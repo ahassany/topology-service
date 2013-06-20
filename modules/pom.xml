@@ -18,10 +18,9 @@
 
     <modules>
         <!--
-        <module>topology-common</module>
-        
         <module>topology-client</module>
         -->
+        <module>topology-common</module>
         <module>topology-service</module>
     </modules>
 
