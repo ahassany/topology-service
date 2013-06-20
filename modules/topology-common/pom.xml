@@ -26,12 +26,11 @@
         <client.version>2.0.0.RC1</client.version>
         <async-http-client.version>1.7.17</async-http-client.version>
         <jackson-jaxrs.version>1.9.12</jackson-jaxrs.version>
+        <maven-jaxb2-plugin.version>0.8.3</maven-jaxb2-plugin.version>
     </properties>
 
 
     <dependencies>
-
-
         <!-- For better json serialization -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
@@ -39,13 +38,18 @@
             <version>${jackson-jaxrs.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!-- For maven to autogenerate java classes from schemas -->
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-runtime</artifactId>
+            <version>0.6.4</version>
+        </dependency>
 
         <!-- I'm not sure if those two packages are needed -->
         <dependency>
@@ -59,4 +63,40 @@
             <version>1.0.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>${maven-jaxb2-plugin.version}</version>
+                <configuration>
+                    <!-- Changes the default schema directory -->
+                    <schemaDirectory>src/main/resources/schemas</schemaDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <args>
+                                <arg>-XtoString</arg>
+                                <arg>-Xequals</arg>
+                                <arg>-XhashCode</arg>
+                                <arg>-Xcopyable</arg>
+                            </args>
+                            <plugins>
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-basics</artifactId>
+                                    <version>0.6.4</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
