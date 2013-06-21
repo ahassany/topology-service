@@ -27,10 +27,18 @@
         <async-http-client.version>1.7.17</async-http-client.version>
         <jackson-jaxrs.version>1.9.12</jackson-jaxrs.version>
         <maven-jaxb2-plugin.version>0.8.3</maven-jaxb2-plugin.version>
+        <commons-io.version>2.4</commons-io.version>
     </properties>
 
 
     <dependencies>
+        <!-- For better IO handling -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
         <!-- For better json serialization -->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
