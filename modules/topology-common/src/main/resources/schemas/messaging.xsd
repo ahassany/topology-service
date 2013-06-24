@@ -6,7 +6,13 @@
     <xs:element name="message">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="body" type="xs:anyType"/>
+                <xs:element name="body">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:any minOccurs="1"></xs:any>
+                        </xs:sequence>
+                    </xs:complexType>  
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
