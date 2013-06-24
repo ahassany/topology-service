@@ -10,12 +10,19 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
 
 
-public class URNSResource {
+public class URNResource {
+    private
+    @PathParam("urn")
+    Broadcaster urn;
 
+    private final String _bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
 
-    Broadcaster topic;
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
@@ -34,27 +41,30 @@ public class URNSResource {
         }
 
         return new SuspendResponse.SuspendResponseBuilder<Message>()
-                .broadcaster(topic).resumeOnBroadcast(resumeOnBroadcast)
+                .broadcaster(urn)
+                .resumeOnBroadcast(resumeOnBroadcast)
                 .outputComments(true)
                 .build();
-
     }
 
-    @POST
+    @PUT
     @Broadcast
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public Broadcastable publish(Message message) {
-        return new Broadcastable(message, "", topic);
+        try {
+            JAXBContext jc = JAXBContext.newInstance(_bindings);
+            Marshaller marshaller = jc.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter sw = new StringWriter();
+            marshaller.marshal(message, sw);
+            return new Broadcastable(sw.toString(), "", urn);
+
+        } catch (JAXBException e) {
+            System.out.println("*** Marshalling error ******");
+        }
+        return null;
+
     }
 
-    /**
-     * Delegating the individual URN handling to the URNResource class
-     *
-     * @return URNResource instance
-     */
-    @Path("/{urn}")
-    public URNResource getURN() {
-        return new URNResource();
-    }
 }
