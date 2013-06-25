@@ -28,10 +28,18 @@
         <jackson-jaxrs.version>1.9.12</jackson-jaxrs.version>
         <maven-jaxb2-plugin.version>0.8.3</maven-jaxb2-plugin.version>
         <commons-io.version>2.4</commons-io.version>
+        <jaxb-visitor.version>1.13</jaxb-visitor.version>
     </properties>
 
 
     <dependencies>
+        <!-- To auto generate visitors for JAXB bindings-->
+        <dependency>
+            <groupId>com.massfords</groupId>
+            <artifactId>jaxb-visitor</artifactId>
+            <version>${jaxb-visitor.version}</version>
+        </dependency>
+
         <!-- For better IO handling -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -93,12 +101,19 @@
                                 <arg>-Xequals</arg>
                                 <arg>-XhashCode</arg>
                                 <arg>-Xcopyable</arg>
+                                <arg>-Xvisitor</arg>
+                                <arg>-Xvisitor-package:net.es.topology.common.visitors</arg>
                             </args>
                             <plugins>
                                 <plugin>
                                     <groupId>org.jvnet.jaxb2_commons</groupId>
                                     <artifactId>jaxb2-basics</artifactId>
                                     <version>0.6.4</version>
+                                </plugin>
+                                <plugin>
+                                    <groupId>com.massfords</groupId>
+                                    <artifactId>jaxb-visitor</artifactId>
+                                    <version>${jaxb-visitor.version}</version>
                                 </plugin>
                             </plugins>
                         </configuration>

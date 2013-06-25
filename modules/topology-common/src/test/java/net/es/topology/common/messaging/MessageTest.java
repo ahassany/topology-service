@@ -1,5 +1,8 @@
 package net.es.topology.common.messaging;
 
+import net.es.topology.common.converter.nml.NMLVisitor;
+import net.es.topology.common.visitors.DepthFirstTraverserImpl;
+import net.es.topology.common.visitors.TraversingVisitor;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -11,6 +14,8 @@ import org.ogf.schemas.nml._2013._05.base.ObjectFactory;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
 
 import javax.xml.bind.*;
+import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 
@@ -41,8 +46,6 @@ public class MessageTest {
         StringWriter out = new StringWriter();
         marshaller.marshal(msg, out);
 
-        System.out.println(out);
-
         // Read it again
         Unmarshaller um = context.createUnmarshaller();
         Message umsg = (Message) um.unmarshal(new InputStreamReader(IOUtils.toInputStream(out.toString())));
@@ -51,5 +54,18 @@ public class MessageTest {
         Message.Body ubody = umsg.getBody();
         Assert.assertThat(ubody.getAny(), CoreMatchers.instanceOf(javax.xml.bind.JAXBElement.class));
         Assert.assertEquals(((JAXBElement<NodeType>) ubody.getAny()).getValue().getName(), nodeName);
+    }
+
+    @Test
+    public void testComplexMessage() throws JAXBException {
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+        JAXBElement<NodeType> element = (JAXBElement<NodeType>) msg.getBody().getAny();
+        Assert.assertEquals(element.getValue().getName(), "Node_A");
     }
 }
