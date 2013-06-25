@@ -1,6 +1,6 @@
-package net.es.topology.common.records;
+package net.es.topology.common.records.nml;
 
-import net.es.topology.common.records.keys.ReservedValues;
+import net.es.topology.common.records.nml.keys.ReservedValues;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>

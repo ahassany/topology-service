@@ -1,9 +1,8 @@
-package net.es.topology.common.records;
+package net.es.topology.common.records.nml;
 
-import net.es.lookup.common.exception.RecordException;
 import net.es.lookup.records.Record;
-import net.es.topology.common.records.keys.ReservedKeys;
-import net.es.topology.common.records.keys.ReservedValues;
+import net.es.topology.common.records.nml.keys.ReservedKeys;
+import net.es.topology.common.records.nml.keys.ReservedValues;
 
 /**
  *  NetworkObject is the parent abstract class of most objects in NML specification.
@@ -28,11 +27,11 @@ public abstract  class NetworkObject extends Record {
     }
 
     public String getId() {
-        return (String) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_ID);
+        return (String) this.getValue(ReservedKeys.RECORD_NML_ID);
     }
 
     public void setId(String id){
-        this.add(ReservedKeys.RECORD_NETWORKOBJECT_ID, id);
+        this.add(ReservedKeys.RECORD_NML_ID, id);
     }
 
 
