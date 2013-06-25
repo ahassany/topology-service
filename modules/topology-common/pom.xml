@@ -29,10 +29,18 @@
         <maven-jaxb2-plugin.version>0.8.3</maven-jaxb2-plugin.version>
         <commons-io.version>2.4</commons-io.version>
         <jaxb-visitor.version>1.13</jaxb-visitor.version>
+        <sLS.version>0.1</sLS.version>
     </properties>
 
 
     <dependencies>
+        <!--  To include sLS dependencies -->
+        <dependency>
+            <groupId>net.es.lookup</groupId>
+            <artifactId>lookup-service-client</artifactId>
+            <version>${sLS.version}</version>
+        </dependency>
+
         <!-- To auto generate visitors for JAXB bindings-->
         <dependency>
             <groupId>com.massfords</groupId>
