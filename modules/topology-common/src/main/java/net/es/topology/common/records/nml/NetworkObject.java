@@ -34,8 +34,22 @@ public abstract  class NetworkObject extends Record {
         this.add(ReservedKeys.RECORD_NML_ID, id);
     }
 
+    public void setLifeTime(Lifetime lifetime) {
+        this.add(ReservedKeys.RECORD_NETWORKOBJECT_LIFETIME, lifetime);
+    }
 
-    // TODO (AH): add lifetime
+    public Lifetime getLifetime() {
+        return (Lifetime) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_LIFETIME);
+    }
+
+    // TODO (AH): Convert verion to Java datetime.
+    public String getVersion() {
+        return (String) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_VERSION);
+    }
+
+    public void setVersion(String version){
+        this.add(ReservedKeys.RECORD_NETWORKOBJECT_VERSION, version);
+    }
+
     // TODO (AH): add Location
-    // TODO (AH): add version
 }

@@ -2,7 +2,11 @@
 <message xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
     xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
     <body>
-        <nml:Node id="urn:ogf:network:example.net:2013:nodeA">
+        <nml:Node id="urn:ogf:network:example.net:2013:nodeA" version="2013-05-30T09:30:10Z">
+            <nml:Lifetime>
+                <nml:start>20130530T093010Z</nml:start>
+                <nml:end>20130531T093010Z</nml:end>
+            </nml:Lifetime>
             <nml:name>Node_A</nml:name>
             <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
                 <nml:Port id="urn:ogf:network:example.net:2013:nodeA:port_X:in" />

@@ -2,12 +2,10 @@ package net.es.topology.common.converter.nml;
 
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.protocol.json.JSONParser;
+import net.es.topology.common.records.nml.Lifetime;
 import net.es.topology.common.records.nml.Node;
 import net.es.topology.common.visitors.BaseVisitor;
-import org.ogf.schemas.nml._2013._05.base.NodeRelationType;
-import org.ogf.schemas.nml._2013._05.base.NodeType;
-import org.ogf.schemas.nml._2013._05.base.PortType;
-import org.ogf.schemas.nml._2013._05.base.SwitchingServiceType;
+import org.ogf.schemas.nml._2013._05.base.*;
 
 import java.util.ArrayList;
 
@@ -30,7 +28,6 @@ public class NMLVisitor extends BaseVisitor{
         sLSNode.setName(nodeType.getName());
 
         for (NodeRelationType relation : nodeType.getRelation()) {
-            System.out.println(relation.getType());
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
                 if (sLSNode.getHasInboundPort() == null) {
                     sLSNode.setHasInboundPort(new ArrayList<String>());
@@ -66,5 +63,16 @@ public class NMLVisitor extends BaseVisitor{
         } catch (ParserException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+    }
+
+
+    @Override
+    public void visit(LifeTimeType lifetimeType) {
+        System.out.println("Visiting lifetime: " + lifetimeType.toString());
+        /*
+        Lifetime lifetime = new Lifetime();
+        lifetime.setStart(lifetimeType.getStart().toXMLFormat());
+        lifetime.setEnd(lifetimeType.getEnd().toXMLFormat());
+        */
     }
 }
