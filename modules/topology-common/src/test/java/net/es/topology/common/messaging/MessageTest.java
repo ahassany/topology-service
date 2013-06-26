@@ -37,7 +37,7 @@ public class MessageTest {
         Message.Body body = new Message.Body();
         JAXBElement<NodeType> node = new ObjectFactory().createNode(new NodeType());
         node.getValue().setName(nodeName);
-        body.setAny(node);
+        body.getAny().add(node);
         msg.setBody(body);
 
         // make sure it marshals correctly
@@ -52,8 +52,9 @@ public class MessageTest {
 
         // Make sure we have the same value
         Message.Body ubody = umsg.getBody();
-        Assert.assertThat(ubody.getAny(), CoreMatchers.instanceOf(javax.xml.bind.JAXBElement.class));
-        Assert.assertEquals(((JAXBElement<NodeType>) ubody.getAny()).getValue().getName(), nodeName);
+        Assert.assertEquals(1, ubody.getAny().size());
+        Assert.assertThat(ubody.getAny().get(0), CoreMatchers.instanceOf(javax.xml.bind.JAXBElement.class));
+        Assert.assertEquals(nodeName, ((JAXBElement<NodeType>) ubody.getAny().get(0)).getValue().getName());
     }
 
     @Test
@@ -65,7 +66,8 @@ public class MessageTest {
         JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
-        JAXBElement<NodeType> element = (JAXBElement<NodeType>) msg.getBody().getAny();
+        Assert.assertEquals(2, msg.getBody().getAny().size());
+        JAXBElement<NodeType> element = (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
         Assert.assertEquals(element.getValue().getName(), "Node_A");
     }
 }
