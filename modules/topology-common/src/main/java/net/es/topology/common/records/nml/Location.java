@@ -26,19 +26,19 @@ public class Location extends Record {
     }
 
     public float getLong() {
-        return (float) this.getValue(ReservedKeys.RECORD_LOCATION_LONG);
+        return Float.valueOf((String) this.getValue(ReservedKeys.RECORD_LOCATION_LONG));
     }
 
     public void setLong(float l) {
-        this.add(ReservedKeys.RECORD_LOCATION_LONG, l);
+        this.add(ReservedKeys.RECORD_LOCATION_LONG, Float.toString(l));
     }
 
     public float getLat() {
-        return (float) this.getValue(ReservedKeys.RECORD_LOCATION_LAT);
+        return Float.valueOf((String) this.getValue(ReservedKeys.RECORD_LOCATION_LAT));
     }
 
     public void setLat(float lat) {
-        this.add(ReservedKeys.RECORD_LOCATION_LAT, lat);
+        this.add(ReservedKeys.RECORD_LOCATION_LAT, Float.toString(lat));
     }
 
 
