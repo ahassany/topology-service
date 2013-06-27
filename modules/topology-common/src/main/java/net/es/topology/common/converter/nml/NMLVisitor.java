@@ -6,10 +6,24 @@ import net.es.topology.common.records.nml.Lifetime;
 import net.es.topology.common.records.nml.Node;
 import net.es.topology.common.visitors.BaseVisitor;
 import org.ogf.schemas.nml._2013._05.base.*;
+import org.ogf.schemas.nsi._2013._09.messaging.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.StringWriter;
+import java.util.*;
 
 /**
+ * Implements a Visitor pattern to travers NML objects and generate sLS records.
+ *
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class NMLVisitor extends BaseVisitor{
@@ -18,11 +32,38 @@ public class NMLVisitor extends BaseVisitor{
     public static final String RELATION_HAS_OUTBOUND_PORT = "http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort";
     public static final String RELATION_HAS_SERVICE = "http://schemas.ogf.org/nml/2013/05/base#hasService";
     public static final String RELATION_IS_ALIAS = "http://schemas.ogf.org/nml/2013/05/base#isAlias";
+    public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
 
+    /**
+     * Loggger
+     */
+    private final Logger logger = LoggerFactory.getLogger(NMLVisitor.class);
+    /**
+     * A Unique UUID to identify the log trace withing each visitor instance.
+     *
+     * @see Netlogger best practices document.
+     */
+    private String logUUID;
+
+    List < Node > nodes = new ArrayList<Node>();
+
+
+    public NMLVisitor() {
+        this.logUUID = UUID.randomUUID().toString();
+    }
+
+
+    /**
+     *  Initialize the visitor with specifc log trace ID.
+     * @param logUUID
+     */
+    public NMLVisitor(String logUUID) {
+        this.logUUID = logUUID;
+    }
 
     @Override
     public void visit(NodeType nodeType) {
-        System.out.println("Visiting node: " + nodeType.getName());
+        logger.info("event=NMLVisitor.visitNodeType.start guid=" + this.logUUID);
         Node sLSNode = new Node();
         sLSNode.setId(nodeType.getId());
         sLSNode.setName(nodeType.getName());
@@ -58,21 +99,23 @@ public class NMLVisitor extends BaseVisitor{
                 }
             }
         }
-        try {
-            System.out.println(JSONParser.toString(sLSNode));
-        } catch (ParserException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        this.nodes.add(sLSNode);
+        System.out.println("ASdf");
+        logger.info("event=NMLVisitor.visitNodeType.end guid=" + this.logUUID);
     }
-
 
     @Override
     public void visit(LifeTimeType lifetimeType) {
-        System.out.println("Visiting lifetime: " + lifetimeType.toString());
-        /*
+        logger.info("event=NMLVisitor.visitLifeTimeType.start guid=" + this.logUUID);
         Lifetime lifetime = new Lifetime();
         lifetime.setStart(lifetimeType.getStart().toXMLFormat());
         lifetime.setEnd(lifetimeType.getEnd().toXMLFormat());
-        */
+        logger.info("event=NMLVisitor.visitLifeTimeType.end guid=" + this.logUUID);
+    }
+
+    @Override
+    public void visit(Message.Body body) {
+        logger.info("event=NMLVisitor.visitBody.start guid=" + this.logUUID);
+        logger.info("event=NMLVisitor.visitBody.end guid=" + this.logUUID);
     }
 }
