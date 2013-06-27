@@ -34,4 +34,11 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_HAS_OUTBOUND_PORT = "relation-has-outbound-port";
     public static final String RECORD_RELATION_HAS_SERVICE = "relation-has-service";
     public static final String RECORD_RELATION_IS_ALIAS = "relation-is-alias";
+    public static final String RECORD_RELATION_IS_SINK = "relation-is-sink";
+    public static final String RECORD_RELATION_IS_SOURCE = "relation-is-source";
+
+    // Label Keys
+    public static final String RECORD_LABEL = "nml-label";
+    public static final String RECORD_LABEL_TYPE = "nml-label-type";
+
 }

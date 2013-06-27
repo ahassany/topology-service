@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+    xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
+    <body>
+        <nml:Node id="urn:ogf:network:example.net:2013:nodeA">
+            <nml:Location id="urn:ogf:network:example.net:2013:redcity">
+                <nml:name>Red City</nml:name>
+                <nml:lat>30.600</nml:lat>
+                <nml:long>12.640</nml:long>
+            </nml:Location>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+                <nml:Node id="urn:ogf:network:example.net:2013:subNode">
+                </nml:Node>
+            </nml:Relation>
+        </nml:Node>
+    </body>
+</message>

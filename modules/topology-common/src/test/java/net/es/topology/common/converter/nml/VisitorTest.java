@@ -1,5 +1,6 @@
 package net.es.topology.common.converter.nml;
 
+import org.junit.Assert;
 import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
@@ -10,7 +11,10 @@ import net.es.topology.common.visitors.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.ogf.schemas.nml._2013._05.base.LocationType;
 import org.ogf.schemas.nml._2013._05.base.NodeType;
+import org.ogf.schemas.nml._2013._05.base.PortType;
+import org.ogf.schemas.nml._2013._05.base.TopologyType;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
 
 import javax.xml.bind.JAXBContext;
@@ -27,6 +31,7 @@ public class VisitorTest {
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
 
     @Test
+    @Ignore
     public void testVisitNodeType() throws JAXBException {
         InputStream in =
                 getClass().getClassLoader().getResourceAsStream("xml-examples/example-message.xml");
@@ -42,6 +47,47 @@ public class VisitorTest {
         msg.getBody().accept(tv);
     }
 
+    @Test
+    @Ignore
+    public void testVisitLocationType() throws JAXBException {
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-location.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        NMLVisitor visitor = new NMLVisitor();
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        tv.setTraverseFirst(true);
+        msg.getBody().accept(tv);
+        JAXBElement<NodeType> nodeElement =  (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(nodeElement.getValue());
+        NodeType nodeType = nodeElement.getValue();
+        Assert.assertNotNull(nodeType.getLocation());
+    }
+
+    @Test
+    public void testVisitPortType() throws JAXBException {
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-port.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        NMLVisitor visitor = new NMLVisitor();
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        tv.setTraverseFirst(true);
+        msg.getBody().accept(tv);
+        JAXBElement<PortType> portElement =  (JAXBElement<PortType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(portElement.getValue());
+        PortType portType = portElement.getValue();
+        Assert.assertNotNull(portType.getLabel());
+        portType.accept(tv);
+    }
 
     @Test
     @Ignore
