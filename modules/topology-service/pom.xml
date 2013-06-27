@@ -19,7 +19,6 @@
     <properties>
         <atmosphere.version>1.1.0.RC4</atmosphere.version>
         <nettosphere.version>2.0.0.RC4</nettosphere.version>
-        <slf4j.version>1.6.4</slf4j.version>
         <geronimo-servlet.version>1.0</geronimo-servlet.version>
         <jetty8.version>8.1.11.v20130520</jetty8.version>
         <netty.version>3.6.3.Final</netty.version>
@@ -35,6 +34,16 @@
             <groupId>net.es</groupId>
             <artifactId>topology-common</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -74,7 +83,6 @@
             <version>1.17</version>
         </dependency>
 
-
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty</artifactId>
@@ -94,28 +102,8 @@
             <artifactId>jackson-jaxrs</artifactId>
             <version>${jackson-jaxrs.version}</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-
-        <!-- I'm not sure if those two packages are needed -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
