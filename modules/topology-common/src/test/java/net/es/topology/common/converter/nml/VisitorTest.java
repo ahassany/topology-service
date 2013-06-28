@@ -27,7 +27,7 @@ import java.io.InputStream;
 /**
  * Tests the NML Visitor
  * Loads messages from src/test/resources/xml-examples/*.xml
- *
+ * <p/>
  * Note: try to use arrange-act-assert testing pattern as mush as possible
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
@@ -36,20 +36,46 @@ public class VisitorTest {
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
 
     @Test
-    @Ignore
     public void testVisitNodeType() throws JAXBException {
+        // Arrange
+        // Create a visitor
+        NMLVisitor visitor = new NMLVisitor();
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
         InputStream in =
-                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message.xml");
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-node.xml");
 
         StreamSource ss = new StreamSource(in);
         JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
-        NMLVisitor visitor = new NMLVisitor();
-        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
-        tv.setTraverseFirst(true);
+        // Act
+        // For some reason this doesn't work
         msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<NodeType> element = (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        NodeType obj = element.getValue();
+        obj.accept(tv);
+
+        // Assert
+        Assert.assertEquals(1, visitor.getNodes().size());
+        Node record = visitor.getNodes().get(0);
+        Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA", record.getId());
+        Assert.assertEquals("Node_A", record.getName());
+        Assert.assertEquals(1, record.getHasService().size());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:switchingService", record.getHasService().get(0));
+        Assert.assertEquals(2, record.getHasInboundPort().size());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:port_X:in", record.getHasInboundPort().get(0));
+        Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:port_Y:in", record.getHasInboundPort().get(1));
+        Assert.assertEquals(2, record.getHasOutboundPort().size());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:port_X:out", record.getHasOutboundPort().get(0));
+        Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:port_Y:out", record.getHasOutboundPort().get(1));
+        // TODO (AH): Test version
     }
 
     @Test
