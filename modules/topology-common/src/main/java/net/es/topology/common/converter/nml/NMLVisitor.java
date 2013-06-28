@@ -206,6 +206,33 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
 
+        // Add Refs to the Ports in the Topology
+        if (topologyType.getPort() != null && topologyType.getPort().size() != 0) {
+            if (sLSTopo.getPorts() == null)
+                sLSTopo.setPorts(new ArrayList<String>());
+        }
+        for (PortType port : topologyType.getPort()) {
+            sLSTopo.getPorts().add(port.getId());
+        }
+
+        // Add Refs to the Nodes in the Topology
+        if (topologyType.getNode() != null && topologyType.getNode().size() != 0) {
+            if (sLSTopo.getNodes() == null)
+                sLSTopo.setNodes(new ArrayList<String>());
+        }
+        for (NodeType node : topologyType.getNode()) {
+            sLSTopo.getNodes().add(node.getId());
+        }
+
+        // Add Refs to the Links in the Topology
+        if (topologyType.getLink() != null && topologyType.getLink().size() != 0) {
+            if (sLSTopo.getLinks() == null)
+                sLSTopo.setLinks(new ArrayList<String>());
+        }
+        for (LinkType link : topologyType.getLink()) {
+            sLSTopo.getLinks().add(link.getId());
+        }
+
         // TODO (AH): deal with location, version, services, etc..
 
         logger.info("event=NMLVisitor.visit.TopologyType.end guid=" + this.logUUID);
