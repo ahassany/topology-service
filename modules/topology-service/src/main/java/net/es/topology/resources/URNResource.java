@@ -1,5 +1,6 @@
 package net.es.topology.resources;
 
+import org.apache.commons.io.IOUtils;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.jersey.Broadcastable;
@@ -10,19 +11,24 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
+import javax.xml.bind.JAXBIntrospector;
+import javax.xml.bind.Unmarshaller;
+import java.io.InputStreamReader;
+
+/**
+ * URNResource to handle requests to individual URNs at "/urns/{urn}"
+ *
+ * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ */
 
 
 public class URNResource {
     private
     @PathParam("urn")
     Broadcaster urn;
-
-    private final String _bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
-
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
@@ -39,7 +45,6 @@ public class URNResource {
         } else {
             resumeOnBroadcast = true;
         }
-
         return new SuspendResponse.SuspendResponseBuilder<Message>()
                 .broadcaster(urn)
                 .resumeOnBroadcast(resumeOnBroadcast)
@@ -51,20 +56,44 @@ public class URNResource {
     @Broadcast
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public Broadcastable publish(Message message) {
+    public Broadcastable publish(String message) {
+        JAXBContext jc = null;
+        Unmarshaller um = null;
+        Message msg = null;
+        JAXBIntrospector inspect = null;
+
+        // The try and catch are separate to better error reporting to the user
         try {
-            JAXBContext jc = JAXBContext.newInstance(_bindings);
-            Marshaller marshaller = jc.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            StringWriter sw = new StringWriter();
-            marshaller.marshal(message, sw);
-            return new Broadcastable(sw.toString(), "", urn);
+            jc = JAXBContext.newInstance(URNSResource.jaxb_bindings);
+        } catch (JAXBException e) {
+            throw new WebApplicationException(Response.serverError().entity("Cannot create JAXB Context: '" + e.getMessage() + "'.\n").build());
+        }
+
+        try {
+            um = jc.createUnmarshaller();
+        } catch (JAXBException e) {
+            throw new WebApplicationException(Response.serverError().entity("Cannot create JAXB Unmarshaller: '" + e.getMessage() + "'.\n").build());
+        }
+
+        inspect = jc.createJAXBIntrospector();
+
+
+        try {
+            msg = (Message) um.unmarshal(new InputStreamReader(IOUtils.toInputStream(message)));
+            //NetworkObject obj = (NetworkObject) msg.getBody();
+            //System.out.println("Netobj: " + obj.getId() );
 
         } catch (JAXBException e) {
-            System.out.println("*** Marshalling error ******");
+            throw new WebApplicationException(Response.serverError().entity("Cannot unmarshall the message: '" + e.getMessage() + "'.\n").build());
         }
-        return null;
 
+        System.out.println("Net obj: " + inspect.getElementName(msg).toString());
+        try {
+            System.out.println("Net obj: " + inspect.getElementName(msg.getBody()));
+        } catch (Exception e) {
+            System.out.println("Inspection error: " + e.getMessage());
+        }
+        return new Broadcastable(message, "", urn);
     }
 
 }
