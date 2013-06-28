@@ -64,8 +64,10 @@ public class NMLVisitor extends BaseVisitor {
     public void visit(NodeType nodeType) {
         logger.info("event=NMLVisitor.visit.NodeType.start guid=" + this.logUUID);
         Node sLSNode = new Node();
-        sLSNode.setId(nodeType.getId());
-        sLSNode.setName(nodeType.getName());
+        if (nodeType.getId() != null)
+            sLSNode.setId(nodeType.getId());
+        if (nodeType.getName() != null)
+            sLSNode.setName(nodeType.getName());
 
         for (NodeRelationType relation : nodeType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
@@ -106,8 +108,11 @@ public class NMLVisitor extends BaseVisitor {
     public void visit(PortType portType) {
         logger.info("event=NMLVisitor.visit.PortType.start guid=" + this.logUUID);
         Port sLSPort = new Port();
-        sLSPort.setId(portType.getId());
-        sLSPort.setName(portType.getName());
+
+        if (portType.getId() != null)
+            sLSPort.setId(portType.getId());
+        if (portType.getName() != null)
+            sLSPort.setName(portType.getName());
 
         for (PortRelationType relation : portType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_IS_SINK)) {
@@ -117,7 +122,7 @@ public class NMLVisitor extends BaseVisitor {
                 for (LinkType link : relation.getLink()) {
                     sLSPort.getIsSink().add(link.getId());
                 }
-            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_SINK)) {
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_SOURCE)) {
                 if (sLSPort.getIsSource() == null) {
                     sLSPort.setIsSource(new ArrayList<String>());
                 }
@@ -163,8 +168,12 @@ public class NMLVisitor extends BaseVisitor {
     public void visit(TopologyType topologyType) {
         logger.info("event=NMLVisitor.visit.TopologyType.start guid=" + this.logUUID);
         Topology sLSTopo = new Topology();
-        sLSTopo.setId(topologyType.getId());
-        sLSTopo.setName(topologyType.getName());
+        if (topologyType.getId() != null)
+            sLSTopo.setId(topologyType.getId());
+        if (topologyType.getName() != null)
+            sLSTopo.setName(topologyType.getName());
+
+        // Parse relations
         for (TopologyRelationType relation : topologyType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
                 if (sLSTopo.getHasInboundPort() == null) {
@@ -196,6 +205,9 @@ public class NMLVisitor extends BaseVisitor {
                 }
             }
         }
+
+        // TODO (AH): deal with location, version, services, etc..
+
         logger.info("event=NMLVisitor.visit.TopologyType.end guid=" + this.logUUID);
     }
 }
