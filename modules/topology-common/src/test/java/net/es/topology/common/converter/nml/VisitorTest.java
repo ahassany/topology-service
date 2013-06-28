@@ -1,6 +1,5 @@
 package net.es.topology.common.converter.nml;
 
-import org.junit.Assert;
 import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
@@ -9,9 +8,9 @@ import net.es.lookup.records.Record;
 import net.es.topology.common.records.nml.Node;
 import net.es.topology.common.visitors.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.TraversingVisitor;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ogf.schemas.nml._2013._05.base.LocationType;
 import org.ogf.schemas.nml._2013._05.base.NodeType;
 import org.ogf.schemas.nml._2013._05.base.PortType;
 import org.ogf.schemas.nml._2013._05.base.TopologyType;
@@ -62,7 +61,7 @@ public class VisitorTest {
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         tv.setTraverseFirst(true);
         msg.getBody().accept(tv);
-        JAXBElement<NodeType> nodeElement =  (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
+        JAXBElement<NodeType> nodeElement = (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
         Assert.assertNotNull(nodeElement.getValue());
         NodeType nodeType = nodeElement.getValue();
         Assert.assertNotNull(nodeType.getLocation());
@@ -82,11 +81,32 @@ public class VisitorTest {
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         tv.setTraverseFirst(true);
         msg.getBody().accept(tv);
-        JAXBElement<PortType> portElement =  (JAXBElement<PortType>) msg.getBody().getAny().get(0);
+        JAXBElement<PortType> portElement = (JAXBElement<PortType>) msg.getBody().getAny().get(0);
         Assert.assertNotNull(portElement.getValue());
         PortType portType = portElement.getValue();
         Assert.assertNotNull(portType.getLabel());
         portType.accept(tv);
+    }
+
+    @Test
+    public void testVisitTopologyType() throws JAXBException {
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-topology.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        NMLVisitor visitor = new NMLVisitor();
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        tv.setTraverseFirst(true);
+        msg.getBody().accept(tv);
+        JAXBElement<TopologyType> element = (JAXBElement<TopologyType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        TopologyType object = element.getValue();
+        Assert.assertNotNull(object.getId());
+        object.accept(tv);
     }
 
     @Test

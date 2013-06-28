@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+    xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
+    <body>
+        <nml:Topology id="urn:ogf:network:example.net:2013:org">
+            <!-- Two internal ports connected by a unidirectional link (not realistic, but simple for the test) -->
+            <nml:Port id="urn:ogf:network:example.net:2013:portA">
+                <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSink">
+                    <nml:Link id="urn:ogf:network:example.net:2013:linkA"/>
+                </nml:Relation>
+            </nml:Port>
+            <nml:Port id="urn:ogf:network:example.net:2013:portB">
+                <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSource">
+                    <nml:Link id="urn:ogf:network:example.net:2013:linkA"/>
+                </nml:Relation>
+            </nml:Port>
+
+            <nml:Link id="urn:ogf:network:example.net:2013:linkA"/>
+
+            <!-- two external facing  bidirectional ports -->
+            <nml:Port id="urn:ogf:network:example.net:2013:portC:in">
+                <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1502</nml:Label>
+            </nml:Port>
+            <nml:Port id="urn:ogf:network:example.net:2013:portC:out">
+                <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1502</nml:Label>
+            </nml:Port>
+
+            <nml:Port id="urn:ogf:network:example.net:2013:portD:in">
+                <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1503</nml:Label>
+            </nml:Port>
+            <nml:Port id="urn:ogf:network:example.net:2013:portD:out">
+                <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1503</nml:Label>
+            </nml:Port>
+
+            <nml:BidirectionalPort id="uurn:ogf:network:example.net:2013:portC">
+                <nml:name>X.1502</nml:name>
+                <nml:Port id="urn:ogf:network:example.net:2013:portC:out"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:portC:in"/>
+            </nml:BidirectionalPort>
+
+            <nml:BidirectionalPort id="uurn:ogf:network:example.net:2013:portD">
+                <nml:name>X.1503</nml:name>
+                <nml:Port id="urn:ogf:network:example.net:2013:portD:out"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:portD:in"/>
+            </nml:BidirectionalPort>
+
+            <!-- define the relations for the inbound and outbound ports -->
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+                <nml:Port id="urn:ogf:network:example.net:2013:portC:in"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:portD:in"/>
+            </nml:Relation>
+
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+                <nml:Port id="urn:ogf:network:example.net:2013:portC:out"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:portD:out"/>
+            </nml:Relation>
+
+        </nml:Topology>
+    </body>
+</message>

@@ -3,6 +3,7 @@ package net.es.topology.common.converter.nml;
 import net.es.topology.common.records.nml.Lifetime;
 import net.es.topology.common.records.nml.Node;
 import net.es.topology.common.records.nml.Port;
+import net.es.topology.common.records.nml.Topology;
 import net.es.topology.common.visitors.BaseVisitor;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
@@ -157,5 +158,46 @@ public class NMLVisitor extends BaseVisitor {
     public void visit(Message.Body body) {
         logger.info("event=NMLVisitor.visitBody.start guid=" + this.logUUID);
         logger.info("event=NMLVisitor.visitBody.end guid=" + this.logUUID);
+    }
+
+    @Override
+    public void visit(TopologyType topologyType) {
+        logger.info("event=NMLVisitor.visit.TopologyType.start guid=" + this.logUUID);
+        Topology sLSTopo = new Topology();
+        sLSTopo.setId(topologyType.getId());
+        sLSTopo.setName(topologyType.getName());
+        for (TopologyRelationType relation : topologyType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
+                if (sLSTopo.getHasInboundPort() == null) {
+                    sLSTopo.setHasInboundPort(new ArrayList<String>());
+                }
+                for (PortType port : relation.getPort()) {
+                    sLSTopo.getHasInboundPort().add(port.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_OUTBOUND_PORT)) {
+                if (sLSTopo.getHasOutboundPort() == null) {
+                    sLSTopo.setHasOutboundPort(new ArrayList<String>());
+                }
+                for (PortType port : relation.getPort()) {
+                    sLSTopo.getHasOutboundPort().add(port.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_SERVICE)) {
+                if (sLSTopo.getHasService() == null) {
+                    sLSTopo.setHasService(new ArrayList<String>());
+                }
+                for (NetworkObject service : relation.getService()) {
+                    sLSTopo.getHasService().add(service.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
+                if (sLSTopo.getIsAlias() == null) {
+                    sLSTopo.setHasService(new ArrayList<String>());
+                }
+                for (TopologyType topologies : relation.getTopology()) {
+                    sLSTopo.getIsAlias().add(topologies.getId());
+                }
+            }
+        }
+
+        logger.info("event=NMLVisitor.visit.TopologyType.end guid=" + this.logUUID);
     }
 }

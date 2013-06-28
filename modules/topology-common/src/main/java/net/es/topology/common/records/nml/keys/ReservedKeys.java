@@ -8,6 +8,10 @@ public class ReservedKeys {
     // General
     public static final String RECORD_NML_ID = "nml-id";
     public static final String RECORD_NML_RELATION = "nml-relation";
+    public static final String RECORD_NML_NODE = "nml-node";
+    public static final String RECORD_NML_PORT = "nml-port";
+    public static final String RECORD_NML_PORTGROUP = "nml-portgroup";
+    public static final String RECORD_NML_LINK = "nml-link";
 
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";
