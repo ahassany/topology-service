@@ -99,7 +99,6 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
         this.nodes.add(sLSNode);
-        System.out.println("ASdf");
         logger.info("event=NMLVisitor.visit.NodeType.end guid=" + this.logUUID);
     }
 
@@ -197,7 +196,6 @@ public class NMLVisitor extends BaseVisitor {
                 }
             }
         }
-
         logger.info("event=NMLVisitor.visit.TopologyType.end guid=" + this.logUUID);
     }
 }
