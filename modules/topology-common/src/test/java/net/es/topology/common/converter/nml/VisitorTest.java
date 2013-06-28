@@ -6,6 +6,7 @@ import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
 import net.es.topology.common.records.nml.Node;
+import net.es.topology.common.records.nml.Port;
 import net.es.topology.common.visitors.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Assert;
@@ -24,6 +25,11 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
 
 /**
+ * Tests the NML Visitor
+ * Loads messages from src/test/resources/xml-examples/*.xml
+ *
+ * Note: try to use arrange-act-assert testing pattern as mush as possible
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class VisitorTest {
@@ -69,6 +75,13 @@ public class VisitorTest {
 
     @Test
     public void testVisitPortType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        NMLVisitor visitor = new NMLVisitor();
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
         InputStream in =
                 getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-port.xml");
 
@@ -77,15 +90,24 @@ public class VisitorTest {
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
-        NMLVisitor visitor = new NMLVisitor();
-        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
-        tv.setTraverseFirst(true);
+        // Act
+        // For some reason this doesn't work
         msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
         JAXBElement<PortType> portElement = (JAXBElement<PortType>) msg.getBody().getAny().get(0);
         Assert.assertNotNull(portElement.getValue());
         PortType portType = portElement.getValue();
         Assert.assertNotNull(portType.getLabel());
         portType.accept(tv);
+
+        // Assert
+        Assert.assertEquals(1, visitor.getPorts().size());
+        Port sLSPort = visitor.getPorts().get(0);
+        Assert.assertEquals("urn:ogf:network:example.net:2013:portA", sLSPort.getId());
+        Assert.assertEquals(null, sLSPort.getName());
+        Assert.assertEquals("1501", sLSPort.getLabel());
+        Assert.assertEquals("http://schemas.ogf.org/nml/2013/05/ethernet#vlan", sLSPort.getLabelType());
     }
 
     @Test

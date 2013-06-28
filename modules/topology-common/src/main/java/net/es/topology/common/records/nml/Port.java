@@ -47,7 +47,7 @@ public class Port extends NetworkObject {
      * @return URI to refer to a technology-specific labelset, e.g. a URI for VLANs
      */
     public String getLabelType() {
-        return (String) this.getValue(ReservedKeys.RECORD_LABEL);
+        return (String) this.getValue(ReservedKeys.RECORD_LABEL_TYPE);
     }
 
     /**

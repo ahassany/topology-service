@@ -162,6 +162,13 @@ public class NMLVisitor extends BaseVisitor {
             sLSPort.setName(portType.getName());
         if (portType.getEncoding() != null)
             sLSPort.setEncoding(portType.getEncoding());
+        if (portType.getLabel() != null) {
+            if (portType.getLabel().getValue() != null)
+                sLSPort.setLabel(portType.getLabel().getValue());
+            if (portType.getLabel().getLabeltype() != null)
+                sLSPort.setLabelType(portType.getLabel().getLabeltype());
+        }
+
         for (PortRelationType relation : portType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_IS_SINK)) {
                 if (sLSPort.getIsSink() == null) {
