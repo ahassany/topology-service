@@ -19,6 +19,9 @@ public class ReservedKeys {
     public static final String RECORD_NETWORKOBJECT_LOCATION = "networkobject-location";
     public static final String RECORD_NETWORKOBJECT_LIFETIME = "networkobject-lifetime";
 
+    // Port keys
+    public static final String RECORD_PORT_ENCODING = "port-encoding";
+
     // Location Keys
     public static final String RECORD_LOCATION_NAME = "location-name";
     public static final String RECORD_LOCATION_LONG = "location-long";

@@ -131,5 +131,23 @@ public class Port extends NetworkObject {
         this.add(ReservedKeys.RECORD_RELATION_IS_SOURCE, links);
     }
 
+    /**
+     * The encoding attribute defines the format of the data streaming through the Port.
+     * The identifier for the encoding must be a URI
+     *
+     * @param encoding URI specified by a GFD
+     */
+    public void setEncoding(String encoding) {
+        this.add(ReservedKeys.RECORD_PORT_ENCODING, encoding);
+    }
 
+    /**
+     * The encoding attribute defines the format of the data streaming through the Port.
+     * The identifier for the encoding must be a URI
+     *
+     * @return encoding URI specified by a GFD
+     */
+    public String getEncoding() {
+        return (String) this.getValue(ReservedKeys.RECORD_PORT_ENCODING);
+    }
 }

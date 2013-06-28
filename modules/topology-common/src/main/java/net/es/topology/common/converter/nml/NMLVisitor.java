@@ -113,7 +113,8 @@ public class NMLVisitor extends BaseVisitor {
             sLSPort.setId(portType.getId());
         if (portType.getName() != null)
             sLSPort.setName(portType.getName());
-
+        if (portType.getEncoding() != null)
+            sLSPort.setEncoding(portType.getEncoding());
         for (PortRelationType relation : portType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_IS_SINK)) {
                 if (sLSPort.getIsSink() == null) {
