@@ -7,6 +7,7 @@ import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.Node;
 import net.es.topology.common.records.ts.Port;
+import net.es.topology.common.records.ts.RecordsCollection;
 import net.es.topology.common.visitors.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Assert;
@@ -39,7 +40,8 @@ public class VisitorTest {
     public void testVisitNodeType() throws JAXBException {
         // Arrange
         // Create a visitor
-        NMLVisitor visitor = new NMLVisitor();
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         // tv.setTraverseFirst(true);
 
@@ -63,8 +65,9 @@ public class VisitorTest {
         obj.accept(tv);
 
         // Assert
-        Assert.assertEquals(1, visitor.getNodes().size());
-        Node record = visitor.getNodes().get(0);
+        Assert.assertEquals(1, collection.getNodes().size());
+        Node nodes[] = collection.getNodes().values().toArray(new Node[collection.getNodes().size()]);
+        Node record = nodes[0];
         Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA", record.getId());
         Assert.assertEquals("Node_A", record.getName());
         Assert.assertEquals(1, record.getHasService().size());
@@ -89,7 +92,8 @@ public class VisitorTest {
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
-        NMLVisitor visitor = new NMLVisitor();
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         tv.setTraverseFirst(true);
         msg.getBody().accept(tv);
@@ -103,7 +107,8 @@ public class VisitorTest {
     public void testVisitPortType() throws JAXBException {
         // Prepare
         // Create a visitor
-        NMLVisitor visitor = new NMLVisitor();
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         // tv.setTraverseFirst(true);
 
@@ -128,8 +133,11 @@ public class VisitorTest {
         portType.accept(tv);
 
         // Assert
-        Assert.assertEquals(1, visitor.getPorts().size());
-        Port sLSPort = visitor.getPorts().get(0);
+        Assert.assertEquals(1, collection.getPorts().size());
+        Port ports[] = collection.getPorts().values().toArray(new Port[collection.getPorts().size()]);
+        Port sLSPort = ports[0];
+        Assert.assertNotNull(sLSPort);
+        Assert.assertNotNull(sLSPort.getId());
         Assert.assertEquals("urn:ogf:network:example.net:2013:portA", sLSPort.getId());
         Assert.assertEquals(null, sLSPort.getName());
         Assert.assertEquals("1501", sLSPort.getLabel());
@@ -146,7 +154,8 @@ public class VisitorTest {
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
-        NMLVisitor visitor = new NMLVisitor();
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         tv.setTraverseFirst(true);
         msg.getBody().accept(tv);
