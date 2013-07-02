@@ -24,6 +24,9 @@ public class NMLVisitor extends BaseVisitor {
     public static final String RELATION_IS_ALIAS = "http://schemas.ogf.org/nml/2013/05/base#isAlias";
     public static final String RELATION_IS_SINK = "http://schemas.ogf.org/nml/2013/05/base#isSink";
     public static final String RELATION_IS_SOURCE = "http://schemas.ogf.org/nml/2013/05/base#isSource";
+    public static final String RELATION_IS_SERIAL_COMPOUND_LINK = "http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink";
+    public static final String RELATION_NEXT = "http://schemas.ogf.org/nml/2013/05/base#next";
+
     // JAXB Bindings
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     /**
@@ -167,6 +170,62 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
         logger.trace("event=NMLVisitor.visit.PortType.end status=0 guid=" + this.logUUID);
+    }
+
+
+    /**
+     * Visit nml link to generate sLS link record
+     *
+     * @param linkType
+     */
+    @Override
+    public void visit(LinkType linkType) {
+        logger.trace("event=NMLVisitor.visit.LinkType.start id=" + linkType.getId() + " guid=" + this.logUUID);
+        Link sLSLink = recordsCollection.linkInstance(linkType.getId());
+
+        if (linkType.getName() != null)
+            sLSLink.setName(linkType.getName());
+        if (linkType.getEncoding() != null)
+            sLSLink.setEncoding(linkType.getEncoding());
+        if (linkType.isNoReturnTraffic() != null)
+            sLSLink.setNoReturnTraffic(linkType.isNoReturnTraffic());
+
+        if (linkType.getLabel() != null) {
+            if (linkType.getLabel().getValue() != null)
+                sLSLink.setLabel(linkType.getLabel().getValue());
+            if (linkType.getLabel().getLabeltype() != null)
+                sLSLink.setLabelType(linkType.getLabel().getLabeltype());
+        }
+
+        for (LinkRelationType relation : linkType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
+                if (sLSLink.getIsAlias() == null) {
+                    sLSLink.setIsAlias(new ArrayList<String>());
+                }
+                for (LinkType link : relation.getLink()) {
+                    sLSLink.getIsAlias().add(link.getId());
+                }
+            }
+
+            if (relation.getType().equalsIgnoreCase(RELATION_IS_SERIAL_COMPOUND_LINK)) {
+                if (sLSLink.getIsSerialCompoundLink() == null) {
+                    sLSLink.setIsSerialCompoundLink(new ArrayList<String>());
+                }
+                for (LinkType link : relation.getLink()) {
+                    sLSLink.getIsSerialCompoundLink().add(link.getId());
+                }
+            }
+
+            if (relation.getType().equalsIgnoreCase(RELATION_NEXT)) {
+                if (sLSLink.getNext() == null) {
+                    sLSLink.setNext(new ArrayList<String>());
+                }
+                for (LinkType link : relation.getLink()) {
+                    sLSLink.getNext().add(link.getId());
+                }
+            }
+        }
+        logger.trace("event=NMLVisitor.visit.LinkType.end status=0 guid=" + this.logUUID);
     }
 
     /**

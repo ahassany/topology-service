@@ -5,15 +5,13 @@ import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
-import net.es.topology.common.records.ts.Node;
-import net.es.topology.common.records.ts.Port;
-import net.es.topology.common.records.ts.RecordsCollection;
-import net.es.topology.common.records.ts.Topology;
+import net.es.topology.common.records.ts.*;
 import net.es.topology.common.visitors.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.ogf.schemas.nml._2013._05.base.LinkType;
 import org.ogf.schemas.nml._2013._05.base.NodeType;
 import org.ogf.schemas.nml._2013._05.base.PortType;
 import org.ogf.schemas.nml._2013._05.base.TopologyType;
@@ -37,6 +35,9 @@ import java.util.Map;
  */
 public class VisitorTest {
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
+
+    // Commonly used value in the tests
+    private final String VLAN_URI = "http://schemas.ogf.org/nml/2013/05/ethernet#vlan";
 
     @Test
     public void testVisitNodeType() throws JAXBException {
@@ -143,7 +144,59 @@ public class VisitorTest {
         Assert.assertEquals("urn:ogf:network:example.net:2013:portA", sLSPort.getId());
         Assert.assertEquals(null, sLSPort.getName());
         Assert.assertEquals("1501", sLSPort.getLabel());
-        Assert.assertEquals("http://schemas.ogf.org/nml/2013/05/ethernet#vlan", sLSPort.getLabelType());
+        Assert.assertEquals(VLAN_URI, sLSPort.getLabelType());
+    }
+
+    @Test
+    public void testVisitLinkType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+        String linkURN = "urn:ogf:network:example.net:2013:linkA:XY";
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-link.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<LinkType> element = (JAXBElement<LinkType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        LinkType linkType = element.getValue();
+        linkType.accept(tv);
+
+        // Assert
+        // FIXME (AH): this should be 1 link only
+        Assert.assertEquals(6, collection.getLinks().size());
+        Assert.assertTrue(collection.getLinks().containsKey(linkURN));
+        Link record = collection.getLinks().get(linkURN);
+
+        Assert.assertEquals(VLAN_URI, record.getEncoding());
+        Assert.assertFalse(record.getNoReturnTraffic());
+        Assert.assertEquals("1501", record.getLabel());
+        Assert.assertEquals(VLAN_URI, record.getLabelType());
+
+        Assert.assertEquals(1, record.getIsAlias().size());
+        Assert.assertTrue(record.getIsAlias().contains("urn:ogf:network:example.net:2013:linkB"));
+
+        Assert.assertEquals(1, record.getNext().size());
+        Assert.assertTrue(record.getNext().contains("urn:ogf:network:example.net:2013:linkC"));
+
+        Assert.assertEquals(3, record.getIsSerialCompoundLink().size());
+        Assert.assertTrue(record.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkD"));
+        Assert.assertTrue(record.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkE"));
+        Assert.assertTrue(record.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkF"));
     }
 
     @Test

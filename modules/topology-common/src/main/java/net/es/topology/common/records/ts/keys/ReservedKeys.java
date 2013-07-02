@@ -22,6 +22,9 @@ public class ReservedKeys {
     // Port keys
     public static final String RECORD_PORT_ENCODING = "port-encoding";
 
+    // Link Keys
+    public static final String RECORD_LINK_NORETURN_TRAFFIC = "link-noreturntraffic";
+
     // Location Keys
     public static final String RECORD_LOCATION_NAME = "location-name";
     public static final String RECORD_LOCATION_LONG = "location-long";
@@ -43,6 +46,8 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_IS_ALIAS = "relation-is-alias";
     public static final String RECORD_RELATION_IS_SINK = "relation-is-sink";
     public static final String RECORD_RELATION_IS_SOURCE = "relation-is-source";
+    public static final String RECORD_RELATION_IS_SERIAL_COMPOUND_LINK = "relation-is-serial-compound-link";
+    public static final String RECORD_RELATION_NEXT = "relation-is-next";
 
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";

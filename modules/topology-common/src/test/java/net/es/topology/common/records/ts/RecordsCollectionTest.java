@@ -59,6 +59,23 @@ public class RecordsCollectionTest {
     }
 
     @Test
+    public void testGetLinks() throws Exception {
+        Assert.assertNotNull(this.collection.getLinks());
+    }
+
+    @Test
+    public void testSetLinks() throws Exception {
+        // Arrange
+        Map<String, Link> links = new HashMap<String, Link>();
+
+        // Act
+        this.collection.setLinks(links);
+
+        // Assert
+        Assert.assertSame(links, this.collection.getLinks());
+    }
+
+    @Test
     public void testGetTopologies() throws Exception {
         Assert.assertNotNull(this.collection.getTopologies());
     }
@@ -93,6 +110,26 @@ public class RecordsCollectionTest {
         Assert.assertSame(portA, portA2);
         Assert.assertSame(portB, this.collection.portInstance(id2));
         Assert.assertSame(portNull, this.collection.portInstance(portNull.getId()));
+    }
+
+    @Test
+    public void testLinkInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:linkA";
+        String id2 = "urn:ogf:network:example.net:2013:linkB";
+        Link linkA = new Link();
+        linkA.setId(id1);
+        this.collection.getLinks().put(id1, linkA);
+
+        // Act
+        Link linkA2 = this.collection.linkInstance(id1);
+        Link linkB = this.collection.linkInstance(id2);
+        Link linkNull = this.collection.linkInstance(null);
+
+        // Assert
+        Assert.assertSame(linkA, linkA2);
+        Assert.assertSame(linkB, this.collection.linkInstance(id2));
+        Assert.assertSame(linkNull, this.collection.linkInstance(linkNull.getId()));
     }
 
     @Test

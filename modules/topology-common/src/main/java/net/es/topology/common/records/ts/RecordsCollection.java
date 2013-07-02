@@ -21,6 +21,7 @@ public class RecordsCollection {
     private final Logger logger = LoggerFactory.getLogger(RecordsCollection.class);
     private Map<String, Node> nodes = null;
     private Map<String, Port> ports = null;
+    private Map<String, Link> links = null;
     private Map<String, Topology> topologies = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
@@ -33,6 +34,7 @@ public class RecordsCollection {
         this.logUUID = UUID.randomUUID().toString();
         this.setNodes(new HashMap<String, Node>());
         this.setPorts(new HashMap<String, Port>());
+        this.setLinks(new HashMap<String, Link>());
         this.setTopologies(new HashMap<String, Topology>());
     }
 
@@ -40,6 +42,7 @@ public class RecordsCollection {
         this.logUUID = logUUID;
         this.setNodes(new HashMap<String, Node>());
         this.setPorts(new HashMap<String, Port>());
+        this.setLinks(new HashMap<String, Link>());
         this.setTopologies(new HashMap<String, Topology>());
     }
 
@@ -58,6 +61,14 @@ public class RecordsCollection {
 
     public void setPorts(Map<String, Port> ports) {
         this.ports = ports;
+    }
+
+    public Map<String, Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Map<String, Link> links) {
+        this.links = links;
     }
 
     public Map<String, Topology> getTopologies() {
@@ -153,6 +164,36 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.topologyInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return topology;
+    }
+
+
+    /**
+     * Create/or return a Link instance
+     * If the a Link with the same id already exists this method will return a reference to it
+     * If there is not Link with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return Link instance
+     */
+    public Link linkInstance(String id) {
+        logger.trace("event=RecordsCollection.linkInstance.start id=" + id + " guid=" + this.logUUID);
+        Link link = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.linkInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getLinks().containsKey(id)) {
+            link = getLinks().get(id);
+        } else {
+            link = new Link();
+            link.setId(id);
+            getLinks().put(id, link);
+            logger.trace("event=RecordsCollection.linkInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.linkInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return link;
     }
 
 }
