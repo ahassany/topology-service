@@ -8,6 +8,7 @@ import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.Node;
 import net.es.topology.common.records.ts.Port;
 import net.es.topology.common.records.ts.RecordsCollection;
+import net.es.topology.common.records.ts.Topology;
 import net.es.topology.common.visitors.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Assert;
@@ -24,6 +25,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * Tests the NML Visitor
@@ -146,6 +148,17 @@ public class VisitorTest {
 
     @Test
     public void testVisitTopologyType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        String topologyURN = "urn:ogf:network:example.net:2013:org";
+        String portURNs[] = {"urn:ogf:network:example.net:2013:portA", "urn:ogf:network:example.net:2013:portB",
+                "urn:ogf:network:example.net:2013:portC:in", "urn:ogf:network:example.net:2013:portC:out",
+                "urn:ogf:network:example.net:2013:portD:in", "urn:ogf:network:example.net:2013:portD:out"};
+
+        // Prepare for by reading the example message
         InputStream in =
                 getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-topology.xml");
 
@@ -154,16 +167,39 @@ public class VisitorTest {
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
-        RecordsCollection collection = new RecordsCollection();
-        NMLVisitor visitor = new NMLVisitor(collection);
-        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
-        tv.setTraverseFirst(true);
+        // Act
+        // For some reason this doesn't work
         msg.getBody().accept(tv);
+
         JAXBElement<TopologyType> element = (JAXBElement<TopologyType>) msg.getBody().getAny().get(0);
         Assert.assertNotNull(element.getValue());
         TopologyType object = element.getValue();
         Assert.assertNotNull(object.getId());
         object.accept(tv);
+
+        // Assert
+        Map<String, Topology> topologyMap = collection.getTopologies();
+        Map<String, Port> portMap = collection.getPorts();
+        Map<String, Node> nodeMap = collection.getNodes();
+
+        Assert.assertEquals(1, topologyMap.size());
+        Assert.assertEquals(6, portMap.size());
+        Assert.assertEquals(0, nodeMap.size());
+
+        Assert.assertTrue(topologyMap.containsKey(topologyURN));
+        Topology topology = topologyMap.get(topologyURN);
+
+        for (String urn : portURNs) {
+            Assert.assertTrue(portMap.containsKey(urn));
+            Assert.assertTrue(topology.getPorts().contains(urn));
+        }
+
+        Assert.assertTrue(topology.getHasInboundPort().contains(portURNs[2]));
+        Assert.assertTrue(topology.getHasInboundPort().contains(portURNs[4]));
+        Assert.assertTrue(topology.getHasOutboundPort().contains(portURNs[3]));
+        Assert.assertTrue(topology.getHasOutboundPort().contains(portURNs[5]));
+
+        // TODO (AH): test for all other elements in Topology
     }
 
     @Test
