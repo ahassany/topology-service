@@ -1,4 +1,4 @@
-package net.es.topology.common.records.nml.keys;
+package net.es.topology.common.records.ts.keys;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
@@ -6,12 +6,12 @@ package net.es.topology.common.records.nml.keys;
 public class ReservedKeys {
 
     // General
-    public static final String RECORD_NML_ID = "nml-id";
-    public static final String RECORD_NML_RELATION = "nml-relation";
-    public static final String RECORD_NML_NODE = "nml-node";
-    public static final String RECORD_NML_PORT = "nml-port";
-    public static final String RECORD_NML_PORTGROUP = "nml-portgroup";
-    public static final String RECORD_NML_LINK = "nml-link";
+    public static final String RECORD_TS_ID = "ts-id";
+    public static final String RECORD_TS_RELATION = "ts-relation";
+    public static final String RECORD_TS_NODE = "ts-node";
+    public static final String RECORD_TS_PORT = "ts-port";
+    public static final String RECORD_TS_PORTGROUP = "ts-portgroup";
+    public static final String RECORD_TS_LINK = "ts-link";
 
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";
@@ -45,7 +45,7 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_IS_SOURCE = "relation-is-source";
 
     // Label Keys
-    public static final String RECORD_LABEL = "nml-label";
-    public static final String RECORD_LABEL_TYPE = "nml-label-type";
+    public static final String RECORD_LABEL = "ts-label";
+    public static final String RECORD_LABEL_TYPE = "ts-label-type";
 
 }

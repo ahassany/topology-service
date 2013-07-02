@@ -1,9 +1,9 @@
 package net.es.topology.common.converter.nml;
 
-import net.es.topology.common.records.nml.Lifetime;
-import net.es.topology.common.records.nml.Node;
-import net.es.topology.common.records.nml.Port;
-import net.es.topology.common.records.nml.Topology;
+import net.es.topology.common.records.ts.Lifetime;
+import net.es.topology.common.records.ts.Node;
+import net.es.topology.common.records.ts.Port;
+import net.es.topology.common.records.ts.Topology;
 import net.es.topology.common.visitors.BaseVisitor;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;

@@ -1,7 +1,7 @@
-package net.es.topology.common.records.nml;
+package net.es.topology.common.records.ts;
 
-import net.es.topology.common.records.nml.keys.ReservedKeys;
-import net.es.topology.common.records.nml.keys.ReservedValues;
+import net.es.topology.common.records.ts.keys.ReservedKeys;
+import net.es.topology.common.records.ts.keys.ReservedValues;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class Topology extends NetworkObject {
      * @return list of nodes' URNs
      */
     public List<String> getNodes() {
-        return (List<String>) this.getValue(ReservedKeys.RECORD_NML_NODE);
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_NODE);
     }
 
     /**
@@ -45,7 +45,7 @@ public class Topology extends NetworkObject {
      * @param list of nodes' URNs
      */
     public void setNodes(List<String> nodes) {
-        this.add(ReservedKeys.RECORD_NML_NODE, nodes);
+        this.add(ReservedKeys.RECORD_TS_NODE, nodes);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Topology extends NetworkObject {
      * @return list of nodes' URNs
      */
     public List<String> getPorts() {
-        return (List<String>) this.getValue(ReservedKeys.RECORD_NML_PORT);
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_PORT);
     }
 
     /**
@@ -63,7 +63,7 @@ public class Topology extends NetworkObject {
      * @param list of ports' URNs
      */
     public void setPorts(List<String> ports) {
-        this.add(ReservedKeys.RECORD_NML_PORT, ports);
+        this.add(ReservedKeys.RECORD_TS_PORT, ports);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Topology extends NetworkObject {
      * @return list of links' URNs
      */
     public List<String> getLinks() {
-        return (List<String>) this.getValue(ReservedKeys.RECORD_NML_LINK);
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_LINK);
     }
 
     /**
@@ -81,7 +81,7 @@ public class Topology extends NetworkObject {
      * @param list of links' URNs
      */
     public void setLinks(List<String> links) {
-        this.add(ReservedKeys.RECORD_NML_LINK, links);
+        this.add(ReservedKeys.RECORD_TS_LINK, links);
     }
 
     /**

@@ -1,7 +1,7 @@
-package net.es.topology.common.records.nml;
+package net.es.topology.common.records.ts;
 
-import net.es.topology.common.records.nml.keys.ReservedKeys;
-import net.es.topology.common.records.nml.keys.ReservedValues;
+import net.es.topology.common.records.ts.keys.ReservedKeys;
+import net.es.topology.common.records.ts.keys.ReservedValues;
 
 import java.util.List;
 

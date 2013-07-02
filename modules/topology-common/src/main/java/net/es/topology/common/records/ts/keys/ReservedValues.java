@@ -1,4 +1,4 @@
-package net.es.topology.common.records.nml.keys;
+package net.es.topology.common.records.ts.keys;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>

@@ -1,10 +1,8 @@
-package net.es.topology.common.records.nml;
+package net.es.topology.common.records.ts;
 
 import net.es.lookup.records.Record;
-import net.es.topology.common.records.nml.keys.ReservedKeys;
-import net.es.topology.common.records.nml.keys.ReservedValues;
-
-import javax.xml.datatype.XMLGregorianCalendar;
+import net.es.topology.common.records.ts.keys.ReservedKeys;
+import net.es.topology.common.records.ts.keys.ReservedValues;
 
 /**
  * A Lifetime is an interval between which the object is said to be active
