@@ -93,6 +93,23 @@ public class RecordsCollectionTest {
     }
 
     @Test
+    public void testGetBidirectionalPorts() throws Exception {
+        Assert.assertNotNull(this.collection.getBidirectionalPorts());
+    }
+
+    @Test
+    public void testSetBidirectionalPorts() throws Exception {
+        // Arrange
+        Map<String, BidirectionalPort> biports = new HashMap<String, BidirectionalPort>();
+
+        // Act
+        this.collection.setBidirectionalPorts(biports);
+
+        // Assert
+        Assert.assertSame(biports, this.collection.getBidirectionalPorts());
+    }
+
+    @Test
     public void testPortInstance() throws Exception {
         // Arrange
         String id1 = "urn:ogf:network:example.net:2013:portA";
@@ -170,5 +187,25 @@ public class RecordsCollectionTest {
         Assert.assertSame(topologyA, topologyA2);
         Assert.assertSame(topologyB, this.collection.topologyInstance(id2));
         Assert.assertSame(topologyNull, this.collection.topologyInstance(topologyNull.getId()));
+    }
+
+    @Test
+    public void testBidirectionalPortInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:biportA";
+        String id2 = "urn:ogf:network:example.net:2013:biportB";
+        BidirectionalPort biportA = new BidirectionalPort();
+        biportA.setId(id1);
+        this.collection.getBidirectionalPorts().put(id1, biportA);
+
+        // Act
+        BidirectionalPort biportA2 = this.collection.bidirectionalPortInstance(id1);
+        BidirectionalPort biportB = this.collection.bidirectionalPortInstance(id2);
+        BidirectionalPort biportNull = this.collection.bidirectionalPortInstance(null);
+
+        // Assert
+        Assert.assertSame(biportA, biportA2);
+        Assert.assertSame(biportB, this.collection.bidirectionalPortInstance(id2));
+        Assert.assertSame(biportNull, this.collection.bidirectionalPortInstance(biportNull.getId()));
     }
 }

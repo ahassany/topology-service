@@ -11,10 +11,7 @@ import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ogf.schemas.nml._2013._05.base.LinkType;
-import org.ogf.schemas.nml._2013._05.base.NodeType;
-import org.ogf.schemas.nml._2013._05.base.PortType;
-import org.ogf.schemas.nml._2013._05.base.TopologyType;
+import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
 
 import javax.xml.bind.JAXBContext;
@@ -35,7 +32,6 @@ import java.util.Map;
  */
 public class VisitorTest {
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
-
     // Commonly used value in the tests
     private final String VLAN_URI = "http://schemas.ogf.org/nml/2013/05/ethernet#vlan";
 
@@ -252,7 +248,53 @@ public class VisitorTest {
         Assert.assertTrue(topology.getHasOutboundPort().contains(portURNs[3]));
         Assert.assertTrue(topology.getHasOutboundPort().contains(portURNs[5]));
 
+        Assert.assertEquals(2, topology.getBidirectionalPorts().size());
+        Assert.assertTrue(topology.getBidirectionalPorts().contains("urn:ogf:network:example.net:2013:portC"));
+        Assert.assertTrue(topology.getBidirectionalPorts().contains("urn:ogf:network:example.net:2013:portC"));
         // TODO (AH): test for all other elements in Topology
+    }
+
+    @Test
+    public void testVisitBidirectionalPortType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-bidirectional-port.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<BidirectionalPortType> element = (JAXBElement<BidirectionalPortType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        BidirectionalPortType biPortType = element.getValue();
+        biPortType.accept(tv);
+
+        // Assert
+        Assert.assertEquals(1, collection.getBidirectionalPorts().size());
+        BidirectionalPort ports[] = collection.getBidirectionalPorts().values().toArray(new BidirectionalPort[collection.getBidirectionalPorts().size()]);
+        BidirectionalPort sLSBiPort = ports[0];
+        Assert.assertNotNull(sLSBiPort);
+        Assert.assertNotNull(sLSBiPort.getId());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:portA", sLSBiPort.getId());
+        Assert.assertEquals("PortA", sLSBiPort.getName());
+
+        Assert.assertNull(sLSBiPort.getPortGroups());
+        Assert.assertEquals(2, sLSBiPort.getPorts().size());
+        Assert.assertTrue(sLSBiPort.getPorts().contains("urn:ogf:network:example.net:2013:portA:out"));
+        Assert.assertTrue(sLSBiPort.getPorts().contains("urn:ogf:network:example.net:2013:portA:in"));
     }
 
     @Test

@@ -23,6 +23,7 @@ public class RecordsCollection {
     private Map<String, Port> ports = null;
     private Map<String, Link> links = null;
     private Map<String, Topology> topologies = null;
+    private Map<String, BidirectionalPort> bidirectionalPorts = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -36,6 +37,7 @@ public class RecordsCollection {
         this.setPorts(new HashMap<String, Port>());
         this.setLinks(new HashMap<String, Link>());
         this.setTopologies(new HashMap<String, Topology>());
+        this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
     }
 
     public RecordsCollection(String logUUID) {
@@ -44,6 +46,7 @@ public class RecordsCollection {
         this.setPorts(new HashMap<String, Port>());
         this.setLinks(new HashMap<String, Link>());
         this.setTopologies(new HashMap<String, Topology>());
+        this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
     }
 
     public Map<String, Node> getNodes() {
@@ -77,6 +80,14 @@ public class RecordsCollection {
 
     public void setTopologies(Map<String, Topology> topologies) {
         this.topologies = topologies;
+    }
+
+    public Map<String, BidirectionalPort> getBidirectionalPorts() {
+        return bidirectionalPorts;
+    }
+
+    public void setBidirectionalPorts(Map<String, BidirectionalPort> bidirectionalPorts) {
+        this.bidirectionalPorts = bidirectionalPorts;
     }
 
     /**
@@ -166,7 +177,6 @@ public class RecordsCollection {
         return topology;
     }
 
-
     /**
      * Create/or return a Link instance
      * If the a Link with the same id already exists this method will return a reference to it
@@ -194,6 +204,35 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.linkInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return link;
+    }
+
+    /**
+     * Create/or return a BidirectionalPort instance
+     * If the a BidirectionalPort with the same id already exists this method will return a reference to it
+     * If there is not BidirectionalPort with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return BidirectionalPort instance
+     */
+    public BidirectionalPort bidirectionalPortInstance(String id) {
+        logger.trace("event=RecordsCollection.bidirectionalPortInstance.start id=" + id + " guid=" + this.logUUID);
+        BidirectionalPort biPort = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.bidirectionalPortInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getBidirectionalPorts().containsKey(id)) {
+            biPort = getBidirectionalPorts().get(id);
+        } else {
+            biPort = new BidirectionalPort();
+            biPort.setId(id);
+            getBidirectionalPorts().put(id, biPort);
+            logger.trace("event=RecordsCollection.bidirectionalPortInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.bidirectionalPortInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return biPort;
     }
 
 }

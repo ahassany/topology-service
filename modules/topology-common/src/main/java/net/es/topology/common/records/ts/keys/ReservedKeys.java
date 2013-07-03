@@ -10,8 +10,9 @@ public class ReservedKeys {
     public static final String RECORD_TS_RELATION = "ts-relation";
     public static final String RECORD_TS_NODE = "ts-node";
     public static final String RECORD_TS_PORT = "ts-port";
-    public static final String RECORD_TS_PORTGROUP = "ts-portgroup";
+    public static final String RECORD_TS_PORT_GROUP = "ts-port-group";
     public static final String RECORD_TS_LINK = "ts-link";
+    public static final String RECORD_TS_BIDIRECTIONAL_PORT = "ts-bidirectional-port";
 
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";

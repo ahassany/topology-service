@@ -8,6 +8,7 @@ import org.ogf.schemas.nsi._2013._09.messaging.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,7 +27,6 @@ public class NMLVisitor extends BaseVisitor {
     public static final String RELATION_IS_SOURCE = "http://schemas.ogf.org/nml/2013/05/base#isSource";
     public static final String RELATION_IS_SERIAL_COMPOUND_LINK = "http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink";
     public static final String RELATION_NEXT = "http://schemas.ogf.org/nml/2013/05/base#next";
-
     // JAXB Bindings
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     /**
@@ -172,6 +172,36 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.PortType.end status=0 guid=" + this.logUUID);
     }
 
+    /**
+     * Visit nml bidirectional port to generate sLS port record
+     *
+     * @param bidirectionalPortType
+     */
+    public void visit(BidirectionalPortType bidirectionalPortType) {
+
+        logger.trace("event=NMLVisitor.visit.BidirectionalPortType.start id=" + bidirectionalPortType.getId() + " guid=" + this.logUUID);
+        BidirectionalPort sLSBiPort = recordsCollection.bidirectionalPortInstance(bidirectionalPortType.getId());
+
+        if (bidirectionalPortType.getName() != null)
+            sLSBiPort.setName(bidirectionalPortType.getName());
+
+        for (JAXBElement<? extends NetworkObject> element : bidirectionalPortType.getRest()) {
+            if (element.getValue() instanceof PortType) {
+                PortType port = (PortType) element.getValue();
+                if (sLSBiPort.getPorts() == null) {
+                    sLSBiPort.setPorts(new ArrayList<String>());
+                }
+                sLSBiPort.getPorts().add(port.getId());
+            } else if (element.getValue() instanceof PortGroupType) {
+                PortGroupType portGroup = (PortGroupType) element.getValue();
+                if (sLSBiPort.getPortGroups() == null) {
+                    sLSBiPort.setPortGroups(new ArrayList<String>());
+                }
+                sLSBiPort.getPortGroups().add(portGroup.getId());
+            }
+        }
+        logger.trace("event=NMLVisitor.visit.BidirectionalPortType.end status=0 guid=" + this.logUUID);
+    }
 
     /**
      * Visit nml link to generate sLS link record
@@ -324,6 +354,17 @@ public class NMLVisitor extends BaseVisitor {
         }
         for (LinkType link : topologyType.getLink()) {
             sLSTopo.getLinks().add(link.getId());
+        }
+
+        // Add Refs to the Bidirectional Ports in the Topology
+        for (NetworkObject object : topologyType.getGroup()) {
+            // Add Refs to the Bidirectional Ports in the Topology
+            if (object instanceof BidirectionalPortType) {
+                if (sLSTopo.getBidirectionalPorts() == null)
+                    sLSTopo.setBidirectionalPorts(new ArrayList<String>());
+                sLSTopo.getBidirectionalPorts().add(object.getId());
+            }
+            // TODO (AH): deal with other groups in the topology
         }
 
         // TODO (AH): deal with location, version, services, etc..

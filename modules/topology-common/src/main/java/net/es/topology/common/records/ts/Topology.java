@@ -51,7 +51,7 @@ public class Topology extends NetworkObject {
     /**
      * List of the URNs of ports in the topology
      *
-     * @return list of nodes' URNs
+     * @return list of ports' URNs
      */
     public List<String> getPorts() {
         return (List<String>) this.getValue(ReservedKeys.RECORD_TS_PORT);
@@ -60,10 +60,28 @@ public class Topology extends NetworkObject {
     /**
      * List of the URNs ports in the topology
      *
-     * @param list of ports' URNs
+     * @param ports list of ports' URNs
      */
     public void setPorts(List<String> ports) {
         this.add(ReservedKeys.RECORD_TS_PORT, ports);
+    }
+
+    /**
+     * List of the URNs of bidirectional ports in the topology
+     *
+     * @return list of bidirectional ports' URNs
+     */
+    public List<String> getBidirectionalPorts() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_BIDIRECTIONAL_PORT);
+    }
+
+    /**
+     * List of the URNs bidirectional ports in the topology
+     *
+     * @param biPorts list of bidirectional ports' URNs
+     */
+    public void setBidirectionalPorts(List<String> biPorts) {
+        this.add(ReservedKeys.RECORD_TS_BIDIRECTIONAL_PORT, biPorts);
     }
 
     /**
