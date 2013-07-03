@@ -303,6 +303,7 @@ public class NMLVisitor extends BaseVisitor {
         if (portGroupType.getEncoding() != null)
             sLSPortGroup.setEncoding(portGroupType.getEncoding());
         // TODO (AH): deal with labelgroup
+
         /*
         if (portGroupType.getLabelGroup() != null) {
             if (portGroupType.getLabelGroup().getValue() != null)
@@ -311,6 +312,22 @@ public class NMLVisitor extends BaseVisitor {
                 sLSPortGroup.setLabelGroupType(portGroupType.getLabelGroup().get());
         }
         */
+
+        // ports in the group
+        if (portGroupType.getPort() != null && portGroupType.getPort().size() != 0)
+            sLSPortGroup.setPorts(new ArrayList<String>());
+        for (PortType port : portGroupType.getPort()) {
+            // This make sure an ID is generated if it wasn't provided
+            sLSPortGroup.getPorts().add(recordsCollection.portInstance(port.getId()).getId());
+        }
+
+        // port groups in the group
+        if (portGroupType.getPortGroup() != null && portGroupType.getPortGroup().size() != 0)
+            sLSPortGroup.setPortGroups(new ArrayList<String>());
+        for (PortGroupType port : portGroupType.getPortGroup()) {
+            // This make sure an ID is generated if it wasn't provided
+            sLSPortGroup.getPortGroups().add(recordsCollection.portGroupInstance(port.getId()).getId());
+        }
 
         for (PortGroupRelationType relation : portGroupType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_IS_SINK)) {

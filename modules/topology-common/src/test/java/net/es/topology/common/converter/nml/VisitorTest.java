@@ -173,7 +173,7 @@ public class VisitorTest {
 
         // Assert
         // TODO (AH): this should assert only one port group is in there
-        Assert.assertEquals(2, collection.getPortGroups().size());
+        Assert.assertEquals(3, collection.getPortGroups().size());
         PortGroup ports[] = collection.getPortGroups().values().toArray(new PortGroup[collection.getPortGroups().size()]);
         PortGroup sLSPortGroup = ports[0];
         Assert.assertNotNull(sLSPortGroup);
@@ -181,6 +181,13 @@ public class VisitorTest {
         Assert.assertEquals("urn:ogf:network:example.net:2013:portGroup", sLSPortGroup.getId());
         Assert.assertEquals(null, sLSPortGroup.getName());
         Assert.assertEquals(VLAN_URI, sLSPortGroup.getEncoding());
+
+        Assert.assertEquals(2, sLSPortGroup.getPorts().size());
+        Assert.assertTrue(sLSPortGroup.getPorts().contains("urn:ogf:network:example.net:2013:portA"));
+        Assert.assertTrue(sLSPortGroup.getPorts().contains("urn:ogf:network:example.net:2013:portB"));
+
+        Assert.assertEquals(1, sLSPortGroup.getPortGroups().size());
+        Assert.assertTrue(sLSPortGroup.getPortGroups().contains("urn:ogf:network:example.net:2013:portGroupC"));
 
         Assert.assertEquals(1, sLSPortGroup.getIsSink().size());
         Assert.assertTrue(sLSPortGroup.getIsSink().contains("urn:ogf:network:example.net:2013:linkA"));

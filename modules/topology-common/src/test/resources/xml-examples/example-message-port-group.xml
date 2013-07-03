@@ -10,6 +10,7 @@
             <nml:Port id="urn:ogf:network:example.net:2013:portB">
                 <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1502</nml:Label>
             </nml:Port>
+            <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroupC" />
             <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSink">
                 <nml:LinkGroup id="urn:ogf:network:example.net:2013:linkA"/>
             </nml:Relation>
