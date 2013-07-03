@@ -26,6 +26,7 @@ public class RecordsCollection {
     private Map<String, BidirectionalPort> bidirectionalPorts = null;
     private Map<String, BidirectionalLink> bidirectionalLinks = null;
     private Map<String, PortGroup> portGroups = null;
+    private Map<String, LinkGroup> linkGroups = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -42,6 +43,7 @@ public class RecordsCollection {
         this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
         this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
         this.setPortGroups(new HashMap<String, PortGroup>());
+        this.setLinkGroups(new HashMap<String, LinkGroup>());
     }
 
     public RecordsCollection(String logUUID) {
@@ -53,6 +55,7 @@ public class RecordsCollection {
         this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
         this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
         this.setPortGroups(new HashMap<String, PortGroup>());
+        this.setLinkGroups(new HashMap<String, LinkGroup>());
     }
 
     public Map<String, Node> getNodes() {
@@ -110,6 +113,14 @@ public class RecordsCollection {
 
     public void setPortGroups(Map<String, PortGroup> portGroups) {
         this.portGroups = portGroups;
+    }
+
+    public Map<String, LinkGroup> getLinkGroups() {
+        return linkGroups;
+    }
+
+    public void setLinkGroups(Map<String, LinkGroup> linkGroups) {
+        this.linkGroups = linkGroups;
     }
 
     /**
@@ -316,4 +327,32 @@ public class RecordsCollection {
         return portGroup;
     }
 
+    /**
+     * Create/or return a LinkGroup instance
+     * If the a LinkGroup with the same id already exists this method will return a reference to it
+     * If there is not LinkGroup with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return PortGroup instance
+     */
+    public LinkGroup linkGroupInstance(String id) {
+        logger.trace("event=RecordsCollection.portLinkInstance.start id=" + id + " guid=" + this.logUUID);
+        LinkGroup linkGroup = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.portLinkInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getLinkGroups().containsKey(id)) {
+            linkGroup = getLinkGroups().get(id);
+        } else {
+            linkGroup = new LinkGroup();
+            linkGroup.setId(id);
+            getLinkGroups().put(id, linkGroup);
+            logger.trace("event=RecordsCollection.portLinkInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.portLinkInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return linkGroup;
+    }
 }

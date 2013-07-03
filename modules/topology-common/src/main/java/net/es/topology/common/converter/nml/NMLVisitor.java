@@ -340,6 +340,60 @@ public class NMLVisitor extends BaseVisitor {
     }
 
     /**
+     * Visit nml link group to generate sLS link group record
+     *
+     * @param linkGroupType
+     */
+    @Override
+    public void visit(LinkGroupType linkGroupType) {
+        logger.trace("event=NMLVisitor.visit.LinkGroupType.start id=" + linkGroupType.getId() + " guid=" + this.logUUID);
+        LinkGroup sLSLinkGroup = recordsCollection.linkGroupInstance(linkGroupType.getId());
+
+        if (linkGroupType.getName() != null)
+            sLSLinkGroup.setName(linkGroupType.getName());
+
+        // TODO (AH): deal with labelgroup
+
+        // Links in the group
+        if (linkGroupType.getLink() != null && linkGroupType.getLink().size() != 0) {
+            sLSLinkGroup.setLinks(new ArrayList<String>());
+        }
+        for (LinkType link : linkGroupType.getLink()) {
+            // This make sure an ID is generated if it wasn't provided
+            sLSLinkGroup.getLinks().add(recordsCollection.linkInstance(link.getId()).getId());
+        }
+
+        // LinkGroups in the group
+        if (linkGroupType.getLinkGroup() != null && linkGroupType.getLinkGroup().size() != 0) {
+            sLSLinkGroup.setLinkGroups(new ArrayList<String>());
+        }
+        for (LinkGroupType link : linkGroupType.getLinkGroup()) {
+            // This make sure an ID is generated if it wasn't provided
+            sLSLinkGroup.getLinkGroups().add(recordsCollection.linkGroupInstance(link.getId()).getId());
+        }
+
+        // Parse relations
+        for (LinkGroupRelationType relation : linkGroupType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_IS_SERIAL_COMPOUND_LINK)) {
+                if (sLSLinkGroup.getIsSerialCompoundLink() == null) {
+                    sLSLinkGroup.setIsSerialCompoundLink(new ArrayList<String>());
+                }
+                for (LinkGroupType link : relation.getLinkGroup()) {
+                    sLSLinkGroup.getIsSerialCompoundLink().add(link.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
+                if (sLSLinkGroup.getIsAlias() == null) {
+                    sLSLinkGroup.setIsAlias(new ArrayList<String>());
+                }
+                for (LinkGroupType link : relation.getLinkGroup()) {
+                    sLSLinkGroup.getIsAlias().add(link.getId());
+                }
+            }
+        }
+        logger.trace("event=NMLVisitor.visit.LinkGroupType.end status=0 guid=" + this.logUUID);
+    }
+
+    /**
      * Visit nml lifetime to generate sLS lifetime record
      *
      * @param lifetimeType

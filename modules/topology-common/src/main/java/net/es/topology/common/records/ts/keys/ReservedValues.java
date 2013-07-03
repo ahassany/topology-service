@@ -10,6 +10,7 @@ public class ReservedValues {
     public static final String RECORD_TYPE_PORT = "nml-port";
     public static final String RECORD_TYPE_PORT_GROUP = "nml-port-group";
     public static final String RECORD_TYPE_LINK = "nml-link";
+    public static final String RECORD_TYPE_LINK_GROUP = "nml-link-group";
 
     public static final String RECORD_TYPE_LOCATION = "nml-location";
     public static final String RECORD_TYPE_LIFETIME = "nml-lifetime";

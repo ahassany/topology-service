@@ -245,6 +245,62 @@ public class VisitorTest {
     }
 
     @Test
+    public void testVisitLinkGroupType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-link-group.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<LinkGroupType> element = (JAXBElement<LinkGroupType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        LinkGroupType linkGroupType = element.getValue();
+        linkGroupType.accept(tv);
+
+        // Assert
+        // TODO (AH): this should assert only one port group is in there
+        for (LinkGroup l : collection.getLinkGroups().values()) {
+            System.out.
+                    println(l.getId());
+        }
+        Assert.assertEquals(4, collection.getLinkGroups().size());
+        Assert.assertTrue(collection.getLinkGroups().containsKey("urn:ogf:network:example.net:2013:linkGroup"));
+        LinkGroup sLSLinkGroup = collection.getLinkGroups().get("urn:ogf:network:example.net:2013:linkGroup");
+        Assert.assertNotNull(sLSLinkGroup);
+        Assert.assertNotNull(sLSLinkGroup.getId());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:linkGroup", sLSLinkGroup.getId());
+        Assert.assertEquals(null, sLSLinkGroup.getName());
+
+        Assert.assertEquals(2, sLSLinkGroup.getLinks().size());
+        Assert.assertTrue(sLSLinkGroup.getLinks().contains("urn:ogf:network:example.net:2013:linkA:XY"));
+        Assert.assertTrue(sLSLinkGroup.getLinks().contains("urn:ogf:network:example.net:2013:linkA:YX"));
+
+        Assert.assertEquals(1, sLSLinkGroup.getLinkGroups().size());
+        Assert.assertTrue(sLSLinkGroup.getLinkGroups().contains("urn:ogf:network:example.net:2013:linkGroupB"));
+
+        Assert.assertEquals(1, sLSLinkGroup.getIsSerialCompoundLink().size());
+        Assert.assertTrue(sLSLinkGroup.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkA:YX"));
+
+        Assert.assertEquals(1, sLSLinkGroup.getIsAlias().size());
+        Assert.assertTrue(sLSLinkGroup.getIsAlias().contains("urn:ogf:network:example.net:2013:linkGroupC"));
+    }
+
+    @Test
     public void testVisitTopologyType() throws JAXBException {
         // Prepare
         // Create a visitor

@@ -282,4 +282,24 @@ public class RecordsCollectionTest {
         Assert.assertSame(portB, this.collection.portGroupInstance(id2));
         Assert.assertSame(portNull, this.collection.portGroupInstance(portNull.getId()));
     }
+
+    @Test
+    public void testLinkGroupInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:linkA";
+        String id2 = "urn:ogf:network:example.net:2013:linkB";
+        LinkGroup linkA = new LinkGroup();
+        linkA.setId(id1);
+        this.collection.getLinkGroups().put(id1, linkA);
+
+        // Act
+        LinkGroup linkA2 = this.collection.linkGroupInstance(id1);
+        LinkGroup linkB = this.collection.linkGroupInstance(id2);
+        LinkGroup linkNull = this.collection.linkGroupInstance(null);
+
+        // Assert
+        Assert.assertSame(linkA, linkA2);
+        Assert.assertSame(linkB, this.collection.linkGroupInstance(id2));
+        Assert.assertSame(linkNull, this.collection.linkGroupInstance(linkNull.getId()));
+    }
 }
