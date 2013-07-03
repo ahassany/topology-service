@@ -46,6 +46,11 @@
                 <nml:Port id="urn:ogf:network:example.net:2013:portD:in"/>
             </nml:BidirectionalPort>
 
+            <nml:BidirectionalLink id="urn:ogf:network:example.net:2013:linkBidir">
+                <nml:Link id="urn:ogf:network:example.net:2013:linkA"/>
+                <nml:Link id="urn:ogf:network:example.net:2013:linkB"/>
+            </nml:BidirectionalLink>
+
             <!-- define the relations for the inbound and outbound ports -->
             <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
                 <nml:Port id="urn:ogf:network:example.net:2013:portC:in"/>

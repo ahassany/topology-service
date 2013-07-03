@@ -110,6 +110,23 @@ public class RecordsCollectionTest {
     }
 
     @Test
+    public void testGetBidirectionalLinks() throws Exception {
+        Assert.assertNotNull(this.collection.getBidirectionalLinks());
+    }
+
+    @Test
+    public void testSetBidirectionalLinks() throws Exception {
+        // Arrange
+        Map<String, BidirectionalLink> biLinks = new HashMap<String, BidirectionalLink>();
+
+        // Act
+        this.collection.setBidirectionalLinks(biLinks);
+
+        // Assert
+        Assert.assertSame(biLinks, this.collection.getBidirectionalLinks());
+    }
+
+    @Test
     public void testPortInstance() throws Exception {
         // Arrange
         String id1 = "urn:ogf:network:example.net:2013:portA";
@@ -207,5 +224,25 @@ public class RecordsCollectionTest {
         Assert.assertSame(biportA, biportA2);
         Assert.assertSame(biportB, this.collection.bidirectionalPortInstance(id2));
         Assert.assertSame(biportNull, this.collection.bidirectionalPortInstance(biportNull.getId()));
+    }
+
+    @Test
+    public void testBidirectionalLinkInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:biportA";
+        String id2 = "urn:ogf:network:example.net:2013:biportB";
+        BidirectionalLink biLinkA = new BidirectionalLink();
+        biLinkA.setId(id1);
+        this.collection.getBidirectionalLinks().put(id1, biLinkA);
+
+        // Act
+        BidirectionalLink biLinkA2 = this.collection.bidirectionalLinkInstance(id1);
+        BidirectionalLink biLinkB = this.collection.bidirectionalLinkInstance(id2);
+        BidirectionalLink biLinkNull = this.collection.bidirectionalLinkInstance(null);
+
+        // Assert
+        Assert.assertSame(biLinkA, biLinkA2);
+        Assert.assertSame(biLinkB, this.collection.bidirectionalLinkInstance(id2));
+        Assert.assertSame(biLinkNull, this.collection.bidirectionalLinkInstance(biLinkNull.getId()));
     }
 }

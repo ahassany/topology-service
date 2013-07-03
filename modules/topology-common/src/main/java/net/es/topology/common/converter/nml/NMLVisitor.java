@@ -259,6 +259,36 @@ public class NMLVisitor extends BaseVisitor {
     }
 
     /**
+     * Visit nml bidirectional link to generate sLS link record
+     *
+     * @param bidirectionalLinkType
+     */
+    public void visit(BidirectionalLinkType bidirectionalLinkType) {
+        logger.trace("event=NMLVisitor.visit.BidirectionalLinkType.start id=" + bidirectionalLinkType.getId() + " guid=" + this.logUUID);
+        BidirectionalLink sLSBiLink = recordsCollection.bidirectionalLinkInstance(bidirectionalLinkType.getId());
+
+        if (bidirectionalLinkType.getName() != null)
+            sLSBiLink.setName(bidirectionalLinkType.getName());
+
+        for (JAXBElement<? extends NetworkObject> element : bidirectionalLinkType.getRest()) {
+            if (element.getValue() instanceof LinkType) {
+                LinkType link = (LinkType) element.getValue();
+                if (sLSBiLink.getLinks() == null) {
+                    sLSBiLink.setLinks(new ArrayList<String>());
+                }
+                sLSBiLink.getLinks().add(link.getId());
+            } else if (element.getValue() instanceof LinkGroupType) {
+                LinkGroupType linkGroup = (LinkGroupType) element.getValue();
+                if (sLSBiLink.getLinkGroups() == null) {
+                    sLSBiLink.setLinkGroups(new ArrayList<String>());
+                }
+                sLSBiLink.getLinkGroups().add(linkGroup.getId());
+            }
+        }
+        logger.trace("event=NMLVisitor.visit.BidirectionalLinkType.end status=0 guid=" + this.logUUID);
+    }
+
+    /**
      * Visit nml lifetime to generate sLS lifetime record
      *
      * @param lifetimeType
@@ -363,6 +393,12 @@ public class NMLVisitor extends BaseVisitor {
                 if (sLSTopo.getBidirectionalPorts() == null)
                     sLSTopo.setBidirectionalPorts(new ArrayList<String>());
                 sLSTopo.getBidirectionalPorts().add(object.getId());
+            }
+
+            if (object instanceof BidirectionalLinkType) {
+                if (sLSTopo.getBidirectionalLinks() == null)
+                    sLSTopo.setBidirectionalLinks(new ArrayList<String>());
+                sLSTopo.getBidirectionalLinks().add(object.getId());
             }
             // TODO (AH): deal with other groups in the topology
         }

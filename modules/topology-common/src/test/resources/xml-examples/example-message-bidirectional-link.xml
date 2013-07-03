@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+    xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
+    <body>
+        <nml:BidirectionalLink id="urn:ogf:network:example.net:2013:linkA">
+            <nml:name>LinkA</nml:name>
+            <nml:Link id="urn:ogf:network:example.net:2013:linkA:XY"/>
+            <nml:Link id="urn:ogf:network:example.net:2013:linkA:YX"/>
+        </nml:BidirectionalLink>
+    </body>
+</message>

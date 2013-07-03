@@ -12,7 +12,9 @@ public class ReservedKeys {
     public static final String RECORD_TS_PORT = "ts-port";
     public static final String RECORD_TS_PORT_GROUP = "ts-port-group";
     public static final String RECORD_TS_LINK = "ts-link";
+    public static final String RECORD_TS_LINK_GROUP = "ts-link-group";
     public static final String RECORD_TS_BIDIRECTIONAL_PORT = "ts-bidirectional-port";
+    public static final String RECORD_TS_BIDIRECTIONAL_LINK = "ts-bidirectional-link";
 
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";

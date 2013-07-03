@@ -96,11 +96,30 @@ public class Topology extends NetworkObject {
     /**
      * List of the URNs links in the topology
      *
-     * @param list of links' URNs
+     * @param links list of links' URNs
      */
     public void setLinks(List<String> links) {
         this.add(ReservedKeys.RECORD_TS_LINK, links);
     }
+
+    /**
+     * List of the URNs of bidirectional links in the topology
+     *
+     * @return list of bidirectional links' URNs
+     */
+    public List<String> getBidirectionalLinks() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_BIDIRECTIONAL_LINK);
+    }
+
+    /**
+     * List of the URNs bidirectional links in the topology
+     *
+     * @param bidirectionalLinks list of links' URNs
+     */
+    public void setBidirectionalLinks(List<String> bidirectionalLinks) {
+        this.add(ReservedKeys.RECORD_TS_BIDIRECTIONAL_LINK, bidirectionalLinks);
+    }
+
 
     /**
      * This defines that the related Network Object has an inbound Port or PortGroup object.

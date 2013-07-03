@@ -24,6 +24,7 @@ public class RecordsCollection {
     private Map<String, Link> links = null;
     private Map<String, Topology> topologies = null;
     private Map<String, BidirectionalPort> bidirectionalPorts = null;
+    private Map<String, BidirectionalLink> bidirectionalLinks = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -38,6 +39,7 @@ public class RecordsCollection {
         this.setLinks(new HashMap<String, Link>());
         this.setTopologies(new HashMap<String, Topology>());
         this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
+        this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
     }
 
     public RecordsCollection(String logUUID) {
@@ -47,6 +49,7 @@ public class RecordsCollection {
         this.setLinks(new HashMap<String, Link>());
         this.setTopologies(new HashMap<String, Topology>());
         this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
+        this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
     }
 
     public Map<String, Node> getNodes() {
@@ -88,6 +91,14 @@ public class RecordsCollection {
 
     public void setBidirectionalPorts(Map<String, BidirectionalPort> bidirectionalPorts) {
         this.bidirectionalPorts = bidirectionalPorts;
+    }
+
+    public Map<String, BidirectionalLink> getBidirectionalLinks() {
+        return bidirectionalLinks;
+    }
+
+    public void setBidirectionalLinks(Map<String, BidirectionalLink> bidirectionalLinks) {
+        this.bidirectionalLinks = bidirectionalLinks;
     }
 
     /**
@@ -233,6 +244,36 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.bidirectionalPortInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return biPort;
+    }
+
+
+    /**
+     * Create/or return a BidirectionalLink instance
+     * If the a BidirectionalLink with the same id already exists this method will return a reference to it
+     * If there is not BidirectionalLink with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return BidirectionalLink instance
+     */
+    public BidirectionalLink bidirectionalLinkInstance(String id) {
+        logger.trace("event=RecordsCollection.bidirectionalLinkInstance.start id=" + id + " guid=" + this.logUUID);
+        BidirectionalLink biLink = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.bidirectionalLinkInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getBidirectionalLinks().containsKey(id)) {
+            biLink = getBidirectionalLinks().get(id);
+        } else {
+            biLink = new BidirectionalLink();
+            biLink.setId(id);
+            getBidirectionalLinks().put(id, biLink);
+            logger.trace("event=RecordsCollection.bidirectionalLinkInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.bidirectionalLinkInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return biLink;
     }
 
 }

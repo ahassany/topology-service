@@ -251,6 +251,9 @@ public class VisitorTest {
         Assert.assertEquals(2, topology.getBidirectionalPorts().size());
         Assert.assertTrue(topology.getBidirectionalPorts().contains("urn:ogf:network:example.net:2013:portC"));
         Assert.assertTrue(topology.getBidirectionalPorts().contains("urn:ogf:network:example.net:2013:portC"));
+
+        Assert.assertEquals(1, topology.getBidirectionalLinks().size());
+        Assert.assertTrue(topology.getBidirectionalLinks().contains("urn:ogf:network:example.net:2013:linkBidir"));
         // TODO (AH): test for all other elements in Topology
     }
 
@@ -295,6 +298,50 @@ public class VisitorTest {
         Assert.assertEquals(2, sLSBiPort.getPorts().size());
         Assert.assertTrue(sLSBiPort.getPorts().contains("urn:ogf:network:example.net:2013:portA:out"));
         Assert.assertTrue(sLSBiPort.getPorts().contains("urn:ogf:network:example.net:2013:portA:in"));
+    }
+
+    @Test
+    public void testVisitBidirectionalLinkType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-bidirectional-link.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<BidirectionalLinkType> element = (JAXBElement<BidirectionalLinkType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        BidirectionalLinkType biLinkType = element.getValue();
+        biLinkType.accept(tv);
+
+        // Assert
+        Assert.assertEquals(1, collection.getBidirectionalLinks().size());
+        BidirectionalLink links[] = collection.getBidirectionalLinks().values().toArray(new BidirectionalLink[collection.getBidirectionalLinks().size()]);
+        BidirectionalLink sLSBiLink = links[0];
+        Assert.assertNotNull(sLSBiLink);
+        Assert.assertNotNull(sLSBiLink.getId());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:linkA", sLSBiLink.getId());
+        Assert.assertEquals("LinkA", sLSBiLink.getName());
+
+        Assert.assertNull(sLSBiLink.getLinkGroups());
+        Assert.assertNotNull(sLSBiLink.getLinks());
+        Assert.assertEquals(2, sLSBiLink.getLinks().size());
+        Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:XY"));
+        Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:YX"));
     }
 
     @Test
