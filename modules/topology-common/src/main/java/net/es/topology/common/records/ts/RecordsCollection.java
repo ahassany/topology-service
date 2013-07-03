@@ -25,6 +25,7 @@ public class RecordsCollection {
     private Map<String, Topology> topologies = null;
     private Map<String, BidirectionalPort> bidirectionalPorts = null;
     private Map<String, BidirectionalLink> bidirectionalLinks = null;
+    private Map<String, PortGroup> portGroups = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -40,6 +41,7 @@ public class RecordsCollection {
         this.setTopologies(new HashMap<String, Topology>());
         this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
         this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
+        this.setPortGroups(new HashMap<String, PortGroup>());
     }
 
     public RecordsCollection(String logUUID) {
@@ -50,6 +52,7 @@ public class RecordsCollection {
         this.setTopologies(new HashMap<String, Topology>());
         this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
         this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
+        this.setPortGroups(new HashMap<String, PortGroup>());
     }
 
     public Map<String, Node> getNodes() {
@@ -99,6 +102,14 @@ public class RecordsCollection {
 
     public void setBidirectionalLinks(Map<String, BidirectionalLink> bidirectionalLinks) {
         this.bidirectionalLinks = bidirectionalLinks;
+    }
+
+    public Map<String, PortGroup> getPortGroups() {
+        return portGroups;
+    }
+
+    public void setPortGroups(Map<String, PortGroup> portGroups) {
+        this.portGroups = portGroups;
     }
 
     /**
@@ -274,6 +285,35 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.bidirectionalLinkInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return biLink;
+    }
+
+    /**
+     * Create/or return a PortGroup instance
+     * If the a PortGroup with the same id already exists this method will return a reference to it
+     * If there is not PortGroup with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return PortGroup instance
+     */
+    public PortGroup portGroupInstance(String id) {
+        logger.trace("event=RecordsCollection.portGroupInstance.start id=" + id + " guid=" + this.logUUID);
+        PortGroup portGroup = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.portGroupInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getPortGroups().containsKey(id)) {
+            portGroup = getPortGroups().get(id);
+        } else {
+            portGroup = new PortGroup();
+            portGroup.setId(id);
+            getPortGroups().put(id, portGroup);
+            logger.trace("event=RecordsCollection.portGroupInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.portGroupInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return portGroup;
     }
 
 }

@@ -8,6 +8,7 @@ public class ReservedValues {
     public static final String RECORD_TYPE_NETWORKOBJECT = "nml-networkobject";
     public static final String RECORD_TYPE_NODE = "nml-node";
     public static final String RECORD_TYPE_PORT = "nml-port";
+    public static final String RECORD_TYPE_PORT_GROUP = "nml-port-group";
     public static final String RECORD_TYPE_LINK = "nml-link";
 
     public static final String RECORD_TYPE_LOCATION = "nml-location";

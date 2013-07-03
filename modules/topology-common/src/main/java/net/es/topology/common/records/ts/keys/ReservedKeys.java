@@ -55,5 +55,7 @@ public class ReservedKeys {
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";
     public static final String RECORD_LABEL_TYPE = "ts-label-type";
+    public static final String RECORD_LABEL_GROUP = "ts-label-group";
+    public static final String RECORD_LABEL_GROUP_TYPE = "ts-label-group-type";
 
 }

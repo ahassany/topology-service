@@ -127,6 +127,23 @@ public class RecordsCollectionTest {
     }
 
     @Test
+    public void testGetPortGroups() throws Exception {
+        Assert.assertNotNull(this.collection.getPortGroups());
+    }
+
+    @Test
+    public void testSetPortGroups() throws Exception {
+        // Arrange
+        Map<String, PortGroup> ports = new HashMap<String, PortGroup>();
+
+        // Act
+        this.collection.setPortGroups(ports);
+
+        // Assert
+        Assert.assertSame(ports, this.collection.getPortGroups());
+    }
+
+    @Test
     public void testPortInstance() throws Exception {
         // Arrange
         String id1 = "urn:ogf:network:example.net:2013:portA";
@@ -244,5 +261,25 @@ public class RecordsCollectionTest {
         Assert.assertSame(biLinkA, biLinkA2);
         Assert.assertSame(biLinkB, this.collection.bidirectionalLinkInstance(id2));
         Assert.assertSame(biLinkNull, this.collection.bidirectionalLinkInstance(biLinkNull.getId()));
+    }
+
+    @Test
+    public void testPortGroupInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:portA";
+        String id2 = "urn:ogf:network:example.net:2013:portB";
+        PortGroup portA = new PortGroup();
+        portA.setId(id1);
+        this.collection.getPortGroups().put(id1, portA);
+
+        // Act
+        PortGroup portA2 = this.collection.portGroupInstance(id1);
+        PortGroup portB = this.collection.portGroupInstance(id2);
+        PortGroup portNull = this.collection.portGroupInstance(null);
+
+        // Assert
+        Assert.assertSame(portA, portA2);
+        Assert.assertSame(portB, this.collection.portGroupInstance(id2));
+        Assert.assertSame(portNull, this.collection.portGroupInstance(portNull.getId()));
     }
 }

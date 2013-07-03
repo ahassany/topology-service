@@ -289,6 +289,57 @@ public class NMLVisitor extends BaseVisitor {
     }
 
     /**
+     * Visit nml port group to generate sLS port group record
+     *
+     * @param portGroupType
+     */
+    @Override
+    public void visit(PortGroupType portGroupType) {
+        logger.trace("event=NMLVisitor.visit.PortGroupType.start id=" + portGroupType.getId() + " guid=" + this.logUUID);
+        PortGroup sLSPortGroup = recordsCollection.portGroupInstance(portGroupType.getId());
+
+        if (portGroupType.getName() != null)
+            sLSPortGroup.setName(portGroupType.getName());
+        if (portGroupType.getEncoding() != null)
+            sLSPortGroup.setEncoding(portGroupType.getEncoding());
+        // TODO (AH): deal with labelgroup
+        /*
+        if (portGroupType.getLabelGroup() != null) {
+            if (portGroupType.getLabelGroup().getValue() != null)
+                sLSPortGroup.setLabelGroup(portGroupType.getLabel().getValue());
+            if (portGroupType.getLabelGroup().getLabeltype() != null)
+                sLSPortGroup.setLabelGroupType(portGroupType.getLabelGroup().get());
+        }
+        */
+
+        for (PortGroupRelationType relation : portGroupType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_IS_SINK)) {
+                if (sLSPortGroup.getIsSink() == null) {
+                    sLSPortGroup.setIsSink(new ArrayList<String>());
+                }
+                for (LinkGroupType link : relation.getLinkGroup()) {
+                    sLSPortGroup.getIsSink().add(link.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_SOURCE)) {
+                if (sLSPortGroup.getIsSource() == null) {
+                    sLSPortGroup.setIsSource(new ArrayList<String>());
+                }
+                for (LinkGroupType link : relation.getLinkGroup()) {
+                    sLSPortGroup.getIsSource().add(link.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
+                if (sLSPortGroup.getIsAlias() == null) {
+                    sLSPortGroup.setIsAlias(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    sLSPortGroup.getIsAlias().add(port.getId());
+                }
+            }
+        }
+        logger.trace("event=NMLVisitor.visit.PortGroupType.end status=0 guid=" + this.logUUID);
+    }
+
+    /**
      * Visit nml lifetime to generate sLS lifetime record
      *
      * @param lifetimeType

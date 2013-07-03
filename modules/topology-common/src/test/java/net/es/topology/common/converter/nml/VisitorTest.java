@@ -144,6 +144,55 @@ public class VisitorTest {
     }
 
     @Test
+    public void testVisitPortGroupType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-port-group.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<PortGroupType> portElement = (JAXBElement<PortGroupType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(portElement.getValue());
+        PortGroupType portGroupType = portElement.getValue();
+        portGroupType.accept(tv);
+
+        // Assert
+        // TODO (AH): this should assert only one port group is in there
+        Assert.assertEquals(2, collection.getPortGroups().size());
+        PortGroup ports[] = collection.getPortGroups().values().toArray(new PortGroup[collection.getPortGroups().size()]);
+        PortGroup sLSPortGroup = ports[0];
+        Assert.assertNotNull(sLSPortGroup);
+        Assert.assertNotNull(sLSPortGroup.getId());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:portGroup", sLSPortGroup.getId());
+        Assert.assertEquals(null, sLSPortGroup.getName());
+        Assert.assertEquals(VLAN_URI, sLSPortGroup.getEncoding());
+
+        Assert.assertEquals(1, sLSPortGroup.getIsSink().size());
+        Assert.assertTrue(sLSPortGroup.getIsSink().contains("urn:ogf:network:example.net:2013:linkA"));
+
+        Assert.assertEquals(1, sLSPortGroup.getIsSource().size());
+        Assert.assertTrue(sLSPortGroup.getIsSource().contains("urn:ogf:network:example.net:2013:linkB"));
+
+        Assert.assertEquals(1, sLSPortGroup.getIsAlias().size());
+        Assert.assertTrue(sLSPortGroup.getIsAlias().contains("urn:ogf:network:example.net:2013:portGroupB"));
+    }
+
+    @Test
     public void testVisitLinkType() throws JAXBException {
         // Prepare
         // Create a visitor
