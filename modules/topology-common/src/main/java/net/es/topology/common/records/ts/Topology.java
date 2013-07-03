@@ -42,7 +42,7 @@ public class Topology extends NetworkObject {
     /**
      * List of the URNs nodes in the topology
      *
-     * @param list of nodes' URNs
+     * @param nodes list of nodes' URNs
      */
     public void setNodes(List<String> nodes) {
         this.add(ReservedKeys.RECORD_TS_NODE, nodes);
