@@ -17,4 +17,7 @@ public class ReservedValues {
     public static final String RECORD_TYPE_TOPOLOGY = "nml-topology";
     public static final String RECORD_TYPE_BIDIRECTIONAL_PORT = "nml-bidirectional-port";
     public static final String RECORD_TYPE_BIDIRECTIONAL_LINK = "nml-bidirectional-link";
+
+    // Records for Network Service Interface (NSI) Topology
+    public static final String RECORD_TYPE_NSA = "nsi-nsa";
 }

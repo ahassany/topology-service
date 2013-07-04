@@ -27,6 +27,7 @@ public class RecordsCollection {
     private Map<String, BidirectionalLink> bidirectionalLinks = null;
     private Map<String, PortGroup> portGroups = null;
     private Map<String, LinkGroup> linkGroups = null;
+    private Map<String, NSA> NSAs = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -44,6 +45,7 @@ public class RecordsCollection {
         this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
         this.setPortGroups(new HashMap<String, PortGroup>());
         this.setLinkGroups(new HashMap<String, LinkGroup>());
+        this.setNSAs(new HashMap<String, NSA>());
     }
 
     public RecordsCollection(String logUUID) {
@@ -56,6 +58,7 @@ public class RecordsCollection {
         this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
         this.setPortGroups(new HashMap<String, PortGroup>());
         this.setLinkGroups(new HashMap<String, LinkGroup>());
+        this.setNSAs(new HashMap<String, NSA>());
     }
 
     public Map<String, Node> getNodes() {
@@ -121,6 +124,14 @@ public class RecordsCollection {
 
     public void setLinkGroups(Map<String, LinkGroup> linkGroups) {
         this.linkGroups = linkGroups;
+    }
+
+    public Map<String, NSA> getNSAs() {
+        return NSAs;
+    }
+
+    public void setNSAs(Map<String, NSA> NSAs) {
+        this.NSAs = NSAs;
     }
 
     /**
@@ -268,7 +279,6 @@ public class RecordsCollection {
         return biPort;
     }
 
-
     /**
      * Create/or return a BidirectionalLink instance
      * If the a BidirectionalLink with the same id already exists this method will return a reference to it
@@ -354,5 +364,34 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.linkGroupInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return linkGroup;
+    }
+
+    /**
+     * Create/or return a NSA instance
+     * If the a NSA with the same id already exists this method will return a reference to it
+     * If there is not NSA with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return NSA instance
+     */
+    public NSA NSAInstance(String id) {
+        logger.trace("event=RecordsCollection.NSAInstance.start id=" + id + " guid=" + this.logUUID);
+        NSA nsa = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.NSAInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getNSAs().containsKey(id)) {
+            nsa = getNSAs().get(id);
+        } else {
+            nsa = new NSA();
+            nsa.setId(id);
+            getNSAs().put(id, nsa);
+            logger.trace("event=RecordsCollection.NSAInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.NSAInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return nsa;
     }
 }

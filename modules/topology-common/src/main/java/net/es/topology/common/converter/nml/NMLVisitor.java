@@ -5,6 +5,8 @@ import net.es.topology.common.visitors.BaseVisitor;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nml._2013._05.base.NetworkObject;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
+import org.ogf.schemas.nsi._2013._09.topology.NSARelationType;
+import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,8 @@ public class NMLVisitor extends BaseVisitor {
     public static final String RELATION_IS_SOURCE = "http://schemas.ogf.org/nml/2013/05/base#isSource";
     public static final String RELATION_IS_SERIAL_COMPOUND_LINK = "http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink";
     public static final String RELATION_NEXT = "http://schemas.ogf.org/nml/2013/05/base#next";
+    public static final String RELATION_PEERS_WITH = "http://schemas.ogf.org/nsi/2013/09/topology#peersWith";
+    public static final String RELATION_MANAGED_BY = "http://schemas.ogf.org/nsi/2013/09/topology#managedBy";
     // JAXB Bindings
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     /**
@@ -408,6 +412,48 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
         logger.trace("event=NMLVisitor.visit.LinkGroupType.end status=0 guid=" + this.logUUID);
+    }
+
+    /**
+     * Visit NSI NSA to generate sLS NSA record
+     *
+     * @param nsaType
+     */
+    public void visit(NSAType nsaType) {
+        logger.trace("event=NMLVisitor.visit.NSAType.start id=" + nsaType.getId() + " guid=" + this.logUUID);
+        NSA sLSNSA = recordsCollection.NSAInstance(nsaType.getId());
+
+        if (nsaType.getName() != null)
+            sLSNSA.setName(nsaType.getName());
+
+        if (nsaType.getTopology() != null && nsaType.getTopology().size() != 0)
+            sLSNSA.setTopologies(new ArrayList<String>());
+        for (TopologyType topologyType : nsaType.getTopology()) {
+            // This make sure an ID is generated if it wasn't provided
+            sLSNSA.getTopologies().add(recordsCollection.topologyInstance(topologyType.getId()).getId());
+        }
+
+        for (NSARelationType relation : nsaType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_PEERS_WITH)) {
+                if (sLSNSA.getPeersWith() == null) {
+                    sLSNSA.setPeersWith(new ArrayList<String>());
+                }
+                for (NSAType nsa : relation.getNSA()) {
+                    sLSNSA.getPeersWith().add(nsa.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_MANAGED_BY)) {
+                if (sLSNSA.getManagedBy() == null) {
+                    sLSNSA.setManagedBy(new ArrayList<String>());
+                }
+                for (NSAType nsa : relation.getNSA()) {
+                    sLSNSA.getManagedBy().add(nsa.getId());
+                }
+            }
+        }
+
+        // TODO (AH): parse service
+
+        logger.trace("event=NMLVisitor.visit.NSAType.end status=0 guid=" + this.logUUID);
     }
 
     /**

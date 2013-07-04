@@ -13,6 +13,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
+import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -460,6 +461,55 @@ public class VisitorTest {
         Assert.assertEquals(2, sLSBiLink.getLinks().size());
         Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:XY"));
         Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:YX"));
+    }
+
+
+    @Test
+    public void testVisitNSAType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-nsa.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<NSAType> element = (JAXBElement<NSAType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        NSAType nsaType = element.getValue();
+        nsaType.accept(tv);
+
+
+        // Assert
+        Assert.assertEquals(3, collection.getNSAs().size());
+        Assert.assertTrue(collection.getNSAs().containsKey("urn:ogf:network:example.org:2013:nsa"));
+        Assert.assertTrue(collection.getNSAs().containsKey("urn:ogf:network:example.com:2013:nsa"));
+        Assert.assertTrue(collection.getNSAs().containsKey("urn:ogf:network:example.net:2013:nsa"));
+        NSA nsa = collection.getNSAs().get("urn:ogf:network:example.org:2013:nsa");
+        Assert.assertEquals("urn:ogf:network:example.org:2013:nsa", nsa.getId());
+        Assert.assertNull(nsa.getName());
+
+        Assert.assertEquals(1, nsa.getTopologies().size());
+        Assert.assertTrue(nsa.getTopologies().contains("urn:ogf:network:example.org:2013:topology"));
+
+        Assert.assertEquals(1, nsa.getPeersWith().size());
+        Assert.assertTrue(nsa.getPeersWith().contains("urn:ogf:network:example.org:2013:nsa"));
+
+        Assert.assertEquals(1, nsa.getManagedBy().size());
+        Assert.assertTrue(nsa.getManagedBy().contains("urn:ogf:network:example.net:2013:nsa"));
     }
 
     @Test

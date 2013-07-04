@@ -144,6 +144,23 @@ public class RecordsCollectionTest {
     }
 
     @Test
+    public void testGetNSAs() throws Exception {
+        Assert.assertNotNull(this.collection.getNSAs());
+    }
+
+    @Test
+    public void testSetNSAs() throws Exception {
+        // Arrange
+        Map<String, NSA> nsas = new HashMap<String, NSA>();
+
+        // Act
+        this.collection.setNSAs(nsas);
+
+        // Assert
+        Assert.assertSame(nsas, this.collection.getNSAs());
+    }
+
+    @Test
     public void testPortInstance() throws Exception {
         // Arrange
         String id1 = "urn:ogf:network:example.net:2013:portA";
@@ -301,5 +318,25 @@ public class RecordsCollectionTest {
         Assert.assertSame(linkA, linkA2);
         Assert.assertSame(linkB, this.collection.linkGroupInstance(id2));
         Assert.assertSame(linkNull, this.collection.linkGroupInstance(linkNull.getId()));
+    }
+
+    @Test
+    public void testNSAInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:nsaA";
+        String id2 = "urn:ogf:network:example.net:2013:nsaB";
+        NSA nsaA = new NSA();
+        nsaA.setId(id1);
+        this.collection.getNSAs().put(id1, nsaA);
+
+        // Act
+        NSA nsaA2 = this.collection.NSAInstance(id1);
+        NSA nsaB = this.collection.NSAInstance(id2);
+        NSA nsaNull = this.collection.NSAInstance(null);
+
+        // Assert
+        Assert.assertSame(nsaA, nsaA2);
+        Assert.assertSame(nsaB, this.collection.NSAInstance(id2));
+        Assert.assertSame(nsaNull, this.collection.NSAInstance(nsaNull.getId()));
     }
 }

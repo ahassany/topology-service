@@ -52,6 +52,8 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_IS_SOURCE = "relation-is-source";
     public static final String RECORD_RELATION_IS_SERIAL_COMPOUND_LINK = "relation-is-serial-compound-link";
     public static final String RECORD_RELATION_NEXT = "relation-is-next";
+    public static final String RECORD_RELATION_PEERS_WITH = "relation-peers-with";
+    public static final String RECORD_RELATION_MANAGED_BY = "relation-managed-by";
 
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";
