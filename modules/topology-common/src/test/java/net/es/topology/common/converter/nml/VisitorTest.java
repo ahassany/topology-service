@@ -11,13 +11,9 @@ import net.es.topology.common.visitors.TraversingVisitor;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
-import org.ogf.schemas.nsi._2013._09.topology.NSAType;
-import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
@@ -56,14 +52,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<NodeType> element = (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        NodeType obj = element.getValue();
-        obj.accept(tv);
 
         // Assert
         Assert.assertEquals(1, collection.getNodes().size());
@@ -98,10 +87,6 @@ public class VisitorTest {
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
         tv.setTraverseFirst(true);
         msg.getBody().accept(tv);
-        JAXBElement<NodeType> nodeElement = (JAXBElement<NodeType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(nodeElement.getValue());
-        NodeType nodeType = nodeElement.getValue();
-        Assert.assertNotNull(nodeType.getLocation());
     }
 
     @Test
@@ -123,15 +108,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<PortType> portElement = (JAXBElement<PortType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(portElement.getValue());
-        PortType portType = portElement.getValue();
-        Assert.assertNotNull(portType.getLabel());
-        portType.accept(tv);
 
         // Assert
         Assert.assertEquals(1, collection.getPorts().size());
@@ -164,14 +141,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<PortGroupType> portElement = (JAXBElement<PortGroupType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(portElement.getValue());
-        PortGroupType portGroupType = portElement.getValue();
-        portGroupType.accept(tv);
 
         // Assert
         // TODO (AH): this should assert only one port group is in there
@@ -221,14 +191,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<LinkType> element = (JAXBElement<LinkType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        LinkType linkType = element.getValue();
-        linkType.accept(tv);
 
         // Assert
         // FIXME (AH): this should be 1 link only
@@ -272,14 +235,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<LinkGroupType> element = (JAXBElement<LinkGroupType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        LinkGroupType linkGroupType = element.getValue();
-        linkGroupType.accept(tv);
 
         // Assert
         // TODO (AH): this should assert only one port group is in there
@@ -327,14 +283,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        JAXBElement<TopologyType> element = (JAXBElement<TopologyType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        TopologyType object = element.getValue();
-        Assert.assertNotNull(object.getId());
-        object.accept(tv);
 
         // Assert
         Map<String, Topology> topologyMap = collection.getTopologies();
@@ -392,14 +341,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<BidirectionalPortType> element = (JAXBElement<BidirectionalPortType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        BidirectionalPortType biPortType = element.getValue();
-        biPortType.accept(tv);
 
         // Assert
         Assert.assertEquals(1, collection.getBidirectionalPorts().size());
@@ -435,14 +377,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<BidirectionalLinkType> element = (JAXBElement<BidirectionalLinkType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        BidirectionalLinkType biLinkType = element.getValue();
-        biLinkType.accept(tv);
 
         // Assert
         Assert.assertEquals(1, collection.getBidirectionalLinks().size());
@@ -479,15 +414,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<NSAType> element = (JAXBElement<NSAType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        NSAType nsaType = element.getValue();
-        nsaType.accept(tv);
-
 
         // Assert
         Assert.assertEquals(3, collection.getNSAs().size());
@@ -527,15 +454,7 @@ public class VisitorTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Act
-        // For some reason this doesn't work
         msg.getBody().accept(tv);
-
-        // This is a work around that the visitor is not traversing elements in Body
-        JAXBElement<NsiServiceType> element = (JAXBElement<NsiServiceType>) msg.getBody().getAny().get(0);
-        Assert.assertNotNull(element.getValue());
-        NsiServiceType nsiServiceType = element.getValue();
-        nsiServiceType.accept(tv);
-
 
         // Assert
         Assert.assertEquals(1, collection.getNSIServices().size());

@@ -1,17 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://schemas.ogf.org/nsi/2013/09/messaging#"
-    xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
+<!--
+
+ File:      messaging.xsd - Main XSD schema definition
+ Version:   $Id$
+ Author:    Ahmed El-Hassany
+ Purpose:   Defines the message content of the NML/NSI topology service
+-->
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+        targetNamespace="http://schemas.ogf.org/nsi/2013/09/messaging#"
+        xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#"
+        xmlns:nsi="http://schemas.ogf.org/nsi/2013/09/topology#"
+        xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#">
+
+    <xs:import schemaLocation="nmlbase.xsd"
+               namespace="http://schemas.ogf.org/nml/2013/05/base#"/>
+    <xs:import schemaLocation="nsi-ext.xsd"
+               namespace="http://schemas.ogf.org/nsi/2013/09/topology#"/>
 
     <xs:element name="message">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="body">
                     <xs:complexType>
-                        <xs:sequence>
-                            <xs:any minOccurs="1" maxOccurs="unbounded"></xs:any>
-                        </xs:sequence>
-                    </xs:complexType>  
+                        <xs:choice>
+                            <xs:sequence>
+                                <xs:element ref="nml:Port" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:PortGroup" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:Node" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:Topology" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:Link" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:LinkGroup" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:BidirectionalPort" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:BidirectionalLink" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:SwitchingService" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:AdaptationService" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nml:DeadaptationService" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element name="Location" type="nml:LocationType" minOccurs="1"
+                                            maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nsi:NSA" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="nsi:Service" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:choice>
+                    </xs:complexType>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
