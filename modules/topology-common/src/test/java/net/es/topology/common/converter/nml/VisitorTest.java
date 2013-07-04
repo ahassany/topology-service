@@ -283,10 +283,6 @@ public class VisitorTest {
 
         // Assert
         // TODO (AH): this should assert only one port group is in there
-        for (LinkGroup l : collection.getLinkGroups().values()) {
-            System.out.
-                    println(l.getId());
-        }
         Assert.assertEquals(4, collection.getLinkGroups().size());
         Assert.assertTrue(collection.getLinkGroups().containsKey("urn:ogf:network:example.net:2013:linkGroup"));
         LinkGroup sLSLinkGroup = collection.getLinkGroups().get("urn:ogf:network:example.net:2013:linkGroup");
