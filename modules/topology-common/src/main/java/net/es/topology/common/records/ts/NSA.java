@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * An NSA object represents a Network Service Agent which can accept Connection Service requests and manages a network.
  *
- * FIXME (AH): add support for services
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  * @see: Network Service Interface Topology Representation
@@ -70,5 +69,24 @@ public class NSA extends NetworkObject {
 
     public void setManagedBy(List<String> managers) {
         this.add(ReservedKeys.RECORD_RELATION_MANAGED_BY, managers);
+    }
+
+
+    /**
+     * List of the URNs of services provided by the NSA
+     *
+     * @return list of services' URNs
+     */
+    public List<String> getNSIServices() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_NSI_SERVICE);
+    }
+
+    /**
+     * List of the URNs of services provided by the NSA
+     *
+     * @param services list of services' URNs
+     */
+    public void setNSIServices(List<String> services) {
+        this.add(ReservedKeys.RECORD_NSI_SERVICE, services);
     }
 }

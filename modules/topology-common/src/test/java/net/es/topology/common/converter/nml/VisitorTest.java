@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
+import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -463,7 +464,6 @@ public class VisitorTest {
         Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:YX"));
     }
 
-
     @Test
     public void testVisitNSAType() throws JAXBException {
         // Prepare
@@ -510,6 +510,54 @@ public class VisitorTest {
 
         Assert.assertEquals(1, nsa.getManagedBy().size());
         Assert.assertTrue(nsa.getManagedBy().contains("urn:ogf:network:example.net:2013:nsa"));
+    }
+
+    @Test
+    public void testVisitNSIServiceType() throws JAXBException {
+        // Prepare
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-nsi-service.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        // For some reason this doesn't work
+        msg.getBody().accept(tv);
+
+        // This is a work around that the visitor is not traversing elements in Body
+        JAXBElement<NsiServiceType> element = (JAXBElement<NsiServiceType>) msg.getBody().getAny().get(0);
+        Assert.assertNotNull(element.getValue());
+        NsiServiceType nsiServiceType = element.getValue();
+        nsiServiceType.accept(tv);
+
+
+        // Assert
+        Assert.assertEquals(1, collection.getNSIServices().size());
+        Assert.assertTrue(collection.getNSIServices().containsKey("urn:ogf:network:example.com:2013:nsa-provserv"));
+
+        Assert.assertEquals(1, collection.getNSAs().size());
+        Assert.assertTrue(collection.getNSAs().containsKey("urn:ogf:network:example.com:2013:nsa"));
+
+        NSIService nsiService = collection.getNSIServices().get("urn:ogf:network:example.com:2013:nsa-provserv");
+        Assert.assertEquals("urn:ogf:network:example.com:2013:nsa-provserv", nsiService.getId());
+        Assert.assertNull(nsiService.getName());
+
+        Assert.assertEquals("http://nsa.example.com/provisioning/wsdl", nsiService.getDescribedBy());
+        Assert.assertEquals("application/vnd.org.ogf.nsi.cs.v2+soap", nsiService.getType());
+        Assert.assertEquals("http://nsa.example.com/provisioning", nsiService.getLink());
+
+        Assert.assertEquals(1, nsiService.getProvidedBy().size());
+        Assert.assertTrue(nsiService.getProvidedBy().contains("urn:ogf:network:example.com:2013:nsa"));
     }
 
     @Test

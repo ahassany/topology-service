@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#"
+         xmlns:nsi="http://schemas.ogf.org/nsi/2013/09/topology#">
+    <body>
+        <nsi:Service id="urn:ogf:network:example.com:2013:nsa-provserv">
+            <nsi:link>http://nsa.example.com/provisioning</nsi:link>
+            <nsi:describedBy>http://nsa.example.com/provisioning/wsdl</nsi:describedBy>
+            <nsi:type>application/vnd.org.ogf.nsi.cs.v2+soap</nsi:type>
+            <nsi:Relation type="http://schemas.ogf.org/nsi/2013/09/topology#providedBy">
+                <nsi:NSA id="urn:ogf:network:example.com:2013:nsa"/>
+            </nsi:Relation>
+        </nsi:Service>
+    </body>
+</message>

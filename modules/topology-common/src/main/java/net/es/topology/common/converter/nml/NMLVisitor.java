@@ -7,6 +7,8 @@ import org.ogf.schemas.nml._2013._05.base.NetworkObject;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
 import org.ogf.schemas.nsi._2013._09.topology.NSARelationType;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
+import org.ogf.schemas.nsi._2013._09.topology.NsiServiceRelationType;
+import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,7 @@ public class NMLVisitor extends BaseVisitor {
     public static final String RELATION_NEXT = "http://schemas.ogf.org/nml/2013/05/base#next";
     public static final String RELATION_PEERS_WITH = "http://schemas.ogf.org/nsi/2013/09/topology#peersWith";
     public static final String RELATION_MANAGED_BY = "http://schemas.ogf.org/nsi/2013/09/topology#managedBy";
+    public static final String RELATION_PROVIDED_BY = "http://schemas.ogf.org/nsi/2013/09/topology#providedBy";
     // JAXB Bindings
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     /**
@@ -451,9 +454,47 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
 
-        // TODO (AH): parse service
+        if (nsaType.getService() != null && nsaType.getService().size() != 0)
+            sLSNSA.setNSIServices(new ArrayList<String>());
+        for (NsiServiceType service : nsaType.getService()) {
+            sLSNSA.getNSIServices().add(recordsCollection.NSIServiceInstance(service.getId()).getId());
+        }
 
         logger.trace("event=NMLVisitor.visit.NSAType.end status=0 guid=" + this.logUUID);
+    }
+
+    /**
+     * Visit NSI Service to generate sLS Service record
+     *
+     * @param nsiServiceType
+     */
+    public void visit(NsiServiceType nsiServiceType) {
+        logger.trace("event=NMLVisitor.visit.NsiServiceType.start id=" + nsiServiceType.getId() + " guid=" + this.logUUID);
+        NSIService nsiService = recordsCollection.NSIServiceInstance(nsiServiceType.getId());
+
+        if (nsiServiceType.getName() != null)
+            nsiService.setName(nsiServiceType.getName());
+
+        if (nsiServiceType.getType() != null)
+            nsiService.setType(nsiServiceType.getType());
+
+        if (nsiServiceType.getDescribedBy() != null)
+            nsiService.setDescribedBy(nsiServiceType.getDescribedBy());
+
+        if (nsiServiceType.getLink() != null)
+            nsiService.setLink(nsiServiceType.getLink());
+
+        for (NsiServiceRelationType relation : nsiServiceType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_PROVIDED_BY)) {
+                if (nsiService.getProvidedBy() == null) {
+                    nsiService.setProvidedBy(new ArrayList<String>());
+                }
+                for (NSAType nsa : relation.getNSA()) {
+                    nsiService.getProvidedBy().add(nsa.getId());
+                }
+            }
+        }
+        logger.trace("event=NMLVisitor.visit.NsiServiceType.end status=0 guid=" + this.logUUID);
     }
 
     /**

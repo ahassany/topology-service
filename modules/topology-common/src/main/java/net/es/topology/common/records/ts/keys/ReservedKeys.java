@@ -54,11 +54,18 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_NEXT = "relation-is-next";
     public static final String RECORD_RELATION_PEERS_WITH = "relation-peers-with";
     public static final String RECORD_RELATION_MANAGED_BY = "relation-managed-by";
+    public static final String RECORD_RELATION_PROVIDED_BY = "relation-provided-by";
 
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";
     public static final String RECORD_LABEL_TYPE = "ts-label-type";
     public static final String RECORD_LABEL_GROUP = "ts-label-group";
     public static final String RECORD_LABEL_GROUP_TYPE = "ts-label-group-type";
+
+    // NSI Keys
+    public static final String RECORD_NSI_LINK = "nsi-link";
+    public static final String RECORD_NSI_SERVICE = "nsi-service";
+    public static final String RECORD_NSI_SERVICE_TYPE = "nsi-service-type";
+    public static final String RECORD_NSI_DESCRIBED_BY = "nsi-described-by";
 
 }

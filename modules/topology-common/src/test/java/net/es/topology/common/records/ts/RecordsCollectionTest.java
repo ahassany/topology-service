@@ -161,6 +161,23 @@ public class RecordsCollectionTest {
     }
 
     @Test
+    public void testGetNSIService() throws Exception {
+        Assert.assertNotNull(this.collection.getNSIServices());
+    }
+
+    @Test
+    public void testSetNSIService() throws Exception {
+        // Arrange
+        Map<String, NSIService> services = new HashMap<String, NSIService>();
+
+        // Act
+        this.collection.setNSIServices(services);
+
+        // Assert
+        Assert.assertSame(services, this.collection.getNSIServices());
+    }
+
+    @Test
     public void testPortInstance() throws Exception {
         // Arrange
         String id1 = "urn:ogf:network:example.net:2013:portA";
@@ -338,5 +355,25 @@ public class RecordsCollectionTest {
         Assert.assertSame(nsaA, nsaA2);
         Assert.assertSame(nsaB, this.collection.NSAInstance(id2));
         Assert.assertSame(nsaNull, this.collection.NSAInstance(nsaNull.getId()));
+    }
+
+    @Test
+    public void testNSIServiceInstance() throws Exception {
+        // Arrange
+        String id1 = "urn:ogf:network:example.net:2013:serviceA";
+        String id2 = "urn:ogf:network:example.net:2013:serviceB";
+        NSIService serviceA = new NSIService();
+        serviceA.setId(id1);
+        this.collection.getNSIServices().put(id1, serviceA);
+
+        // Act
+        NSIService serviceA2 = this.collection.NSIServiceInstance(id1);
+        NSIService serviceB = this.collection.NSIServiceInstance(id2);
+        NSIService serviceNull = this.collection.NSIServiceInstance(null);
+
+        // Assert
+        Assert.assertSame(serviceA, serviceA2);
+        Assert.assertSame(serviceB, this.collection.NSIServiceInstance(id2));
+        Assert.assertSame(serviceNull, this.collection.NSIServiceInstance(serviceNull.getId()));
     }
 }

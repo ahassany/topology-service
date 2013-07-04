@@ -28,6 +28,7 @@ public class RecordsCollection {
     private Map<String, PortGroup> portGroups = null;
     private Map<String, LinkGroup> linkGroups = null;
     private Map<String, NSA> NSAs = null;
+    private Map<String, NSIService> NSIServices = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -46,6 +47,7 @@ public class RecordsCollection {
         this.setPortGroups(new HashMap<String, PortGroup>());
         this.setLinkGroups(new HashMap<String, LinkGroup>());
         this.setNSAs(new HashMap<String, NSA>());
+        this.setNSIServices(new HashMap<String, NSIService>());
     }
 
     public RecordsCollection(String logUUID) {
@@ -59,6 +61,7 @@ public class RecordsCollection {
         this.setPortGroups(new HashMap<String, PortGroup>());
         this.setLinkGroups(new HashMap<String, LinkGroup>());
         this.setNSAs(new HashMap<String, NSA>());
+        this.setNSIServices(new HashMap<String, NSIService>());
     }
 
     public Map<String, Node> getNodes() {
@@ -132,6 +135,14 @@ public class RecordsCollection {
 
     public void setNSAs(Map<String, NSA> NSAs) {
         this.NSAs = NSAs;
+    }
+
+    public Map<String, NSIService> getNSIServices() {
+        return NSIServices;
+    }
+
+    public void setNSIServices(Map<String, NSIService> services) {
+        this.NSIServices = services;
     }
 
     /**
@@ -393,5 +404,35 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.NSAInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return nsa;
+    }
+
+
+    /**
+     * Create/or return a NSI Service instance
+     * If the a NSI Service  with the same id already exists this method will return a reference to it
+     * If there is not NSI Service  with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return NSI Service instance
+     */
+    public NSIService NSIServiceInstance(String id) {
+        logger.trace("event=RecordsCollection.NSIServiceInstance.start id=" + id + " guid=" + this.logUUID);
+        NSIService nsiService = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.NSIServiceInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getNSIServices().containsKey(id)) {
+            nsiService = getNSIServices().get(id);
+        } else {
+            nsiService = new NSIService();
+            nsiService.setId(id);
+            getNSIServices().put(id, nsiService);
+            logger.trace("event=RecordsCollection.NSIServiceInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.NSIServiceInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return nsiService;
     }
 }

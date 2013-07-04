@@ -20,4 +20,5 @@ public class ReservedValues {
 
     // Records for Network Service Interface (NSI) Topology
     public static final String RECORD_TYPE_NSA = "nsi-nsa";
+    public static final String RECORD_TYPE_NSI_SERVICE = "nsi-service";
 }
