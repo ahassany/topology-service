@@ -62,6 +62,16 @@
                 <nml:Port id="urn:ogf:network:example.net:2013:portD:out"/>
             </nml:Relation>
 
+            <nml:Node id="urn:ogf:network:example.net:2013:nodeA">
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+                    <nml:Port id="urn:ogf:network:example.net:2013:portA" />
+                </nml:Relation>
+            </nml:Node>
+
+            <!-- testing for group elements -->
+            <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroupA" />
+            <nml:LinkGroup id="urn:ogf:network:example.net:2013:linkGroupA" />
+            <nml:Topology id="urn:ogf:network:example.net:2013:topologyA" />
         </nml:Topology>
     </body>
 </message>

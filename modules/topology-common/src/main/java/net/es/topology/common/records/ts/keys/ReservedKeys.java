@@ -15,6 +15,7 @@ public class ReservedKeys {
     public static final String RECORD_TS_LINK_GROUP = "ts-link-group";
     public static final String RECORD_TS_BIDIRECTIONAL_PORT = "ts-bidirectional-port";
     public static final String RECORD_TS_BIDIRECTIONAL_LINK = "ts-bidirectional-link";
+    public static final String RECORD_TS_TOPOLOGY = "ts-topology";
 
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";

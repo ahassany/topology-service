@@ -508,7 +508,7 @@ public class NMLVisitor extends BaseVisitor {
             sLSTopo.getLinks().add(link.getId());
         }
 
-        // Add Refs to the Bidirectional Ports in the Topology
+        // Add Refs to the Group elements in the Topology
         for (NetworkObject object : topologyType.getGroup()) {
             // Add Refs to the Bidirectional Ports in the Topology
             if (object instanceof BidirectionalPortType) {
@@ -522,7 +522,27 @@ public class NMLVisitor extends BaseVisitor {
                     sLSTopo.setBidirectionalLinks(new ArrayList<String>());
                 sLSTopo.getBidirectionalLinks().add(object.getId());
             }
-            // TODO (AH): deal with other groups in the topology
+
+            if (object instanceof PortGroupType) {
+                if (sLSTopo.getPortGroups() == null) {
+                    sLSTopo.setPortGroups(new ArrayList<String>());
+                }
+                sLSTopo.getPortGroups().add(object.getId());
+            }
+
+            if (object instanceof LinkGroupType) {
+                if (sLSTopo.getLinkGroups() == null) {
+                    sLSTopo.setLinkGroups(new ArrayList<String>());
+                }
+                sLSTopo.getLinkGroups().add(object.getId());
+            }
+
+            if (object instanceof TopologyType) {
+                if (sLSTopo.getTopologies() == null) {
+                    sLSTopo.setTopologies(new ArrayList<String>());
+                }
+                sLSTopo.getTopologies().add(object.getId());
+            }
         }
 
         // TODO (AH): deal with location, version, services, etc..

@@ -343,12 +343,14 @@ public class VisitorTest {
         Map<String, Port> portMap = collection.getPorts();
         Map<String, Node> nodeMap = collection.getNodes();
 
-        Assert.assertEquals(1, topologyMap.size());
+        Assert.assertEquals(2, topologyMap.size());
         Assert.assertEquals(6, portMap.size());
-        Assert.assertEquals(0, nodeMap.size());
+        Assert.assertEquals(1, nodeMap.size());
 
         Assert.assertTrue(topologyMap.containsKey(topologyURN));
         Topology topology = topologyMap.get(topologyURN);
+
+        Assert.assertTrue(topology.getNodes().contains("urn:ogf:network:example.net:2013:nodeA"));
 
         for (String urn : portURNs) {
             Assert.assertTrue(portMap.containsKey(urn));
@@ -366,6 +368,10 @@ public class VisitorTest {
 
         Assert.assertEquals(1, topology.getBidirectionalLinks().size());
         Assert.assertTrue(topology.getBidirectionalLinks().contains("urn:ogf:network:example.net:2013:linkBidir"));
+
+        Assert.assertTrue(topology.getPortGroups().contains("urn:ogf:network:example.net:2013:portGroupA"));
+        Assert.assertTrue(topology.getLinkGroups().contains("urn:ogf:network:example.net:2013:linkGroupA"));
+        Assert.assertTrue(topology.getTopologies().contains("urn:ogf:network:example.net:2013:topologyA"));
         // TODO (AH): test for all other elements in Topology
     }
 

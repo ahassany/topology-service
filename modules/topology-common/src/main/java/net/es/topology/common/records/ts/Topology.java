@@ -67,6 +67,24 @@ public class Topology extends NetworkObject {
     }
 
     /**
+     * List of the URNs of port groups in the topology
+     *
+     * @return list of port groups' URNs
+     */
+    public List<String> getPortGroups() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_PORT_GROUP);
+    }
+
+    /**
+     * List of the URNs port groups in the topology
+     *
+     * @param portGroups list of port groups' URNs
+     */
+    public void setPortGroups(List<String> portGroups) {
+        this.add(ReservedKeys.RECORD_TS_PORT_GROUP, portGroups);
+    }
+
+    /**
      * List of the URNs of bidirectional ports in the topology
      *
      * @return list of bidirectional ports' URNs
@@ -103,6 +121,42 @@ public class Topology extends NetworkObject {
     }
 
     /**
+     * List of the URNs of link groups in the topology
+     *
+     * @return list of link groups' URNs
+     */
+    public List<String> getLinkGroups() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_LINK_GROUP);
+    }
+
+    /**
+     * List of the URNs link groups in the topology
+     *
+     * @param linkGroups list of link groups' URNs
+     */
+    public void setLinkGroups(List<String> linkGroups) {
+        this.add(ReservedKeys.RECORD_TS_LINK_GROUP, linkGroups);
+    }
+
+    /**
+     * List of the URNs of topologies in the topology
+     *
+     * @return list of topologies' URNs
+     */
+    public List<String> getTopologies() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_TOPOLOGY);
+    }
+
+    /**
+     * List of the URNs topologies in the topology
+     *
+     * @param topologies list of link groups' URNs
+     */
+    public void setTopologies(List<String> topologies) {
+        this.add(ReservedKeys.RECORD_TS_TOPOLOGY, topologies);
+    }
+
+    /**
      * List of the URNs of bidirectional links in the topology
      *
      * @return list of bidirectional links' URNs
@@ -119,7 +173,6 @@ public class Topology extends NetworkObject {
     public void setBidirectionalLinks(List<String> bidirectionalLinks) {
         this.add(ReservedKeys.RECORD_TS_BIDIRECTIONAL_LINK, bidirectionalLinks);
     }
-
 
     /**
      * This defines that the related Network Object has an inbound Port or PortGroup object.
