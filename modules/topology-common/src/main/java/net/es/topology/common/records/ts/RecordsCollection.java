@@ -338,11 +338,11 @@ public class RecordsCollection {
      * @return PortGroup instance
      */
     public LinkGroup linkGroupInstance(String id) {
-        logger.trace("event=RecordsCollection.portLinkInstance.start id=" + id + " guid=" + this.logUUID);
+        logger.trace("event=RecordsCollection.linkGroupInstance.start id=" + id + " guid=" + this.logUUID);
         LinkGroup linkGroup = null;
         if (id == null) {
             id = UUID.randomUUID().toString();
-            logger.trace("event=RecordsCollection.portLinkInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+            logger.trace("event=RecordsCollection.linkGroupInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
         }
         if (getLinkGroups().containsKey(id)) {
             linkGroup = getLinkGroups().get(id);
@@ -350,9 +350,9 @@ public class RecordsCollection {
             linkGroup = new LinkGroup();
             linkGroup.setId(id);
             getLinkGroups().put(id, linkGroup);
-            logger.trace("event=RecordsCollection.portLinkInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+            logger.trace("event=RecordsCollection.linkGroupInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
         }
-        logger.trace("event=RecordsCollection.portLinkInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        logger.trace("event=RecordsCollection.linkGroupInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return linkGroup;
     }
 }

@@ -150,7 +150,7 @@ public class Topology extends NetworkObject {
     /**
      * List of the URNs topologies in the topology
      *
-     * @param topologies list of link groups' URNs
+     * @param topologies list of Topologies' URNs
      */
     public void setTopologies(List<String> topologies) {
         this.add(ReservedKeys.RECORD_TS_TOPOLOGY, topologies);
@@ -193,7 +193,7 @@ public class Topology extends NetworkObject {
     }
 
     /**
-     * This defines that the related Network Object has an outbound Port or PortGroup object.
+     * This defines that the related Topology has an outbound Port or PortGroup object.
      *
      * @return list of the URNs of outbound ports
      */
@@ -202,7 +202,7 @@ public class Topology extends NetworkObject {
     }
 
     /**
-     * This defines that the related Network Object has an outbound Port or PortGroup object.
+     * This defines that the related Topology has an outbound Port or PortGroup object.
      *
      * @param ports list of the URNs of outbound ports
      */
@@ -211,7 +211,7 @@ public class Topology extends NetworkObject {
     }
 
     /**
-     * Node related to SwitchingService, describing a switching ability of that Node.
+     * Node related to SwitchingService, describing a switching ability of that Topology.
      *
      * @return List of SwitchingServices URNs
      */
@@ -220,7 +220,7 @@ public class Topology extends NetworkObject {
     }
 
     /**
-     * Node related to SwitchingService, describing a switching ability of that Node
+     * Node related to SwitchingService, describing a switching ability of that Topology
      *
      * @param services List of SwitchingServices URNs
      */
@@ -229,7 +229,7 @@ public class Topology extends NetworkObject {
     }
 
     /**
-     * isAlias is a relation to another Node describe that one can be used as the alias of another.
+     * isAlias is a relation to another Topology describes that one can be used as the alias of another.
      *
      * @return list of the URNs of the other Nodes.
      */
@@ -238,7 +238,7 @@ public class Topology extends NetworkObject {
     }
 
     /**
-     * isAlias is a relation to another Node describe that one can be used as the alias of another.
+     * isAlias is a relation to another Topology describes that one can be used as the alias of another.
      *
      * @param aliases list of the URNs of the other Nodes.
      */
