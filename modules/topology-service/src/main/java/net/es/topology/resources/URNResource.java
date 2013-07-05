@@ -1,5 +1,13 @@
 package net.es.topology.resources;
 
+import net.es.lookup.client.RegistrationClient;
+import net.es.lookup.client.SimpleLS;
+import net.es.lookup.common.exception.LSClientException;
+import net.es.lookup.common.exception.ParserException;
+import net.es.topology.common.converter.nml.NMLVisitor;
+import net.es.topology.common.records.ts.RecordsCollection;
+import net.es.topology.common.visitors.DepthFirstTraverserImpl;
+import net.es.topology.common.visitors.TraversingVisitor;
 import org.apache.commons.io.IOUtils;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.cpr.Broadcaster;
@@ -80,18 +88,26 @@ public class URNResource {
 
         try {
             msg = (Message) um.unmarshal(new InputStreamReader(IOUtils.toInputStream(message)));
-            //NetworkObject obj = (NetworkObject) msg.getBody();
-            //System.out.println("Netobj: " + obj.getId() );
-
         } catch (JAXBException e) {
             throw new WebApplicationException(Response.serverError().entity("Cannot unmarshall the message: '" + e.getMessage() + "'.\n").build());
         }
 
-        System.out.println("Net obj: " + inspect.getElementName(msg).toString());
+        RecordsCollection collection = new RecordsCollection();
+        NMLVisitor visitor = new NMLVisitor(collection);
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+
+        msg.getBody().accept(tv);
+        SimpleLS client;
         try {
-            System.out.println("Net obj: " + inspect.getElementName(msg.getBody()));
-        } catch (Exception e) {
-            System.out.println("Inspection error: " + e.getMessage());
+            // TODO (AH): define a better way to specify the sLS address
+            client = new SimpleLS("localhost", 8090);
+            client.connect();
+            RegistrationClient rclient = new RegistrationClient(client);
+            visitor.getRecordsCollection().sendTosLS(rclient);
+        } catch (LSClientException e) {
+            throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
+        } catch (ParserException e) {
+            throw new WebApplicationException(Response.serverError().entity("Parser exception: '" + e.getMessage() + "'.\n").build());
         }
         return new Broadcastable(message, "", urn);
     }
