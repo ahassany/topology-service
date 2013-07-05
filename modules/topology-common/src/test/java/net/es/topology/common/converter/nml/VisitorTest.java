@@ -37,6 +37,8 @@ public class VisitorTest {
     // Commonly used value in the tests
     private final String VLAN_URI = "http://schemas.ogf.org/nml/2013/05/ethernet#vlan";
     private final Logger logger = LoggerFactory.getLogger(VisitorTest.class);
+    // Used to assert object versions in tests
+    private final String version = "2013-05-30T09:30:10Z";
     /**
      * this UUID changes for each test case
      */
@@ -147,6 +149,7 @@ public class VisitorTest {
         Assert.assertNotNull(sLSPort.getId());
         Assert.assertEquals("urn:ogf:network:example.net:2013:portA", sLSPort.getId());
         Assert.assertEquals(null, sLSPort.getName());
+        Assert.assertEquals(this.version, sLSPort.getVersion());
         Assert.assertEquals("1501", sLSPort.getLabel());
         Assert.assertEquals(VLAN_URI, sLSPort.getLabelType());
         logger.debug("event=VisitorTest.testVisitPortType.end status=0 guid=" + getLogGUID());
@@ -184,6 +187,7 @@ public class VisitorTest {
         Assert.assertNotNull(sLSPortGroup.getId());
         Assert.assertEquals("urn:ogf:network:example.net:2013:portGroup", sLSPortGroup.getId());
         Assert.assertEquals(null, sLSPortGroup.getName());
+        Assert.assertEquals(this.version, sLSPortGroup.getVersion());
         Assert.assertEquals(VLAN_URI, sLSPortGroup.getEncoding());
 
         Assert.assertEquals(2, sLSPortGroup.getPorts().size());
@@ -236,6 +240,7 @@ public class VisitorTest {
 
         Assert.assertEquals(VLAN_URI, record.getEncoding());
         Assert.assertFalse(record.getNoReturnTraffic());
+        Assert.assertEquals(this.version, record.getVersion());
         Assert.assertEquals("1501", record.getLabel());
         Assert.assertEquals(VLAN_URI, record.getLabelType());
 
@@ -282,6 +287,7 @@ public class VisitorTest {
         LinkGroup sLSLinkGroup = collection.getLinkGroups().get("urn:ogf:network:example.net:2013:linkGroup");
         Assert.assertNotNull(sLSLinkGroup);
         Assert.assertNotNull(sLSLinkGroup.getId());
+        Assert.assertEquals(this.version, sLSLinkGroup.getVersion());
         Assert.assertEquals("urn:ogf:network:example.net:2013:linkGroup", sLSLinkGroup.getId());
         Assert.assertEquals(null, sLSLinkGroup.getName());
 
@@ -337,6 +343,7 @@ public class VisitorTest {
 
         Assert.assertTrue(topologyMap.containsKey(topologyURN));
         Topology topology = topologyMap.get(topologyURN);
+        Assert.assertEquals(this.version, topology.getVersion());
 
         Assert.assertTrue(topology.getNodes().contains("urn:ogf:network:example.net:2013:nodeA"));
 
@@ -395,6 +402,8 @@ public class VisitorTest {
         Assert.assertNotNull(sLSBiPort.getId());
         Assert.assertEquals("urn:ogf:network:example.net:2013:portA", sLSBiPort.getId());
         Assert.assertEquals("PortA", sLSBiPort.getName());
+        Assert.assertEquals(this.version, sLSBiPort.getVersion());
+
 
         Assert.assertNull(sLSBiPort.getPortGroups());
         Assert.assertEquals(2, sLSBiPort.getPorts().size());
@@ -434,6 +443,8 @@ public class VisitorTest {
         Assert.assertNotNull(sLSBiLink.getId());
         Assert.assertEquals("urn:ogf:network:example.net:2013:linkA", sLSBiLink.getId());
         Assert.assertEquals("LinkA", sLSBiLink.getName());
+        Assert.assertEquals(this.version, sLSBiLink.getVersion());
+
 
         Assert.assertNull(sLSBiLink.getLinkGroups());
         Assert.assertNotNull(sLSBiLink.getLinks());
@@ -474,6 +485,8 @@ public class VisitorTest {
         NSA nsa = collection.getNSAs().get("urn:ogf:network:example.org:2013:nsa");
         Assert.assertEquals("urn:ogf:network:example.org:2013:nsa", nsa.getId());
         Assert.assertNull(nsa.getName());
+        Assert.assertEquals(this.version, nsa.getVersion());
+
 
         Assert.assertEquals(1, nsa.getTopologies().size());
         Assert.assertTrue(nsa.getTopologies().contains("urn:ogf:network:example.org:2013:topology"));
@@ -519,6 +532,8 @@ public class VisitorTest {
         NSIService nsiService = collection.getNSIServices().get("urn:ogf:network:example.com:2013:nsa-provserv");
         Assert.assertEquals("urn:ogf:network:example.com:2013:nsa-provserv", nsiService.getId());
         Assert.assertNull(nsiService.getName());
+        Assert.assertEquals(this.version, nsiService.getVersion());
+
 
         Assert.assertEquals("http://nsa.example.com/provisioning/wsdl", nsiService.getDescribedBy());
         Assert.assertEquals("application/vnd.org.ogf.nsi.cs.v2+soap", nsiService.getType());

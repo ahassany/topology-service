@@ -90,6 +90,9 @@ public class NMLVisitor extends BaseVisitor {
         if (nodeType.getName() != null)
             sLSNode.setName(nodeType.getName());
 
+        if (nodeType.getVersion() != null)
+            sLSNode.setVersion(nodeType.getVersion().toString());
+
         for (NodeRelationType relation : nodeType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
                 if (sLSNode.getHasInboundPort() == null) {
@@ -138,6 +141,9 @@ public class NMLVisitor extends BaseVisitor {
             sLSPort.setName(portType.getName());
         if (portType.getEncoding() != null)
             sLSPort.setEncoding(portType.getEncoding());
+        if (portType.getVersion() != null)
+            sLSPort.setVersion(portType.getVersion().toString());
+
         if (portType.getLabel() != null) {
             if (portType.getLabel().getValue() != null)
                 sLSPort.setLabel(portType.getLabel().getValue());
@@ -192,6 +198,9 @@ public class NMLVisitor extends BaseVisitor {
         if (bidirectionalPortType.getName() != null)
             sLSBiPort.setName(bidirectionalPortType.getName());
 
+        if (bidirectionalPortType.getVersion() != null)
+            sLSBiPort.setVersion(bidirectionalPortType.getVersion().toString());
+
         for (JAXBElement<? extends NetworkObject> element : bidirectionalPortType.getRest()) {
             if (element.getValue() instanceof PortType) {
                 PortType port = (PortType) element.getValue();
@@ -226,6 +235,8 @@ public class NMLVisitor extends BaseVisitor {
             sLSLink.setEncoding(linkType.getEncoding());
         if (linkType.isNoReturnTraffic() != null)
             sLSLink.setNoReturnTraffic(linkType.isNoReturnTraffic());
+        if (linkType.getVersion() != null)
+            sLSLink.setVersion(linkType.getVersion().toString());
 
         if (linkType.getLabel() != null) {
             if (linkType.getLabel().getValue() != null)
@@ -277,6 +288,9 @@ public class NMLVisitor extends BaseVisitor {
         if (bidirectionalLinkType.getName() != null)
             sLSBiLink.setName(bidirectionalLinkType.getName());
 
+        if (bidirectionalLinkType.getVersion() != null)
+            sLSBiLink.setVersion(bidirectionalLinkType.getVersion().toString());
+
         for (JAXBElement<? extends NetworkObject> element : bidirectionalLinkType.getRest()) {
             if (element.getValue() instanceof LinkType) {
                 LinkType link = (LinkType) element.getValue();
@@ -309,6 +323,8 @@ public class NMLVisitor extends BaseVisitor {
             sLSPortGroup.setName(portGroupType.getName());
         if (portGroupType.getEncoding() != null)
             sLSPortGroup.setEncoding(portGroupType.getEncoding());
+        if (portGroupType.getVersion() != null)
+            sLSPortGroup.setVersion(portGroupType.getVersion().toString());
         // TODO (AH): deal with labelgroup
 
         /*
@@ -376,6 +392,9 @@ public class NMLVisitor extends BaseVisitor {
         if (linkGroupType.getName() != null)
             sLSLinkGroup.setName(linkGroupType.getName());
 
+        if (linkGroupType.getVersion() != null)
+            sLSLinkGroup.setVersion(linkGroupType.getVersion().toString());
+
         // TODO (AH): deal with labelgroup
 
         // Links in the group
@@ -428,7 +447,8 @@ public class NMLVisitor extends BaseVisitor {
 
         if (nsaType.getName() != null)
             sLSNSA.setName(nsaType.getName());
-
+        if (nsaType.getVersion() != null)
+            sLSNSA.setVersion(nsaType.getVersion().toString());
         if (nsaType.getTopology() != null && nsaType.getTopology().size() != 0)
             sLSNSA.setTopologies(new ArrayList<String>());
         for (TopologyType topologyType : nsaType.getTopology()) {
@@ -474,6 +494,9 @@ public class NMLVisitor extends BaseVisitor {
 
         if (nsiServiceType.getName() != null)
             nsiService.setName(nsiServiceType.getName());
+
+        if (nsiServiceType.getVersion() != null)
+            nsiService.setVersion(nsiServiceType.getVersion().toString());
 
         if (nsiServiceType.getType() != null)
             nsiService.setType(nsiServiceType.getType());
@@ -534,6 +557,9 @@ public class NMLVisitor extends BaseVisitor {
 
         if (topologyType.getName() != null)
             sLSTopo.setName(topologyType.getName());
+
+        if (topologyType.getVersion() != null)
+            sLSTopo.setVersion(topologyType.getVersion().toString());
 
         // Parse relations
         for (TopologyRelationType relation : topologyType.getRelation()) {

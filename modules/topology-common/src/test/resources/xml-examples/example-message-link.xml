@@ -3,7 +3,8 @@
     xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
     <body>
         <nml:Link id="urn:ogf:network:example.net:2013:linkA:XY" noReturnTraffic="false"
-                  encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">
+                  encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
+                  version="2013-05-30T09:30:10Z">
             <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
             <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
                 <nml:Link id="urn:ogf:network:example.net:2013:linkB" />

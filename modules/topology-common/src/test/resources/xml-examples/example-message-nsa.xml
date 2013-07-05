@@ -5,7 +5,7 @@
          xmlns:vc="urn:ietf:params:xml:ns:vcard-4.0">
     <body>
         <nsi:NSA id="urn:ogf:network:example.org:2013:nsa"
-                 version="2013-05-29T12:11:12">
+                 version="2013-05-30T09:30:10Z">
             <nml:Location id="urn:ogf:network:example.com:2013:location">
                 <nml:lat>55.637</nml:lat>
                 <nml:long>12.641</nml:long>
