@@ -1,12 +1,22 @@
 package net.es.topology.common.records.ts;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import net.es.lookup.client.RegistrationClient;
+import net.es.lookup.client.SimpleLS;
+import net.es.lookup.common.exception.LSClientException;
+import net.es.lookup.common.exception.ParserException;
+import net.es.topology.common.converter.nml.NMLVisitor;
+import net.es.topology.common.visitors.DepthFirstTraverserImpl;
+import net.es.topology.common.visitors.TraversingVisitor;
+import org.junit.*;
+import org.ogf.schemas.nsi._2013._09.messaging.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +27,7 @@ import java.util.UUID;
 public class RecordsCollectionTest {
     private final Logger logger = LoggerFactory.getLogger(RecordsCollectionTest.class);
     private RecordsCollection collection;
+    public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     /**
      * this UUID changes for each test case
      */
@@ -450,5 +461,40 @@ public class RecordsCollectionTest {
         Assert.assertSame(serviceB, this.collection.NSIServiceInstance(id2));
         Assert.assertSame(serviceNull, this.collection.NSIServiceInstance(serviceNull.getId()));
         logger.debug("event=RecordsCollectionTest.testNSIServiceInstance.end status=0 guid=" + getLogGUID());
+    }
+
+
+    @Test
+    @Ignore
+    public void testSendTosLS() throws Exception{
+        // Arrange
+        logger.debug("event=RecordsCollectionTest.testSendTosLS.start guid=" + getLogGUID());
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-nsa.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Prepare client
+        // TODO (AH): define a better way to specify the sLS address
+        SimpleLS client = new SimpleLS("localhost", 8090);
+        client.connect();
+        RegistrationClient rclient = new RegistrationClient(client);
+
+        // Act
+        msg.getBody().accept(tv);
+        visitor.getRecordsCollection().sendTosLS(rclient);
+
+        // TODO test the registered records
+        logger.debug("event=RecordsCollectionTest.testSendTosLS.end status=0 guid=" + getLogGUID());
     }
 }

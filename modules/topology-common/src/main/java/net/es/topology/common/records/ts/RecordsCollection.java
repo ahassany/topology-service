@@ -1,11 +1,14 @@
 package net.es.topology.common.records.ts;
 
+import net.es.lookup.client.RegistrationClient;
+import net.es.lookup.common.exception.LSClientException;
+import net.es.lookup.common.exception.ParserException;
+import net.es.lookup.records.Record;
+import net.es.topology.common.records.ts.keys.ReservedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This is useful to store generated elements while traversing any topology to create sLS records
@@ -406,7 +409,6 @@ public class RecordsCollection {
         return nsa;
     }
 
-
     /**
      * Create/or return a NSI Service instance
      * If the a NSI Service  with the same id already exists this method will return a reference to it
@@ -434,5 +436,54 @@ public class RecordsCollection {
         }
         logger.trace("event=RecordsCollection.NSIServiceInstance.end id=" + id + " status=0 guid=" + this.logUUID);
         return nsiService;
+    }
+
+    public void sendTosLS(RegistrationClient client) throws LSClientException, ParserException {
+        logger.info("event=RecordsCollection.sendTosLS.start guid=" + this.logUUID);
+        // Will be handy to do the rollbacks
+        Map<String, Record> registeredRecords = new HashMap<String, Record>();
+
+        Collection<Record> records = new ArrayList<Record>();
+        // Probably there is a better way than this
+        for (Record record : getNodes().values()) {
+            records.add(record);
+        }
+        for (Record record : getLinks().values()) {
+            records.add(record);
+        }
+        for (Record record : getLinkGroups().values()) {
+            records.add(record);
+        }
+        for (Record record : getPorts().values()) {
+            records.add(record);
+        }
+        for (Record record : getPortGroups().values()) {
+            records.add(record);
+        }
+        for (Record record : getBidirectionalPorts().values()) {
+            records.add(record);
+        }
+        for (Record record : getBidirectionalLinks().values()) {
+            records.add(record);
+        }
+        for (Record record : getTopologies().values()) {
+            records.add(record);
+        }
+        for (Record record : getNSAs().values()) {
+            records.add(record);
+        }
+        for (Record record : getNSIServices().values()) {
+            records.add(record);
+        }
+
+        for (Record record : records) {
+            logger.info("event=RecordsCollection.sendTosLS.register.start id=" + record.getValue(ReservedKeys.RECORD_TS_ID) + " guid=" + this.logUUID);
+            client.setRecord(record);
+            client.register();
+            registeredRecords.put(client.getRelativeUrl(), record);
+            logger.info("event=RecordsCollection.sendTosLS.register.end id=" + record.getValue(ReservedKeys.RECORD_TS_ID) + " relativeURL=" + client.getRelativeUrl() + " status=0 guid=" + this.logUUID);
+        }
+
+        logger.info("event=RecordsCollection.sendTosLS.end status=0 guid=" + this.logUUID);
     }
 }
