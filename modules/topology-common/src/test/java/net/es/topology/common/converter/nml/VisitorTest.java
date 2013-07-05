@@ -101,8 +101,17 @@ public class VisitorTest {
     }
 
     @Test
-    @Ignore
     public void testVisitLocationType() throws JAXBException {
+        // Arrange
+        // Prepare logger
+        logger.debug("event=VisitorTest.testVisitLocationType.start guid=" + getLogGUID());
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
         InputStream in =
                 getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-location.xml");
 
@@ -111,11 +120,23 @@ public class VisitorTest {
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
-        RecordsCollection collection = new RecordsCollection();
-        NMLVisitor visitor = new NMLVisitor(collection);
-        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
-        tv.setTraverseFirst(true);
+        // Act
         msg.getBody().accept(tv);
+
+        // Assert
+        Assert.assertEquals(1, visitor.getRecordsCollection().getNodes().size());
+        Assert.assertTrue(visitor.getRecordsCollection().getNodes().containsKey("urn:ogf:network:example.net:2013:nodeA"));
+        Node node = visitor.getRecordsCollection().getNodes().get("urn:ogf:network:example.net:2013:nodeA");
+        Location loc = node.getLocation();
+        Assert.assertSame(node, loc.getNetworkObject());
+        Assert.assertEquals("Red City", loc.getName());
+        Assert.assertEquals("US", loc.getUnlocode());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:redcity", loc.getId());
+        Assert.assertEquals(Float.valueOf(10.000f), loc.getAltitude());
+        Assert.assertEquals(Float.valueOf(30.600f), loc.getLatitude());
+        Assert.assertEquals(Float.valueOf(12.640f), loc.getLongitude());
+
+        logger.debug("event=VisitorTest.testVisitLocationType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
@@ -496,6 +517,15 @@ public class VisitorTest {
 
         Assert.assertEquals(1, nsa.getManagedBy().size());
         Assert.assertTrue(nsa.getManagedBy().contains("urn:ogf:network:example.net:2013:nsa"));
+
+        Location loc = nsa.getLocation();
+        Assert.assertSame(nsa, loc.getNetworkObject());
+        Assert.assertEquals("Red City", loc.getName());
+        Assert.assertEquals("US", loc.getUnlocode());
+        Assert.assertEquals("urn:ogf:network:example.net:2013:redcity", loc.getId());
+        Assert.assertEquals(Float.valueOf(10.000f), loc.getAltitude());
+        Assert.assertEquals(Float.valueOf(30.600f), loc.getLatitude());
+        Assert.assertEquals(Float.valueOf(12.640f), loc.getLongitude());
         logger.debug("event=VisitorTest.testVisitNSAType.end status=0 guid=" + getLogGUID());
     }
 

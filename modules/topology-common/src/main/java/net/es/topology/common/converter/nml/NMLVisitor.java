@@ -78,6 +78,53 @@ public class NMLVisitor extends BaseVisitor {
     }
 
     /**
+     * A common method to parse location objects
+     *
+     * @param networkObject the NML network object
+     * @param slSObject     the sLS record
+     */
+    protected void setLocation(NetworkObject networkObject, net.es.topology.common.records.ts.NetworkObject slSObject) {
+        if (networkObject.getLocation() == null)
+            return;
+        LocationType locationType = networkObject.getLocation();
+        Location location = new Location(slSObject);
+        if (locationType.getId() != null) {
+            location.setId(locationType.getId());
+        }
+        if (locationType.getName() != null) {
+            location.setName(locationType.getName());
+        }
+        if (locationType.getUnlocode() != null) {
+            location.setUnlocode(locationType.getUnlocode());
+        }
+        if (locationType.getAlt() != null) {
+            location.setAltitude(locationType.getAlt());
+        }
+        if (locationType.getLat() != null) {
+            location.setLatitude(locationType.getLat());
+        }
+        if (locationType.getLong() != null) {
+            location.setLongitude(locationType.getLong());
+        }
+        // TODO(AH): deal with address
+    }
+
+    /**
+     * A common method to parse network objects
+     *
+     * @param networkObject the NML network object
+     * @param slSObject     the sLS record
+     */
+    protected void setNetworkObject(NetworkObject networkObject, net.es.topology.common.records.ts.NetworkObject slSObject) {
+        this.setLocation(networkObject, slSObject);
+        if (networkObject.getName() != null)
+            slSObject.setName(networkObject.getName());
+
+        if (networkObject.getVersion() != null)
+            slSObject.setVersion(networkObject.getVersion().toString());
+    }
+
+    /**
      * Visit nml node to generate sLS Node record
      *
      * @param nodeType
@@ -87,11 +134,7 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.NodeType.start id=" + nodeType.getId() + " guid=" + this.logUUID);
         Node sLSNode = getRecordsCollection().nodeInstance(nodeType.getId());
 
-        if (nodeType.getName() != null)
-            sLSNode.setName(nodeType.getName());
-
-        if (nodeType.getVersion() != null)
-            sLSNode.setVersion(nodeType.getVersion().toString());
+        this.setNetworkObject(nodeType, sLSNode);
 
         for (NodeRelationType relation : nodeType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
@@ -137,12 +180,10 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.PortType.start id=" + portType.getId() + " guid=" + this.logUUID);
         Port sLSPort = recordsCollection.portInstance(portType.getId());
 
-        if (portType.getName() != null)
-            sLSPort.setName(portType.getName());
+        this.setNetworkObject(portType, sLSPort);
+
         if (portType.getEncoding() != null)
             sLSPort.setEncoding(portType.getEncoding());
-        if (portType.getVersion() != null)
-            sLSPort.setVersion(portType.getVersion().toString());
 
         if (portType.getLabel() != null) {
             if (portType.getLabel().getValue() != null)
@@ -195,11 +236,7 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.BidirectionalPortType.start id=" + bidirectionalPortType.getId() + " guid=" + this.logUUID);
         BidirectionalPort sLSBiPort = recordsCollection.bidirectionalPortInstance(bidirectionalPortType.getId());
 
-        if (bidirectionalPortType.getName() != null)
-            sLSBiPort.setName(bidirectionalPortType.getName());
-
-        if (bidirectionalPortType.getVersion() != null)
-            sLSBiPort.setVersion(bidirectionalPortType.getVersion().toString());
+        this.setNetworkObject(bidirectionalPortType, sLSBiPort);
 
         for (JAXBElement<? extends NetworkObject> element : bidirectionalPortType.getRest()) {
             if (element.getValue() instanceof PortType) {
@@ -229,14 +266,12 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.LinkType.start id=" + linkType.getId() + " guid=" + this.logUUID);
         Link sLSLink = recordsCollection.linkInstance(linkType.getId());
 
-        if (linkType.getName() != null)
-            sLSLink.setName(linkType.getName());
+        this.setNetworkObject(linkType, sLSLink);
+
         if (linkType.getEncoding() != null)
             sLSLink.setEncoding(linkType.getEncoding());
         if (linkType.isNoReturnTraffic() != null)
             sLSLink.setNoReturnTraffic(linkType.isNoReturnTraffic());
-        if (linkType.getVersion() != null)
-            sLSLink.setVersion(linkType.getVersion().toString());
 
         if (linkType.getLabel() != null) {
             if (linkType.getLabel().getValue() != null)
@@ -285,11 +320,7 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.BidirectionalLinkType.start id=" + bidirectionalLinkType.getId() + " guid=" + this.logUUID);
         BidirectionalLink sLSBiLink = recordsCollection.bidirectionalLinkInstance(bidirectionalLinkType.getId());
 
-        if (bidirectionalLinkType.getName() != null)
-            sLSBiLink.setName(bidirectionalLinkType.getName());
-
-        if (bidirectionalLinkType.getVersion() != null)
-            sLSBiLink.setVersion(bidirectionalLinkType.getVersion().toString());
+        this.setNetworkObject(bidirectionalLinkType, sLSBiLink);
 
         for (JAXBElement<? extends NetworkObject> element : bidirectionalLinkType.getRest()) {
             if (element.getValue() instanceof LinkType) {
@@ -319,12 +350,11 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.PortGroupType.start id=" + portGroupType.getId() + " guid=" + this.logUUID);
         PortGroup sLSPortGroup = recordsCollection.portGroupInstance(portGroupType.getId());
 
-        if (portGroupType.getName() != null)
-            sLSPortGroup.setName(portGroupType.getName());
+        this.setNetworkObject(portGroupType, sLSPortGroup);
+
         if (portGroupType.getEncoding() != null)
             sLSPortGroup.setEncoding(portGroupType.getEncoding());
-        if (portGroupType.getVersion() != null)
-            sLSPortGroup.setVersion(portGroupType.getVersion().toString());
+
         // TODO (AH): deal with labelgroup
 
         /*
@@ -389,11 +419,7 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.LinkGroupType.start id=" + linkGroupType.getId() + " guid=" + this.logUUID);
         LinkGroup sLSLinkGroup = recordsCollection.linkGroupInstance(linkGroupType.getId());
 
-        if (linkGroupType.getName() != null)
-            sLSLinkGroup.setName(linkGroupType.getName());
-
-        if (linkGroupType.getVersion() != null)
-            sLSLinkGroup.setVersion(linkGroupType.getVersion().toString());
+        this.setNetworkObject(linkGroupType, sLSLinkGroup);
 
         // TODO (AH): deal with labelgroup
 
@@ -445,10 +471,8 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.NSAType.start id=" + nsaType.getId() + " guid=" + this.logUUID);
         NSA sLSNSA = recordsCollection.NSAInstance(nsaType.getId());
 
-        if (nsaType.getName() != null)
-            sLSNSA.setName(nsaType.getName());
-        if (nsaType.getVersion() != null)
-            sLSNSA.setVersion(nsaType.getVersion().toString());
+        this.setNetworkObject(nsaType, sLSNSA);
+
         if (nsaType.getTopology() != null && nsaType.getTopology().size() != 0)
             sLSNSA.setTopologies(new ArrayList<String>());
         for (TopologyType topologyType : nsaType.getTopology()) {
@@ -492,11 +516,7 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.NsiServiceType.start id=" + nsiServiceType.getId() + " guid=" + this.logUUID);
         NSIService nsiService = recordsCollection.NSIServiceInstance(nsiServiceType.getId());
 
-        if (nsiServiceType.getName() != null)
-            nsiService.setName(nsiServiceType.getName());
-
-        if (nsiServiceType.getVersion() != null)
-            nsiService.setVersion(nsiServiceType.getVersion().toString());
+        this.setNetworkObject(nsiServiceType, nsiService);
 
         if (nsiServiceType.getType() != null)
             nsiService.setType(nsiServiceType.getType());
@@ -555,11 +575,7 @@ public class NMLVisitor extends BaseVisitor {
         logger.trace("event=NMLVisitor.visit.TopologyType.start id=" + topologyType.getId() + " guid=" + this.logUUID);
         Topology sLSTopo = getRecordsCollection().topologyInstance(topologyType.getId());
 
-        if (topologyType.getName() != null)
-            sLSTopo.setName(topologyType.getName());
-
-        if (topologyType.getVersion() != null)
-            sLSTopo.setVersion(topologyType.getVersion().toString());
+        this.setNetworkObject(topologyType, sLSTopo);
 
         // Parse relations
         for (TopologyRelationType relation : topologyType.getRelation()) {

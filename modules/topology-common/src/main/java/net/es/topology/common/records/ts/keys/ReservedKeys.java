@@ -20,7 +20,6 @@ public class ReservedKeys {
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";
     public static final String RECORD_NETWORKOBJECT_VERSION = "networkobject-version";
-    public static final String RECORD_NETWORKOBJECT_LOCATION = "networkobject-location";
     public static final String RECORD_NETWORKOBJECT_LIFETIME = "networkobject-lifetime";
 
     // Port keys
@@ -30,10 +29,11 @@ public class ReservedKeys {
     public static final String RECORD_LINK_NORETURN_TRAFFIC = "link-noreturntraffic";
 
     // Location Keys
+    public static final String RECORD_LOCATION_ID = "location-id";
     public static final String RECORD_LOCATION_NAME = "location-name";
-    public static final String RECORD_LOCATION_LONG = "location-long";
-    public static final String RECORD_LOCATION_LAT = "location-lat";
-    public static final String RECORD_LOCATION_ALT = "location-alt";
+    public static final String RECORD_LOCATION_LATITUDE = "location-latitude";
+    public static final String RECORD_LOCATION_LONGITUDE = "location-longitude";
+    public static final String RECORD_LOCATION_ALTITUDE = "location-altitude";
     public static final String RECORD_LOCATION_UNLOCODE = "location-unlocode";
     public static final String RECORD_LOCATION_ADDRESS = "location-address";
 
@@ -67,5 +67,4 @@ public class ReservedKeys {
     public static final String RECORD_NSI_SERVICE = "nsi-service";
     public static final String RECORD_NSI_SERVICE_TYPE = "nsi-service-type";
     public static final String RECORD_NSI_DESCRIBED_BY = "nsi-described-by";
-
 }

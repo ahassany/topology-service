@@ -1,63 +1,143 @@
 package net.es.topology.common.records.ts;
 
-import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.keys.ReservedKeys;
-import net.es.topology.common.records.ts.keys.ReservedValues;
 
 /**
+ * A Location is a reference to a geographical location or area.
+ * A Location object can be related to other Network Objects to describe that these are located there.
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
-public class Location extends Record {
+public class Location {
+    NetworkObject networkObject = null;
 
-    public Location() {
-        super(ReservedValues.RECORD_TYPE_LOCATION);
+    public Location(NetworkObject networkObject) {
+        this.networkObject = networkObject;
     }
 
-    public Location(String recordType) {
-        super(recordType);
+    /**
+     * Get the NetworkObject that this location object is wrapped around
+     *
+     * @return
+     */
+    public NetworkObject getNetworkObject() {
+        return this.networkObject;
     }
 
+    /**
+     * Set the NetworkObject that this location object is wrapped around
+     *
+     * @param networkObject
+     */
+    public void setNetworkObject(NetworkObject networkObject) {
+        this.networkObject = networkObject;
+    }
+
+    /**
+     * A human readable string
+     *
+     * @return
+     */
     public String getName() {
-        return (String) this.getValue(ReservedKeys.RECORD_LOCATION_NAME);
+        return (String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_NAME);
     }
 
+    /**
+     * A human readable string
+     *
+     * @param name
+     */
     public void setName(String name) {
-        this.add(ReservedKeys.RECORD_LOCATION_NAME, name);
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_NAME, name);
     }
 
-    public float getLong() {
-        return Float.valueOf((String) this.getValue(ReservedKeys.RECORD_LOCATION_LONG));
+    /**
+     * Longitude in WGS84 coordinate system (in decimal degrees)
+     *
+     * @return
+     */
+    public Float getLongitude() {
+        return (Float) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE);
     }
 
-    public void setLong(float l) {
-        this.add(ReservedKeys.RECORD_LOCATION_LONG, Float.toString(l));
+    /**
+     * Longitude in WGS84 coordinate system (in decimal degrees)
+     *
+     * @param longitude
+     */
+    public void setLongitude(Float longitude) {
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_LONGITUDE, longitude);
     }
 
-    public float getLat() {
-        return Float.valueOf((String) this.getValue(ReservedKeys.RECORD_LOCATION_LAT));
+    /**
+     * Latitude in WGS84 coordinate system (in decimal degrees)
+     *
+     * @return
+     */
+    public Float getLatitude() {
+        return (Float) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE);
     }
 
-    public void setLat(float lat) {
-        this.add(ReservedKeys.RECORD_LOCATION_LAT, Float.toString(lat));
+    /**
+     * Latitude in WGS84 coordinate system (in decimal degrees)
+     *
+     * @param latitude
+     */
+    public void setLatitude(Float latitude) {
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_LATITUDE, latitude);
     }
 
+    /**
+     * Altitude in WGS84 coordinate system (in decimal meters)
+     *
+     * @return
+     */
+    public Float getAltitude() {
+        return (Float) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE);
+    }
 
+    /**
+     * Altitude in WGS84 coordinate system (in decimal meters)
+     *
+     * @param altitude
+     */
+    public void setAltitude(Float altitude) {
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_ALTITUDE, altitude);
+    }
+
+    /**
+     * the UN/LOCODE location identifier [UNLOCODE]
+     *
+     * @return
+     */
     public String getUnlocode() {
-        return (String) this.getValue(ReservedKeys.RECORD_LOCATION_UNLOCODE);
+        return (String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_UNLOCODE);
     }
 
+    /**
+     * the UN/LOCODE location identifier [UNLOCODE]
+     *
+     * @param unlocode
+     */
     public void setUnlocode(String unlocode) {
-        this.add(ReservedKeys.RECORD_LOCATION_UNLOCODE, unlocode);
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_UNLOCODE, unlocode);
     }
 
+    /**
+     * A persistent globally unique URI for the location
+     */
     public String getId() {
-        return (String) this.getValue(ReservedKeys.RECORD_TS_ID);
+        return (String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ID);
     }
 
-    public void setId(String id){
-        this.add(ReservedKeys.RECORD_TS_ID, id);
+    /**
+     * A persistent globally unique URI for the location
+     *
+     * @param id URI
+     */
+    public void setId(String id) {
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_ID, id);
     }
-
 
     // TODO (AH): parse address! which is completely generic!
 }
