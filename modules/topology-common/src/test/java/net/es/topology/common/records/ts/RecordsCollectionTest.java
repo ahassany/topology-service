@@ -4,19 +4,37 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class RecordsCollectionTest {
+    private final Logger logger = LoggerFactory.getLogger(RecordsCollectionTest.class);
     private RecordsCollection collection;
+    /**
+     * this UUID changes for each test case
+     */
+    private String logGUID = null;
 
     @Before
     public void createCollection() {
-        this.collection = new RecordsCollection();
+        // Make sure that each test case has it's own ID to make it easier to trace.
+        this.logGUID = UUID.randomUUID().toString();
+        this.collection = new RecordsCollection(getLogGUID());
+    }
+
+    /**
+     * get the UUID of the current test case
+     * @return
+     */
+    public String getLogGUID() {
+        return this.logGUID;
     }
 
     @After
@@ -26,12 +44,15 @@ public class RecordsCollectionTest {
 
     @Test
     public void testGetNodes() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetNodes.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getNodes());
+        logger.debug("event=RecordsCollectionTest.testGetNodes.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetNodes() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetNodes.start guid=" + getLogGUID());
         Map<String, Node> nodes = new HashMap<String, Node>();
 
         // Act
@@ -39,16 +60,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(nodes, this.collection.getNodes());
+        logger.debug("event=RecordsCollectionTest.testSetNodes.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetPorts() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetPorts.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getPorts());
+        logger.debug("event=RecordsCollectionTest.testGetPorts.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetPorts() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetPorts.start guid=" + getLogGUID());
         Map<String, Port> ports = new HashMap<String, Port>();
 
         // Act
@@ -56,16 +81,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(ports, this.collection.getPorts());
+        logger.debug("event=RecordsCollectionTest.testSetPorts.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetLinks() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetLinks.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getLinks());
+        logger.debug("event=RecordsCollectionTest.testGetLinks.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetLinks() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetLinks.start guid=" + getLogGUID());
         Map<String, Link> links = new HashMap<String, Link>();
 
         // Act
@@ -73,16 +102,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(links, this.collection.getLinks());
+        logger.debug("event=RecordsCollectionTest.testSetLinks.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetTopologies() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetTopologies.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getTopologies());
+        logger.debug("event=RecordsCollectionTest.testGetTopologies.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetTopologies() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetTopologies.start guid=" + getLogGUID());
         Map<String, Topology> topologies = new HashMap<String, Topology>();
 
         // Act
@@ -90,16 +123,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(topologies, this.collection.getTopologies());
+        logger.debug("event=RecordsCollectionTest.testSetTopologies.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetBidirectionalPorts() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetBidirectionalPorts.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getBidirectionalPorts());
+        logger.debug("event=RecordsCollectionTest.testGetBidirectionalPorts.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetBidirectionalPorts() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetBidirectionalPorts.start guid=" + getLogGUID());
         Map<String, BidirectionalPort> biports = new HashMap<String, BidirectionalPort>();
 
         // Act
@@ -107,16 +144,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(biports, this.collection.getBidirectionalPorts());
+        logger.debug("event=RecordsCollectionTest.testSetBidirectionalPorts.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetBidirectionalLinks() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetBidirectionalLinks.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getBidirectionalLinks());
+        logger.debug("event=RecordsCollectionTest.testGetBidirectionalLinks.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetBidirectionalLinks() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetBidirectionalLinks.start guid=" + getLogGUID());
         Map<String, BidirectionalLink> biLinks = new HashMap<String, BidirectionalLink>();
 
         // Act
@@ -124,16 +165,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(biLinks, this.collection.getBidirectionalLinks());
+        logger.debug("event=RecordsCollectionTest.testSetBidirectionalLinks.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetPortGroups() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetPortGroups.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getPortGroups());
+        logger.debug("event=RecordsCollectionTest.testGetPortGroups.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetPortGroups() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetPortGroups.start guid=" + getLogGUID());
         Map<String, PortGroup> ports = new HashMap<String, PortGroup>();
 
         // Act
@@ -141,16 +186,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(ports, this.collection.getPortGroups());
+        logger.debug("event=RecordsCollectionTest.testSetPortGroups.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetNSAs() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetNSAs.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getNSAs());
+        logger.debug("event=RecordsCollectionTest.testGetNSAs.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetNSAs() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetNSAs.start guid=" + getLogGUID());
         Map<String, NSA> nsas = new HashMap<String, NSA>();
 
         // Act
@@ -158,16 +207,20 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(nsas, this.collection.getNSAs());
+        logger.debug("event=RecordsCollectionTest.testSetNSAs.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testGetNSIService() throws Exception {
+        logger.debug("event=RecordsCollectionTest.testGetNSIService.start guid=" + getLogGUID());
         Assert.assertNotNull(this.collection.getNSIServices());
+        logger.debug("event=RecordsCollectionTest.testGetNSIService.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testSetNSIService() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testSetNSIService.start guid=" + getLogGUID());
         Map<String, NSIService> services = new HashMap<String, NSIService>();
 
         // Act
@@ -175,11 +228,13 @@ public class RecordsCollectionTest {
 
         // Assert
         Assert.assertSame(services, this.collection.getNSIServices());
+        logger.debug("event=RecordsCollectionTest.testSetNSIService.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testPortInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testPortInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:portA";
         String id2 = "urn:ogf:network:example.net:2013:portB";
         Port portA = new Port();
@@ -195,11 +250,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(portA, portA2);
         Assert.assertSame(portB, this.collection.portInstance(id2));
         Assert.assertSame(portNull, this.collection.portInstance(portNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testPortInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testLinkInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testLinkInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:linkA";
         String id2 = "urn:ogf:network:example.net:2013:linkB";
         Link linkA = new Link();
@@ -215,11 +272,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(linkA, linkA2);
         Assert.assertSame(linkB, this.collection.linkInstance(id2));
         Assert.assertSame(linkNull, this.collection.linkInstance(linkNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testLinkInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testNodeInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testNodeInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:nodeA";
         String id2 = "urn:ogf:network:example.net:2013:nodeB";
         Node nodeA = new Node();
@@ -235,11 +294,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(nodeA, nodeA2);
         Assert.assertSame(nodeB, this.collection.nodeInstance(id2));
         Assert.assertSame(nodeNull, this.collection.nodeInstance(nodeNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testNodeInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testTopologyInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testTopologyInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:topologyA";
         String id2 = "urn:ogf:network:example.net:2013:topologyB";
         Topology topologyA = new Topology();
@@ -255,11 +316,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(topologyA, topologyA2);
         Assert.assertSame(topologyB, this.collection.topologyInstance(id2));
         Assert.assertSame(topologyNull, this.collection.topologyInstance(topologyNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testTopologyInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testBidirectionalPortInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testBidirectionalPortInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:biportA";
         String id2 = "urn:ogf:network:example.net:2013:biportB";
         BidirectionalPort biportA = new BidirectionalPort();
@@ -267,6 +330,7 @@ public class RecordsCollectionTest {
         this.collection.getBidirectionalPorts().put(id1, biportA);
 
         // Act
+        logger.debug("event=RecordsCollectionTest.testBidirectionalPortInstance.start guid=" + getLogGUID());
         BidirectionalPort biportA2 = this.collection.bidirectionalPortInstance(id1);
         BidirectionalPort biportB = this.collection.bidirectionalPortInstance(id2);
         BidirectionalPort biportNull = this.collection.bidirectionalPortInstance(null);
@@ -275,11 +339,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(biportA, biportA2);
         Assert.assertSame(biportB, this.collection.bidirectionalPortInstance(id2));
         Assert.assertSame(biportNull, this.collection.bidirectionalPortInstance(biportNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testBidirectionalPortInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testBidirectionalLinkInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testBidirectionalLinkInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:biportA";
         String id2 = "urn:ogf:network:example.net:2013:biportB";
         BidirectionalLink biLinkA = new BidirectionalLink();
@@ -295,11 +361,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(biLinkA, biLinkA2);
         Assert.assertSame(biLinkB, this.collection.bidirectionalLinkInstance(id2));
         Assert.assertSame(biLinkNull, this.collection.bidirectionalLinkInstance(biLinkNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testBidirectionalLinkInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testPortGroupInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testPortGroupInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:portA";
         String id2 = "urn:ogf:network:example.net:2013:portB";
         PortGroup portA = new PortGroup();
@@ -315,11 +383,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(portA, portA2);
         Assert.assertSame(portB, this.collection.portGroupInstance(id2));
         Assert.assertSame(portNull, this.collection.portGroupInstance(portNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testPortGroupInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testLinkGroupInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testLinkGroupInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:linkA";
         String id2 = "urn:ogf:network:example.net:2013:linkB";
         LinkGroup linkA = new LinkGroup();
@@ -335,11 +405,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(linkA, linkA2);
         Assert.assertSame(linkB, this.collection.linkGroupInstance(id2));
         Assert.assertSame(linkNull, this.collection.linkGroupInstance(linkNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testLinkGroupInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testNSAInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testNSAInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:nsaA";
         String id2 = "urn:ogf:network:example.net:2013:nsaB";
         NSA nsaA = new NSA();
@@ -355,11 +427,13 @@ public class RecordsCollectionTest {
         Assert.assertSame(nsaA, nsaA2);
         Assert.assertSame(nsaB, this.collection.NSAInstance(id2));
         Assert.assertSame(nsaNull, this.collection.NSAInstance(nsaNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testNSAInstance.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testNSIServiceInstance() throws Exception {
         // Arrange
+        logger.debug("event=RecordsCollectionTest.testNSIServiceInstance.start guid=" + getLogGUID());
         String id1 = "urn:ogf:network:example.net:2013:serviceA";
         String id2 = "urn:ogf:network:example.net:2013:serviceB";
         NSIService serviceA = new NSIService();
@@ -375,5 +449,6 @@ public class RecordsCollectionTest {
         Assert.assertSame(serviceA, serviceA2);
         Assert.assertSame(serviceB, this.collection.NSIServiceInstance(id2));
         Assert.assertSame(serviceNull, this.collection.NSIServiceInstance(serviceNull.getId()));
+        logger.debug("event=RecordsCollectionTest.testNSIServiceInstance.end status=0 guid=" + getLogGUID());
     }
 }
