@@ -32,11 +32,11 @@ import java.util.UUID;
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
-public class VisitorTest {
+public class NMLVisitorTest {
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     // Commonly used value in the tests
     private final String VLAN_URI = "http://schemas.ogf.org/nml/2013/05/ethernet#vlan";
-    private final Logger logger = LoggerFactory.getLogger(VisitorTest.class);
+    private final Logger logger = LoggerFactory.getLogger(NMLVisitorTest.class);
     // Used to assert object versions in tests
     private final String version = "2013-05-30T09:30:10Z";
     /**
@@ -63,7 +63,7 @@ public class VisitorTest {
     public void testVisitNodeType() throws JAXBException {
         // Arrange
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitNodeType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitNodeType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -96,7 +96,7 @@ public class VisitorTest {
         Assert.assertEquals(2, record.getHasOutboundPort().size());
         Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:port_X:out", record.getHasOutboundPort().get(0));
         Assert.assertEquals("urn:ogf:network:example.net:2013:nodeA:port_Y:out", record.getHasOutboundPort().get(1));
-        logger.debug("event=VisitorTest.testVisitNodeType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitNodeType.end status=0 guid=" + getLogGUID());
         // TODO (AH): Test version
     }
 
@@ -104,7 +104,7 @@ public class VisitorTest {
     public void testVisitLocationType() throws JAXBException {
         // Arrange
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitLocationType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitLocationType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -136,14 +136,14 @@ public class VisitorTest {
         Assert.assertEquals(Float.valueOf(30.600f), loc.getLatitude());
         Assert.assertEquals(Float.valueOf(12.640f), loc.getLongitude());
 
-        logger.debug("event=VisitorTest.testVisitLocationType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitLocationType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitPortType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitPortType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitPortType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -173,14 +173,14 @@ public class VisitorTest {
         Assert.assertEquals(this.version, sLSPort.getVersion());
         Assert.assertEquals("1501", sLSPort.getLabel());
         Assert.assertEquals(VLAN_URI, sLSPort.getLabelType());
-        logger.debug("event=VisitorTest.testVisitPortType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitPortType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitPortGroupType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitPortGroupType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitPortGroupType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -226,14 +226,14 @@ public class VisitorTest {
 
         Assert.assertEquals(1, sLSPortGroup.getIsAlias().size());
         Assert.assertTrue(sLSPortGroup.getIsAlias().contains("urn:ogf:network:example.net:2013:portGroupB"));
-        logger.debug("event=VisitorTest.testVisitPortGroupType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitPortGroupType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitLinkType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitLinkType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitLinkType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -275,14 +275,14 @@ public class VisitorTest {
         Assert.assertTrue(record.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkD"));
         Assert.assertTrue(record.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkE"));
         Assert.assertTrue(record.getIsSerialCompoundLink().contains("urn:ogf:network:example.net:2013:linkF"));
-        logger.debug("event=VisitorTest.testVisitLinkType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitLinkType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitLinkGroupType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitLinkGroupType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitLinkGroupType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -324,14 +324,14 @@ public class VisitorTest {
 
         Assert.assertEquals(1, sLSLinkGroup.getIsAlias().size());
         Assert.assertTrue(sLSLinkGroup.getIsAlias().contains("urn:ogf:network:example.net:2013:linkGroupC"));
-        logger.debug("event=VisitorTest.testVisitLinkGroupType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitLinkGroupType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitTopologyType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitTopologyType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitTopologyType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -389,14 +389,14 @@ public class VisitorTest {
         Assert.assertTrue(topology.getLinkGroups().contains("urn:ogf:network:example.net:2013:linkGroupA"));
         Assert.assertTrue(topology.getTopologies().contains("urn:ogf:network:example.net:2013:topologyA"));
         // TODO (AH): test for all other elements in Topology
-        logger.debug("event=VisitorTest.testVisitTopologyType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitTopologyType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitBidirectionalPortType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitBidirectionalPortType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitBidirectionalPortType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -430,14 +430,14 @@ public class VisitorTest {
         Assert.assertEquals(2, sLSBiPort.getPorts().size());
         Assert.assertTrue(sLSBiPort.getPorts().contains("urn:ogf:network:example.net:2013:portA:out"));
         Assert.assertTrue(sLSBiPort.getPorts().contains("urn:ogf:network:example.net:2013:portA:in"));
-        logger.debug("event=VisitorTest.testVisitBidirectionalPortType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitBidirectionalPortType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitBidirectionalLinkType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitBidirectionalLinkType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitBidirectionalLinkType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -472,14 +472,14 @@ public class VisitorTest {
         Assert.assertEquals(2, sLSBiLink.getLinks().size());
         Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:XY"));
         Assert.assertTrue(sLSBiLink.getLinks().contains("urn:ogf:network:example.net:2013:linkA:YX"));
-        logger.debug("event=VisitorTest.testVisitBidirectionalLinkType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitBidirectionalLinkType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitNSAType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitNSAType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitNSAType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -526,14 +526,14 @@ public class VisitorTest {
         Assert.assertEquals(Float.valueOf(10.000f), loc.getAltitude());
         Assert.assertEquals(Float.valueOf(30.600f), loc.getLatitude());
         Assert.assertEquals(Float.valueOf(12.640f), loc.getLongitude());
-        logger.debug("event=VisitorTest.testVisitNSAType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitNSAType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
     public void testVisitNSIServiceType() throws JAXBException {
         // Prepare
         // Prepare logger
-        logger.debug("event=VisitorTest.testVisitNSIServiceType.start guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitNSIServiceType.start guid=" + getLogGUID());
         // Create a visitor
         RecordsCollection collection = new RecordsCollection(getLogGUID());
         NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
@@ -571,7 +571,7 @@ public class VisitorTest {
 
         Assert.assertEquals(1, nsiService.getProvidedBy().size());
         Assert.assertTrue(nsiService.getProvidedBy().contains("urn:ogf:network:example.com:2013:nsa"));
-        logger.debug("event=VisitorTest.testVisitNSIServiceType.end status=0 guid=" + getLogGUID());
+        logger.debug("event=NMLVisitorTest.testVisitNSIServiceType.end status=0 guid=" + getLogGUID());
     }
 
     @Test
