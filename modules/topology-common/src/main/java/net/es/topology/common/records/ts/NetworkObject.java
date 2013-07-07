@@ -61,24 +61,6 @@ public abstract class NetworkObject extends Record {
      */
     public Location getLocation() {
         Location location = new Location(this);
-        if (this.getValue(ReservedKeys.RECORD_LOCATION_ID) != null) {
-            location.setId((String) this.getValue(ReservedKeys.RECORD_LOCATION_ID));
-        }
-        if (this.getValue(ReservedKeys.RECORD_LOCATION_NAME) != null) {
-            location.setName((String) this.getValue(ReservedKeys.RECORD_LOCATION_NAME));
-        }
-        if (this.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE) != null) {
-            location.setAltitude((Float) this.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE));
-        }
-        if (this.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE) != null) {
-            location.setLatitude((Float) this.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE));
-        }
-        if (this.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE) != null) {
-            location.setLongitude((Float) this.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE));
-        }
-        if (this.getValue(ReservedKeys.RECORD_LOCATION_UNLOCODE) != null) {
-            location.setUnlocode((String) this.getValue(ReservedKeys.RECORD_LOCATION_UNLOCODE));
-        }
         // TODO (AH): deal with address
         return location;
     }

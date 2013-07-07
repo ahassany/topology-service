@@ -57,7 +57,7 @@ public class Location {
      * @return
      */
     public Float getLongitude() {
-        return (Float) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE);
+        return Float.valueOf((String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE));
     }
 
     /**
@@ -66,7 +66,7 @@ public class Location {
      * @param longitude
      */
     public void setLongitude(Float longitude) {
-        this.networkObject.add(ReservedKeys.RECORD_LOCATION_LONGITUDE, longitude);
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_LONGITUDE, longitude.toString());
     }
 
     /**
@@ -75,7 +75,7 @@ public class Location {
      * @return
      */
     public Float getLatitude() {
-        return (Float) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE);
+        return Float.valueOf((String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE));
     }
 
     /**
@@ -84,7 +84,7 @@ public class Location {
      * @param latitude
      */
     public void setLatitude(Float latitude) {
-        this.networkObject.add(ReservedKeys.RECORD_LOCATION_LATITUDE, latitude);
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_LATITUDE, latitude.toString());
     }
 
     /**
@@ -93,7 +93,7 @@ public class Location {
      * @return
      */
     public Float getAltitude() {
-        return (Float) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE);
+        return Float.valueOf((String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE));
     }
 
     /**
@@ -102,7 +102,7 @@ public class Location {
      * @param altitude
      */
     public void setAltitude(Float altitude) {
-        this.networkObject.add(ReservedKeys.RECORD_LOCATION_ALTITUDE, altitude);
+        this.networkObject.add(ReservedKeys.RECORD_LOCATION_ALTITUDE, altitude.toString());
     }
 
     /**
