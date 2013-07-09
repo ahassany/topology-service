@@ -17,7 +17,7 @@
     <name>topology-service</name>
 
     <properties>
-        <atmosphere.version>1.1.0.RC4</atmosphere.version>
+        <atmosphere.version>2.0.0.RC1</atmosphere.version>
         <nettosphere.version>2.0.0.RC4</nettosphere.version>
         <geronimo-servlet.version>1.0</geronimo-servlet.version>
         <jetty8.version>8.1.11.v20130520</jetty8.version>
