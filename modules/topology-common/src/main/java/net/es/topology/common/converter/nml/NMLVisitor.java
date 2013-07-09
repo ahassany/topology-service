@@ -1,7 +1,7 @@
 package net.es.topology.common.converter.nml;
 
 import net.es.topology.common.records.ts.*;
-import net.es.topology.common.visitors.BaseVisitor;
+import net.es.topology.common.visitors.nml.BaseVisitor;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nml._2013._05.base.NetworkObject;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
