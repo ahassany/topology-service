@@ -6,6 +6,9 @@ import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.NSA;
 import net.es.topology.common.records.ts.TSRecordFactory;
+import net.es.topology.common.visitors.sls.TraverserImpl;
+import net.es.topology.common.visitors.sls.TraversingVisitor;
+import net.es.topology.common.visitors.sls.TraversingVisitorProgressMonitorLoggingImpl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -52,6 +55,31 @@ public class SLSVisitorTest {
             System.out.println(records.get(0).getRecordType());
             for (Record record : records) {
                 System.out.println(((NSA) record).getTopologies());
+            }
+        } catch (LSClientException e) {
+            e.printStackTrace();
+        } catch (ParserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testTraverser() {
+        SLSVisitor visitor = new SLSVisitor();
+        TraversingVisitor tv = new TraversingVisitor(new TraverserImpl(), visitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        String urn = "urn:ogf:network:example.org:2013:nsa";
+        try {
+            SimpleLS client = new SimpleLS("localhost", 8090);
+            client.setRelativeUrl("lookup/records?ts-id=" + urn);
+            client.connect();
+            client.send();
+            String resp = client.getResponse();
+            List<Record> records = TSRecordFactory.toRecords(resp, getLogGUID());
+            System.out.println(records.get(0).getRecordType());
+            for (Record record : records) {
+                ((NSA) record).accept(tv);
             }
         } catch (LSClientException e) {
             e.printStackTrace();
