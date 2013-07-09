@@ -2,17 +2,18 @@ package net.es.topology.common.records.ts;
 
 import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.visitors.sls.Visitable;
+import net.es.topology.common.visitors.sls.Visitor;
 
 import java.util.List;
 
 /**
  * An NSA object represents a Network Service Agent which can accept Connection Service requests and manages a network.
  *
- *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  * @see: Network Service Interface Topology Representation
  */
-public class NSA extends NetworkObject {
+public class NSA extends NetworkObject implements Visitable {
 
     public NSA() {
         super(ReservedValues.RECORD_TYPE_NSA);
@@ -71,7 +72,6 @@ public class NSA extends NetworkObject {
         this.add(ReservedKeys.RECORD_RELATION_MANAGED_BY, managers);
     }
 
-
     /**
      * List of the URNs of services provided by the NSA
      *
@@ -88,5 +88,14 @@ public class NSA extends NetworkObject {
      */
     public void setNSIServices(List<String> services) {
         this.add(ReservedKeys.RECORD_NSI_SERVICE, services);
+    }
+
+    /**
+     * calls the visit method at the visitor
+     *
+     * @param aVisitor
+     */
+    public void accept(Visitor aVisitor) {
+        aVisitor.visit(this);
     }
 }

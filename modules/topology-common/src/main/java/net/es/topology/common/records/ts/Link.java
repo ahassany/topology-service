@@ -2,16 +2,18 @@ package net.es.topology.common.records.ts;
 
 import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.visitors.sls.Visitable;
+import net.es.topology.common.visitors.sls.Visitor;
 
 import java.util.List;
 
 /**
  * A Link object describes a unidirectional data transport from each of its sources to all of its sinks.
  *
- * @see NML schema docs for the description of the fields
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ * @see NML schema docs for the description of the fields
  */
-public class Link extends NetworkObject {
+public class Link extends NetworkObject implements Visitable {
 
     public Link() {
         super(ReservedValues.RECORD_TYPE_LINK);
@@ -66,16 +68,6 @@ public class Link extends NetworkObject {
      * The encoding attribute defines the format of the data streaming through the Link.
      * The identifier for the encoding must be a URI
      *
-     * @param encoding URI specified by a GFD
-     */
-    public void setEncoding(String encoding) {
-        this.add(ReservedKeys.RECORD_PORT_ENCODING, encoding);
-    }
-
-    /**
-     * The encoding attribute defines the format of the data streaming through the Link.
-     * The identifier for the encoding must be a URI
-     *
      * @return encoding URI specified by a GFD
      */
     public String getEncoding() {
@@ -83,14 +75,13 @@ public class Link extends NetworkObject {
     }
 
     /**
-     * A value of true changes the definition of Link to: data transport from each sources to all sinks,
-     * except that there is no data transport from a source to a sink if the source and sink are grouped
-     * together in a BidirectionalPort group. The default value of noReturnTraffic is false.
+     * The encoding attribute defines the format of the data streaming through the Link.
+     * The identifier for the encoding must be a URI
      *
-     * @param noReturnTraffic
+     * @param encoding URI specified by a GFD
      */
-    public void setNoReturnTraffic(boolean noReturnTraffic) {
-        this.add(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC, noReturnTraffic);
+    public void setEncoding(String encoding) {
+        this.add(ReservedKeys.RECORD_PORT_ENCODING, encoding);
     }
 
     /**
@@ -102,6 +93,17 @@ public class Link extends NetworkObject {
      */
     public boolean getNoReturnTraffic() {
         return (Boolean) this.getValue(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC);
+    }
+
+    /**
+     * A value of true changes the definition of Link to: data transport from each sources to all sinks,
+     * except that there is no data transport from a source to a sink if the source and sink are grouped
+     * together in a BidirectionalPort group. The default value of noReturnTraffic is false.
+     *
+     * @param noReturnTraffic
+     */
+    public void setNoReturnTraffic(boolean noReturnTraffic) {
+        this.add(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC, noReturnTraffic);
     }
 
     /**
@@ -143,7 +145,6 @@ public class Link extends NetworkObject {
     }
 
     /**
-     *
      * @return list of the URNs of the other Links.
      */
     public List<String> getNext() {
@@ -151,10 +152,18 @@ public class Link extends NetworkObject {
     }
 
     /**
-     *
      * @param links list of the URNs of the other Links.
      */
     public void setNext(List<String> links) {
         this.add(ReservedKeys.RECORD_RELATION_NEXT, links);
+    }
+
+    /**
+     * calls the visit method at the visitor
+     *
+     * @param aVisitor
+     */
+    public void accept(Visitor aVisitor) {
+        aVisitor.visit(this);
     }
 }

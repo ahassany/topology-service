@@ -2,13 +2,15 @@ package net.es.topology.common.records.ts;
 
 import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.visitors.sls.Visitable;
+import net.es.topology.common.visitors.sls.Visitor;
 
 import java.util.List;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
-public class Node extends NetworkObject {
+public class Node extends NetworkObject implements Visitable {
 
     public Node() {
         super(ReservedValues.RECORD_TYPE_NODE);
@@ -95,4 +97,12 @@ public class Node extends NetworkObject {
         this.add(ReservedKeys.RECORD_RELATION_IS_ALIAS, aliases);
     }
 
+    /**
+     * calls the visit method at the visitor
+     *
+     * @param aVisitor
+     */
+    public void accept(Visitor aVisitor) {
+        aVisitor.visit(this);
+    }
 }

@@ -2,6 +2,8 @@ package net.es.topology.common.records.ts;
 
 import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.visitors.sls.Visitable;
+import net.es.topology.common.visitors.sls.Visitor;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  * @see: NML schema docs for the meaning of the fields
  */
-public class PortGroup extends NetworkObject {
+public class PortGroup extends NetworkObject implements Visitable {
 
     public PortGroup() {
         super(ReservedValues.RECORD_TYPE_PORT_GROUP);
@@ -172,5 +174,14 @@ public class PortGroup extends NetworkObject {
      */
     public void setEncoding(String encoding) {
         this.add(ReservedKeys.RECORD_PORT_ENCODING, encoding);
+    }
+
+    /**
+     * calls the visit method at the visitor
+     *
+     * @param aVisitor
+     */
+    public void accept(Visitor aVisitor) {
+        aVisitor.visit(this);
     }
 }

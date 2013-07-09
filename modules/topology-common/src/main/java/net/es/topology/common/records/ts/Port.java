@@ -2,6 +2,8 @@ package net.es.topology.common.records.ts;
 
 import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.visitors.sls.Visitable;
+import net.es.topology.common.visitors.sls.Visitor;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ import java.util.List;
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  * @see: NML schema docs for the meaning of the fields
  */
-public class Port extends NetworkObject {
+public class Port extends NetworkObject implements Visitable {
 
     public Port() {
         super(ReservedValues.RECORD_TYPE_PORT);
@@ -135,6 +137,16 @@ public class Port extends NetworkObject {
      * The encoding attribute defines the format of the data streaming through the Port.
      * The identifier for the encoding must be a URI
      *
+     * @return encoding URI specified by a GFD
+     */
+    public String getEncoding() {
+        return (String) this.getValue(ReservedKeys.RECORD_PORT_ENCODING);
+    }
+
+    /**
+     * The encoding attribute defines the format of the data streaming through the Port.
+     * The identifier for the encoding must be a URI
+     *
      * @param encoding URI specified by a GFD
      */
     public void setEncoding(String encoding) {
@@ -142,12 +154,11 @@ public class Port extends NetworkObject {
     }
 
     /**
-     * The encoding attribute defines the format of the data streaming through the Port.
-     * The identifier for the encoding must be a URI
+     * calls the visit method at the visitor
      *
-     * @return encoding URI specified by a GFD
+     * @param aVisitor
      */
-    public String getEncoding() {
-        return (String) this.getValue(ReservedKeys.RECORD_PORT_ENCODING);
+    public void accept(Visitor aVisitor) {
+        aVisitor.visit(this);
     }
 }

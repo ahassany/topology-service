@@ -3,13 +3,15 @@ package net.es.topology.common.records.ts;
 import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.visitors.sls.Visitable;
+import net.es.topology.common.visitors.sls.Visitor;
 
 /**
  * NetworkObject is the parent abstract class of most objects in NML specification.
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
-public abstract class NetworkObject extends Record {
+public abstract class NetworkObject extends Record implements Visitable {
     public NetworkObject() {
         super(ReservedValues.RECORD_TYPE_NETWORKOBJECT);
     }
@@ -94,5 +96,14 @@ public abstract class NetworkObject extends Record {
 
         location.setNetworkObject(this);
         // TODO (AH): deal with address
+    }
+
+    /**
+     * calls the visit method at the visitor
+     *
+     * @param aVisitor
+     */
+    public void accept(Visitor aVisitor) {
+        aVisitor.visit(this);
     }
 }
