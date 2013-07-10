@@ -1,21 +1,26 @@
 package net.es.topology.common.converter.nml;
 
+import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.records.ts.NSA;
+import net.es.topology.common.records.ts.RecordsCache;
 import net.es.topology.common.records.ts.TSRecordFactory;
+import net.es.topology.common.records.ts.Topology;
 import net.es.topology.common.visitors.sls.TraverserImpl;
 import net.es.topology.common.visitors.sls.TraversingVisitor;
 import net.es.topology.common.visitors.sls.TraversingVisitorProgressMonitorLoggingImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,31 +70,44 @@ public class SLSVisitorTest {
     }
 
     @Test
-    @Ignore
     public void testTraverser() throws Exception{
+        // Arrange
+        String urn = "urn:ogf:network:example.org:2013:nsa1";
+        String topoURN = "urn:ogf:network:example.org:2013:topo";
+        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
+        sLSConfig.setFilename(sLSConfigFile);
+        SimpleLS client = sLSConfig.getClient();
+        RecordsCache cache = new RecordsCache(client, getLogGUID());
+
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+
+        // Register the first NSA
+        NSA nsa1 = new NSA();
+        nsa1.setId(urn);
+        nsa1.setVersion("2013-05-30T09:30:10Z");
+        nsa1.setName("nsa1");
+        nsa1.setTopologies(new ArrayList<String>());
+        nsa1.getTopologies().add(topoURN);
+        registrationClient.setRecord(nsa1);
+        registrationClient.register();
+
+        Topology topology = new Topology();
+        topology.setId(topoURN);
+        topology.setVersion("2013-05-30T09:30:10Z");
+        registrationClient.setRecord(topology);
+        registrationClient.register();
+
+        // Prepare the visitor
         SLSVisitor visitor = new SLSVisitor();
-        TraversingVisitor tv = new TraversingVisitor(new TraverserImpl(), visitor, getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(client, getLogGUID());
+        TraversingVisitor tv = new TraversingVisitor(new TraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
-        String urn = "urn:ogf:network:example.org:2013:nsa";
-        try {
-            // Load sLS client
-            JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-            sLSConfig.setFilename(sLSConfigFile);
-            SimpleLS client = sLSConfig.getClient();
-            client.setRelativeUrl("lookup/records?ts-id=" + urn);
-            client.connect();
-            client.send();
-            String resp = client.getResponse();
-            List<Record> records = TSRecordFactory.toRecords(resp, getLogGUID());
-            System.out.println(records.get(0).getRecordType());
-            for (Record record : records) {
-                ((NSA) record).accept(tv);
-            }
-        } catch (LSClientException e) {
-            e.printStackTrace();
-        } catch (ParserException e) {
-            e.printStackTrace();
-        }
+
+
+        // Act
+        NSA receivedNSA = recordsCache.getNSA(urn);
+        Assert.assertNotNull(receivedNSA);
+        receivedNSA.accept(tv);
     }
 }
