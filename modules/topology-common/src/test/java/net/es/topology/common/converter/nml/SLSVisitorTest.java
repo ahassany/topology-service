@@ -4,6 +4,7 @@ import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
+import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.records.ts.NSA;
 import net.es.topology.common.records.ts.TSRecordFactory;
 import net.es.topology.common.visitors.sls.TraverserImpl;
@@ -22,7 +23,7 @@ import java.util.UUID;
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class SLSVisitorTest {
-
+    private final String sLSConfigFile = getClass().getClassLoader().getResource("config/sls.json").getFile();
     private final Logger logger = LoggerFactory.getLogger(SLSVisitorTest.class);
     private String logGUID = null;
 
@@ -64,14 +65,18 @@ public class SLSVisitorTest {
     }
 
     @Test
-    public void testTraverser() {
+    @Ignore
+    public void testTraverser() throws Exception{
         SLSVisitor visitor = new SLSVisitor();
         TraversingVisitor tv = new TraversingVisitor(new TraverserImpl(), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
         String urn = "urn:ogf:network:example.org:2013:nsa";
         try {
-            SimpleLS client = new SimpleLS("localhost", 8090);
+            // Load sLS client
+            JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
+            sLSConfig.setFilename(sLSConfigFile);
+            SimpleLS client = sLSConfig.getClient();
             client.setRelativeUrl("lookup/records?ts-id=" + urn);
             client.connect();
             client.send();

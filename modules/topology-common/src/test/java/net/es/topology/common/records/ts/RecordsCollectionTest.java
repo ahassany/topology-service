@@ -2,8 +2,7 @@ package net.es.topology.common.records.ts;
 
 import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
-import net.es.lookup.common.exception.LSClientException;
-import net.es.lookup.common.exception.ParserException;
+import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
@@ -25,9 +23,10 @@ import java.util.UUID;
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class RecordsCollectionTest {
-    private final Logger logger = LoggerFactory.getLogger(RecordsCollectionTest.class);
-    private RecordsCollection collection;
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
+    private final Logger logger = LoggerFactory.getLogger(RecordsCollectionTest.class);
+    private final String sLSConfigFile = getClass().getClassLoader().getResource("config/sls.json").getFile();
+    private RecordsCollection collection;
     /**
      * this UUID changes for each test case
      */
@@ -42,6 +41,7 @@ public class RecordsCollectionTest {
 
     /**
      * get the UUID of the current test case
+     *
      * @return
      */
     public String getLogGUID() {
@@ -463,10 +463,9 @@ public class RecordsCollectionTest {
         logger.debug("event=RecordsCollectionTest.testNSIServiceInstance.end status=0 guid=" + getLogGUID());
     }
 
-
     @Test
     @Ignore
-    public void testSendTosLS() throws Exception{
+    public void testSendTosLS() throws Exception {
         // Arrange
         logger.debug("event=RecordsCollectionTest.testSendTosLS.start guid=" + getLogGUID());
         // Create a visitor
@@ -484,9 +483,12 @@ public class RecordsCollectionTest {
         Unmarshaller um = context.createUnmarshaller();
         Message msg = (Message) um.unmarshal(ss);
 
+        // Load sLS client
+        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
+        sLSConfig.setFilename(sLSConfigFile);
+        SimpleLS client = sLSConfig.getClient();
+
         // Prepare client
-        // TODO (AH): define a better way to specify the sLS address
-        SimpleLS client = new SimpleLS("localhost", 8090);
         client.connect();
         RegistrationClient rclient = new RegistrationClient(client);
 

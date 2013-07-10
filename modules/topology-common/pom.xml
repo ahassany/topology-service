@@ -29,10 +29,18 @@
         <commons-io.version>2.4</commons-io.version>
         <jaxb-visitor.version>1.13</jaxb-visitor.version>
         <sLS.version>0.1</sLS.version>
+        <gson.versino>2.2.3</gson.versino>
     </properties>
 
 
     <dependencies>
+        <!-- sometimes easier than Jackson for reading JSON config files -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.versino}</version>
+        </dependency>
+
         <!--  To include sLS dependencies -->
         <dependency>
             <groupId>net.es.lookup</groupId>
