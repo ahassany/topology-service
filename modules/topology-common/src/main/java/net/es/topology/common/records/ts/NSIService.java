@@ -34,7 +34,7 @@ public class NSIService extends NetworkObject implements Visitable {
      * @return URL
      */
     public String getLink() {
-        return (String) this.getValue(ReservedKeys.RECORD_NSI_LINK);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_NSI_LINK));
     }
 
     /**
@@ -54,7 +54,7 @@ public class NSIService extends NetworkObject implements Visitable {
      * @return URI
      */
     public String getType() {
-        return (String) this.getValue(ReservedKeys.RECORD_NSI_SERVICE_TYPE);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_NSI_SERVICE_TYPE));
     }
 
     /**
@@ -74,7 +74,7 @@ public class NSIService extends NetworkObject implements Visitable {
      * @return URI of the WADL file
      */
     public String getDescribedBy() {
-        return (String) this.getValue(ReservedKeys.RECORD_NSI_DESCRIBED_BY);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_NSI_DESCRIBED_BY));
     }
 
     /**

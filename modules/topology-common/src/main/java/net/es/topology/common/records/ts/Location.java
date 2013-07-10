@@ -39,7 +39,7 @@ public class Location {
      * @return
      */
     public String getName() {
-        return (String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_NAME);
+        return this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_NAME));
     }
 
     /**
@@ -57,7 +57,7 @@ public class Location {
      * @return
      */
     public Float getLongitude() {
-        return Float.valueOf((String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE));
+        return Float.valueOf(this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE)));
     }
 
     /**
@@ -75,7 +75,7 @@ public class Location {
      * @return
      */
     public Float getLatitude() {
-        return Float.valueOf((String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE));
+        return Float.valueOf(this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE)));
     }
 
     /**
@@ -93,7 +93,7 @@ public class Location {
      * @return
      */
     public Float getAltitude() {
-        return Float.valueOf((String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE));
+        return Float.valueOf(this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE)));
     }
 
     /**
@@ -111,7 +111,7 @@ public class Location {
      * @return
      */
     public String getUnlocode() {
-        return (String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_UNLOCODE);
+        return this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_UNLOCODE));
     }
 
     /**
@@ -127,7 +127,7 @@ public class Location {
      * A persistent globally unique URI for the location
      */
     public String getId() {
-        return (String) this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ID);
+        return this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ID));
     }
 
     /**

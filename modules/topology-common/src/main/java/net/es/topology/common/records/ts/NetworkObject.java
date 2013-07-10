@@ -5,6 +5,7 @@ import net.es.topology.common.records.ts.keys.ReservedKeys;
 import net.es.topology.common.records.ts.keys.ReservedValues;
 import net.es.topology.common.visitors.sls.Visitable;
 import net.es.topology.common.visitors.sls.Visitor;
+import net.sf.json.JSONArray;
 
 /**
  * NetworkObject is the parent abstract class of most objects in NML specification.
@@ -20,8 +21,23 @@ public abstract class NetworkObject extends Record implements Visitable {
         super(recordType);
     }
 
+    /**
+     * A work around the fact that sLS changes everything to a list of strings
+     *
+     * @param value
+     * @return
+     */
+    protected String arrayToString(Object value) {
+        if (value instanceof String)
+            return (String) value;
+        else if (value instanceof JSONArray)
+            return (String) ((JSONArray) value).get(0);
+        else
+            return null;
+    }
+
     public String getName() {
-        return (String) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_NAME);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_NAME));
     }
 
     public void setName(String name) {
@@ -29,7 +45,7 @@ public abstract class NetworkObject extends Record implements Visitable {
     }
 
     public String getId() {
-        return (String) this.getValue(ReservedKeys.RECORD_TS_ID);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_TS_ID));
     }
 
     public void setId(String id) {
@@ -46,7 +62,7 @@ public abstract class NetworkObject extends Record implements Visitable {
 
     // TODO (AH): Convert version to Java datetime.
     public String getVersion() {
-        return (String) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_VERSION);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_VERSION));
     }
 
     public void setVersion(String version) {

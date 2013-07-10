@@ -30,7 +30,7 @@ public class Port extends NetworkObject implements Visitable {
      * @return one specific value taken from the labelset, e.g. a VLAN number
      */
     public String getLabel() {
-        return (String) this.getValue(ReservedKeys.RECORD_LABEL);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_LABEL));
     }
 
     /**
@@ -49,7 +49,7 @@ public class Port extends NetworkObject implements Visitable {
      * @return URI to refer to a technology-specific labelset, e.g. a URI for VLANs
      */
     public String getLabelType() {
-        return (String) this.getValue(ReservedKeys.RECORD_LABEL_TYPE);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_LABEL_TYPE));
     }
 
     /**
@@ -140,7 +140,7 @@ public class Port extends NetworkObject implements Visitable {
      * @return encoding URI specified by a GFD
      */
     public String getEncoding() {
-        return (String) this.getValue(ReservedKeys.RECORD_PORT_ENCODING);
+        return arrayToString(this.getValue(ReservedKeys.RECORD_PORT_ENCODING));
     }
 
     /**
