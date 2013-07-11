@@ -11,8 +11,8 @@ import java.util.UUID;
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
-public class TraverserImpl implements Traverser {
-    private final Logger logger = LoggerFactory.getLogger(TraverserImpl.class);
+public class SLSTraverserImpl implements Traverser {
+    private final Logger logger = LoggerFactory.getLogger(SLSTraverserImpl.class);
     RecordsCache cache;
     /**
      * A Unique UUID to identify the log trace within each traverser instance.
@@ -21,12 +21,12 @@ public class TraverserImpl implements Traverser {
      */
     private String logGUID;
 
-    public TraverserImpl(RecordsCache cache, String logGUID) {
+    public SLSTraverserImpl(RecordsCache cache, String logGUID) {
         this.cache = cache;
         this.logGUID = logGUID;
     }
 
-    public TraverserImpl(RecordsCache cache) {
+    public SLSTraverserImpl(RecordsCache cache) {
         this(cache, UUID.randomUUID().toString());
     }
 
@@ -78,7 +78,7 @@ public class TraverserImpl implements Traverser {
 
     @Override
     public void traverse(NSA record, Visitor visitor) {
-        getLogger().trace("event=TraverserImpl.traverse.NSA.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        getLogger().trace("event=SLSTraverserImpl.traverse.NSA.start recordURN=" + record.getId() + " guid=" + getLogGUID());
         try {
             if (record.getTopologies() != null) {
                 for (String urn : record.getTopologies()) {
@@ -115,11 +115,11 @@ public class TraverserImpl implements Traverser {
             }
             // TODO (AH) travers admin contact
         } catch (LSClientException ex) {
-            getLogger().warn("event=TraverserImpl.traverse.NSA.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+            getLogger().warn("event=SLSTraverserImpl.traverse.NSA.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
         } catch (ParserException ex) {
-            getLogger().warn("event=TraverserImpl.traverse.NSA.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+            getLogger().warn("event=SLSTraverserImpl.traverse.NSA.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
         }
-        getLogger().trace("event=TraverserImpl.traverse.NSA.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
+        getLogger().trace("event=SLSTraverserImpl.traverse.NSA.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 
     @Override
@@ -139,7 +139,7 @@ public class TraverserImpl implements Traverser {
 
     @Override
     public void traverse(Topology record, Visitor visitor) {
-        getLogger().trace("event=TraverserImpl.traverse.Topology.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        getLogger().trace("event=SLSTraverserImpl.traverse.Topology.start recordURN=" + record.getId() + " guid=" + getLogGUID());
         try {
             if (record.getTopologies() != null) {
                 for (String urn : record.getTopologies()) {
@@ -224,10 +224,10 @@ public class TraverserImpl implements Traverser {
             }
             // TODO (AH): travers services and hasService
         } catch (LSClientException ex) {
-            getLogger().warn("event=TraverserImpl.traverse.Topology.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+            getLogger().warn("event=SLSTraverserImpl.traverse.Topology.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
         } catch (ParserException ex) {
-            getLogger().warn("event=TraverserImpl.traverse.Topology.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+            getLogger().warn("event=SLSTraverserImpl.traverse.Topology.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
         }
-        getLogger().trace("event=TraverserImpl.traverse.Topology.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
+        getLogger().trace("event=SLSTraverserImpl.traverse.Topology.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 }
