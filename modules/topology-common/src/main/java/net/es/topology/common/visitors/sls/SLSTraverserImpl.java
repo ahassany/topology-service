@@ -91,7 +91,7 @@ public class SLSTraverserImpl implements Traverser {
             if (record.getPeersWith() != null) {
                 for (String urn : record.getPeersWith()) {
                     NSA sLSRecord = getCache().getNSA(urn);
-                    if (sLSRecord != null) {
+                    if (sLSRecord != null && sLSRecord.getId().equalsIgnoreCase(record.getId()) == false) {
                         sLSRecord.accept(visitor);
                     }
                 }
@@ -99,7 +99,7 @@ public class SLSTraverserImpl implements Traverser {
             if (record.getManagedBy() != null) {
                 for (String urn : record.getManagedBy()) {
                     NSA sLSRecord = getCache().getNSA(urn);
-                    if (sLSRecord != null) {
+                    if (sLSRecord != null && sLSRecord.getId().equalsIgnoreCase(record.getId()) == false) {
                         sLSRecord.accept(visitor);
                     }
                 }
@@ -129,7 +129,31 @@ public class SLSTraverserImpl implements Traverser {
 
     @Override
     public void traverse(Port record, Visitor visitor) {
-
+        getLogger().trace("event=SLSTraverserImpl.traverse.Port.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        try {
+            if (record.getIsSink() != null) {
+                for (String urn : record.getIsSink()) {
+                    Link sLSRecord = getCache().getLink(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getIsSource() != null) {
+                for (String urn : record.getIsSource()) {
+                    Link sLSRecord = getCache().getLink(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            // TODO (AH) travers hasService
+        } catch (LSClientException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.Port.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        } catch (ParserException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.Port.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        }
+        getLogger().trace("event=SLSTraverserImpl.traverse.Port.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 
     @Override
@@ -144,7 +168,7 @@ public class SLSTraverserImpl implements Traverser {
             if (record.getTopologies() != null) {
                 for (String urn : record.getTopologies()) {
                     Topology sLSRecord = getCache().getTopology(urn);
-                    if (sLSRecord != null) {
+                    if (sLSRecord != null  && sLSRecord.getId().equalsIgnoreCase(record.getId()) == false) {
                         sLSRecord.accept(visitor);
                     }
                 }
