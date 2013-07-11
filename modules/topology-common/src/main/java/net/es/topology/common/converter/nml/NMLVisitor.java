@@ -580,18 +580,31 @@ public class NMLVisitor extends BaseVisitor {
         // Parse relations
         for (TopologyRelationType relation : topologyType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
-                if (sLSTopo.getHasInboundPort() == null) {
+                if (relation.getPort().size() > 0 && sLSTopo.getHasInboundPort() == null) {
                     sLSTopo.setHasInboundPort(new ArrayList<String>());
                 }
                 for (PortType port : relation.getPort()) {
                     sLSTopo.getHasInboundPort().add(port.getId());
                 }
+                if (relation.getPortGroup().size() > 0 && sLSTopo.getHasOutboundPort() == null) {
+                    sLSTopo.setHasInboundPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    sLSTopo.getHasInboundPortGroup().add(port.getId());
+                }
             } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_OUTBOUND_PORT)) {
-                if (sLSTopo.getHasOutboundPort() == null) {
+                if (relation.getPort().size() > 0 && sLSTopo.getHasOutboundPort() == null) {
                     sLSTopo.setHasOutboundPort(new ArrayList<String>());
                 }
                 for (PortType port : relation.getPort()) {
                     sLSTopo.getHasOutboundPort().add(port.getId());
+                }
+
+                if (relation.getPortGroup().size() > 0 && sLSTopo.getHasOutboundPort() == null) {
+                    sLSTopo.setHasOutboundPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    sLSTopo.getHasOutboundPortGroup().add(port.getId());
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_SERVICE)) {
                 if (sLSTopo.getHasService() == null) {

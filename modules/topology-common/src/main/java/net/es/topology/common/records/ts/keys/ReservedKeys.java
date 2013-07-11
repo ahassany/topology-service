@@ -46,6 +46,8 @@ public class ReservedKeys {
     // Relations
     public static final String RECORD_RELATION_HAS_INBOUND_PORT = "relation-has-inbound-port";
     public static final String RECORD_RELATION_HAS_OUTBOUND_PORT = "relation-has-outbound-port";
+    public static final String RECORD_RELATION_HAS_INBOUND_PORT_GROUP = "relation-has-inbound-port-group";
+    public static final String RECORD_RELATION_HAS_OUTBOUND_PORT_GROUP = "relation-has-outbound-port-group";
     public static final String RECORD_RELATION_HAS_SERVICE = "relation-has-service";
     public static final String RECORD_RELATION_IS_ALIAS = "relation-is-alias";
     public static final String RECORD_RELATION_IS_SINK = "relation-is-sink";

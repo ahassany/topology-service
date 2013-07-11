@@ -186,7 +186,7 @@ public class Topology extends NetworkObject implements Visitable {
     }
 
     /**
-     * This defines that the related Network Object has an inbound Port or PortGroup object.
+     * This defines that the related Network Object has an inbound Port object.
      *
      * @param ports list of the URNs of inbound ports
      */
@@ -195,7 +195,7 @@ public class Topology extends NetworkObject implements Visitable {
     }
 
     /**
-     * This defines that the related Topology has an outbound Port or PortGroup object.
+     * This defines that the related Topology has an outbound Port object.
      *
      * @return list of the URNs of outbound ports
      */
@@ -204,7 +204,7 @@ public class Topology extends NetworkObject implements Visitable {
     }
 
     /**
-     * This defines that the related Topology has an outbound Port or PortGroup object.
+     * This defines that the related Topology has an outbound Port object.
      *
      * @param ports list of the URNs of outbound ports
      */
@@ -213,7 +213,43 @@ public class Topology extends NetworkObject implements Visitable {
     }
 
     /**
-     * Node related to SwitchingService, describing a switching ability of that Topology.
+     * This defines that the related Network Object has an inbound PortGroup object.
+     *
+     * @return list of the URNs of inbound ports
+     */
+    public List<String> getHasInboundPortGroup() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_INBOUND_PORT_GROUP);
+    }
+
+    /**
+     * This defines that the related Network Object has an inbound PortGroup object.
+     *
+     * @param ports list of the URNs of inbound ports
+     */
+    public void setHasInboundPortGroup(List<String> ports) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_INBOUND_PORT_GROUP, ports);
+    }
+
+    /**
+     * This defines that the related Topology has an outbound Port or PortGroup object.
+     *
+     * @return list of the URNs of outbound ports
+     */
+    public List<String> getHasOutboundPortGroup() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_OUTBOUND_PORT_GROUP);
+    }
+
+    /**
+     * This defines that the related Topology has an outbound PortGroup object.
+     *
+     * @param ports list of the URNs of outbound ports
+     */
+    public void setHasOutboundPortGroup(List<String> ports) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_OUTBOUND_PORT_GROUP, ports);
+    }
+
+    /**
+     * Topology related to SwitchingService, describing a switching ability of that Topology.
      *
      * @return List of SwitchingServices URNs
      */
