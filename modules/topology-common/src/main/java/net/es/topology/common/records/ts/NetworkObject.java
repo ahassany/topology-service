@@ -13,6 +13,8 @@ import net.sf.json.JSONArray;
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public abstract class NetworkObject extends Record implements Visitable {
+    private Location location = null;
+
     public NetworkObject() {
         super(ReservedValues.RECORD_TYPE_NETWORKOBJECT);
     }
@@ -78,7 +80,9 @@ public abstract class NetworkObject extends Record implements Visitable {
      * @return
      */
     public Location getLocation() {
-        Location location = new Location(this);
+        if (this.location == null) {
+            this.location = new Location(this);
+        }
         // TODO (AH): deal with address
         return location;
     }
@@ -111,6 +115,7 @@ public abstract class NetworkObject extends Record implements Visitable {
         }
 
         location.setNetworkObject(this);
+        this.location = location;
         // TODO (AH): deal with address
     }
 
