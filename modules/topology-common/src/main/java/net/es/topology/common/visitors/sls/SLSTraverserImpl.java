@@ -159,7 +159,58 @@ public class SLSTraverserImpl implements Traverser {
 
     @Override
     public void traverse(PortGroup record, Visitor visitor) {
+        getLogger().trace("event=SLSTraverserImpl.traverse.PortGroup.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        try {
+            if (record.getPorts() != null) {
+                for (String urn : record.getPorts()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getPortGroups() != null) {
+                for (String urn : record.getPortGroups()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getIsSink() != null) {
+                for (String urn : record.getIsSink()) {
+                    LinkGroup sLSRecord = getCache().getLinkGroup(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getIsSource() != null) {
+                for (String urn : record.getIsSource()) {
+                    LinkGroup sLSRecord = getCache().getLinkGroup(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getIsAlias() != null) {
+                for (String urn : record.getIsAlias()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
 
+            // TODO (AH) travers labelGroup
+        } catch (LSClientException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.PortGroup.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        } catch (ParserException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.PortGroup.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        }
+        getLogger().trace("event=SLSTraverserImpl.traverse.PortGroup.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 
     @Override

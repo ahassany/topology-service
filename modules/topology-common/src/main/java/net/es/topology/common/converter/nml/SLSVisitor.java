@@ -1,6 +1,5 @@
 package net.es.topology.common.converter.nml;
 
-import net.es.topology.common.config.JAXBConfig;
 import net.es.topology.common.records.ts.*;
 import net.es.topology.common.records.ts.NetworkObject;
 import net.es.topology.common.visitors.sls.Visitor;
@@ -9,9 +8,6 @@ import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 import org.ogf.schemas.nsi._2013._09.topology.ObjectFactory;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -132,10 +128,13 @@ public class SLSVisitor implements Visitor {
         obj.setId(record.getId());
         //obj.setVersion(new XMLGregorianCalendar().set record.getVersion());
         obj.setName(record.getName());
-
-        obj.setLabel(nmlFactory.createLabelType());
-        obj.getLabel().setLabeltype(record.getLabelType());
-        obj.getLabel().setValue(record.getLabel());
+        if (record.getEncoding() != null)
+            obj.setEncoding(record.getEncoding());
+        if (record.getLabelType() != null) {
+            obj.setLabel(nmlFactory.createLabelType());
+            obj.getLabel().setLabeltype(record.getLabelType());
+            obj.getLabel().setValue(record.getLabel());
+        }
 
         if (record.getIsSource() != null) {
             for (String urn : record.getIsSource()) {
