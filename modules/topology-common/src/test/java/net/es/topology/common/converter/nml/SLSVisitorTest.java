@@ -237,7 +237,11 @@ public class SLSVisitorTest {
         PortGroup received = recordsCache.getPortGroup(urn);
         Assert.assertNotNull(received);
         received.accept(tv);
-        // Assert.assertTrue(slsVisitor.getPortGroupTypeMap().get(urn).equals(msg.getValue()));
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getPortGroupTypeMap().containsKey(urn));
+        PortGroupType nmlObj = slsVisitor.getPortGroupTypeMap().get(urn);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
 
         logger.debug("event=SLSVisitorTest.testVisitPortGroup.end status=0 guid=" + getLogGUID());
     }

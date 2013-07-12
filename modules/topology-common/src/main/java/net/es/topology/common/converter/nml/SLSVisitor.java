@@ -26,6 +26,7 @@ public class SLSVisitor implements Visitor {
     private Map<String, PortType> portTypeMap = new HashMap<String, PortType>();
     private Map<String, PortGroupType> portGroupTypeMap = new HashMap<String, PortGroupType>();
     private Map<String, LinkType> linkTypeMap = new HashMap<String, LinkType>();
+    private Map<String, LinkGroupType> linkGroupTypeMap = new HashMap<String, LinkGroupType>();
     private Map<String, NodeType> nodeTypeMap = new HashMap<String, NodeType>();
     /**
      * to make sure each object serialized once.
@@ -54,6 +55,10 @@ public class SLSVisitor implements Visitor {
 
     public Map<String, LinkType> getLinkTypeMap() {
         return linkTypeMap;
+    }
+
+    public Map<String, LinkGroupType> getLinkGroupTypeMap() {
+        return this.linkGroupTypeMap;
     }
 
     public Map<String, NodeType> getNodeTypeMap() {
@@ -262,7 +267,90 @@ public class SLSVisitor implements Visitor {
     public void visit(PortGroup record) {
         PortGroupType obj = nmlFactory.createPortGroupType();
         setNetworkObejctValues(obj, record);
+
+        if (record.getEncoding() != null)
+            obj.setEncoding(record.getEncoding());
+
+        // TODO (AH): convert label group
+
+        if (record.getPorts() != null) {
+            for (String urn : record.getPorts()) {
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    PortType obj2 = nmlFactory.createPortType();
+                    obj.getPort().add(obj2);
+                } else {
+                    obj.getPort().add(getPortTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getPortGroups() != null) {
+            for (String urn : record.getPortGroups()) {
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    PortGroupType obj2 = nmlFactory.createPortGroupType();
+                    obj.getPortGroup().add(obj2);
+                } else {
+                    obj.getPortGroup().add(getPortGroupTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getIsSink() != null) {
+            for (String urn : record.getIsSink()) {
+                PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
+                relation.setType(NMLVisitor.RELATION_IS_SINK);
+                LinkGroupType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+
+                    objR = nmlFactory.createLinkGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLinkGroup().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+
+        if (record.getIsSource() != null) {
+            for (String urn : record.getIsSource()) {
+                PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
+                relation.setType(NMLVisitor.RELATION_IS_SOURCE);
+                LinkGroupType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+
+                    objR = nmlFactory.createLinkGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLinkGroup().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+
         getPortGroupTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            for (String urn : record.getIsAlias()) {
+                PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
     }
 
     @Override
