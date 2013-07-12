@@ -1,6 +1,7 @@
 package net.es.topology.common.converter.nml;
 
 import net.es.topology.common.records.ts.*;
+import net.es.topology.common.records.ts.utils.RecordsCollection;
 import net.es.topology.common.visitors.nml.BaseVisitor;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nml._2013._05.base.NetworkObject;

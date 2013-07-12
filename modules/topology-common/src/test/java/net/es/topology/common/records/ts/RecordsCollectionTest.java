@@ -4,6 +4,7 @@ import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
+import net.es.topology.common.records.ts.utils.RecordsCollection;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
 import org.junit.*;

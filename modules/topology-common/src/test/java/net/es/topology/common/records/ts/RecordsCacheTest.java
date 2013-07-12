@@ -4,6 +4,7 @@ import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.records.Record;
 import net.es.topology.common.config.sls.JsonClientProvider;
+import net.es.topology.common.records.ts.utils.RecordsCache;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

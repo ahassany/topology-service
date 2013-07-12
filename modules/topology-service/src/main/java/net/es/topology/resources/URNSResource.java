@@ -5,7 +5,7 @@ import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.topology.common.converter.nml.NMLVisitor;
-import net.es.topology.common.records.ts.RecordsCollection;
+import net.es.topology.common.records.ts.utils.RecordsCollection;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
 import org.apache.commons.io.IOUtils;

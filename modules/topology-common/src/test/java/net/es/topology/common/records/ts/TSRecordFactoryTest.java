@@ -2,6 +2,7 @@ package net.es.topology.common.records.ts;
 
 import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.records.ts.utils.TSRecordFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

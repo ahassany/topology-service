@@ -1,10 +1,11 @@
-package net.es.topology.common.records.ts;
+package net.es.topology.common.records.ts.utils;
 
 import net.es.lookup.common.ReservedKeys;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.common.exception.RecordException;
 import net.es.lookup.records.Record;
 import net.es.lookup.records.RecordFactory;
+import net.es.topology.common.records.ts.*;
 import net.es.topology.common.records.ts.keys.ReservedValues;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

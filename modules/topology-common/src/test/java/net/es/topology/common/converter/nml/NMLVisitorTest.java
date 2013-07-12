@@ -6,6 +6,7 @@ import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.*;
+import net.es.topology.common.records.ts.utils.RecordsCollection;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
 import org.junit.Assert;

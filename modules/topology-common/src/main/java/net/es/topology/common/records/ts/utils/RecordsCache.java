@@ -1,9 +1,10 @@
-package net.es.topology.common.records.ts;
+package net.es.topology.common.records.ts.utils;
 
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
+import net.es.topology.common.records.ts.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
