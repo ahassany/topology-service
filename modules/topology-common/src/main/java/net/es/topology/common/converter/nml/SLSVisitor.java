@@ -8,10 +8,11 @@ import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 import org.ogf.schemas.nsi._2013._09.topology.ObjectFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.*;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
@@ -59,6 +60,78 @@ public class SLSVisitor implements Visitor {
         return nodeTypeMap;
     }
 
+    /**
+     * A helper method to read the values from the sLS record and setup the NML network object values
+     *
+     * @param nmlNetObj
+     * @param slsNetObj
+     */
+    protected void setNetworkObejctValues(org.ogf.schemas.nml._2013._05.base.NetworkObject nmlNetObj, NetworkObject slsNetObj) {
+        if (slsNetObj.getId() != null) {
+            nmlNetObj.setId(slsNetObj.getId());
+        }
+        if (slsNetObj.getName() != null) {
+            nmlNetObj.setName(slsNetObj.getName());
+        }
+
+        // to check if the network object has location information
+        boolean locationSet = false;
+        LocationType nmlLocation = null;
+        if (slsNetObj.getLocation() != null) {
+            if (nmlNetObj.getLocation() == null) {
+                nmlLocation = nmlFactory.createLocationType();
+            } else {
+                nmlLocation = nmlNetObj.getLocation();
+            }
+            Location slsLocation = slsNetObj.getLocation();
+            if (slsLocation.getId() != null) {
+                nmlLocation.setId(slsLocation.getId());
+                locationSet = true;
+            }
+            if (slsLocation.getName() != null) {
+                nmlLocation.setName(slsLocation.getName());
+                locationSet = true;
+            }
+            if (slsLocation.getAltitude() != null) {
+                nmlLocation.setAlt(slsLocation.getAltitude());
+                locationSet = true;
+            }
+            if (slsLocation.getLongitude() != null) {
+                nmlLocation.setLong(slsLocation.getLongitude());
+                locationSet = true;
+            }
+            if (slsLocation.getLatitude() != null) {
+                nmlLocation.setLat(slsLocation.getLatitude());
+                locationSet = true;
+            }
+            if (slsLocation.getUnlocode() != null) {
+                nmlLocation.setUnlocode(slsLocation.getUnlocode());
+                locationSet = true;
+            }
+            // TODO (AH): set address
+        }
+        if (locationSet) {
+            nmlNetObj.setLocation(nmlLocation);
+        }
+
+        // TODO (AH): set lifetime
+        if (slsNetObj.getVersion() != null) {
+            Calendar calendar = DatatypeConverter.parseDateTime(slsNetObj.getVersion());
+            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(calendar.getTime());
+
+            try {
+                XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                nmlNetObj.setVersion(xmlCalendar);
+            } catch (DatatypeConfigurationException e) {
+                // TODO (AH): handle error in version date format
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
     @Override
     public void visit(NetworkObject record) {
 
@@ -77,11 +150,7 @@ public class SLSVisitor implements Visitor {
     @Override
     public void visit(Link record) {
         LinkType obj = nmlFactory.createLinkType();
-        obj.setId(record.getId());
-        //obj.setVersion(new XMLGregorianCalendar().set record.getVersion());
-        obj.setName(record.getName());
-
-
+        setNetworkObejctValues(obj, record);
         getLinkTypeMap().put(obj.getId(), obj);
     }
 
@@ -98,9 +167,7 @@ public class SLSVisitor implements Visitor {
     @Override
     public void visit(NSA record) {
         NSAType obj = nsiFactory.createNSAType();
-        obj.setId(record.getId());
-        //obj.setVersion(new XMLGregorianCalendar().set record.getVersion());
-        obj.setName(record.getName());
+        setNetworkObejctValues(obj, record);
 
         if (record.getTopologies() != null) {
             for (String urn : record.getTopologies()) {
@@ -125,9 +192,8 @@ public class SLSVisitor implements Visitor {
     @Override
     public void visit(Port record) {
         PortType obj = nmlFactory.createPortType();
-        obj.setId(record.getId());
-        //obj.setVersion(new XMLGregorianCalendar().set record.getVersion());
-        obj.setName(record.getName());
+        setNetworkObejctValues(obj, record);
+
         if (record.getEncoding() != null)
             obj.setEncoding(record.getEncoding());
         if (record.getLabelType() != null) {
@@ -194,15 +260,15 @@ public class SLSVisitor implements Visitor {
 
     @Override
     public void visit(PortGroup record) {
-
+        PortGroupType obj = nmlFactory.createPortGroupType();
+        setNetworkObejctValues(obj, record);
+        getPortGroupTypeMap().put(obj.getId(), obj);
     }
 
     @Override
     public void visit(Topology record) {
         TopologyType obj = nmlFactory.createTopologyType();
-        obj.setId(record.getId());
-        //nsa.setVersion(new XMLGregorianCalendar().set record.getVersion());
-        obj.setName(record.getName());
+        setNetworkObejctValues(obj, record);
 
         if (record.getPorts() != null) {
             for (String urn : record.getPorts()) {
