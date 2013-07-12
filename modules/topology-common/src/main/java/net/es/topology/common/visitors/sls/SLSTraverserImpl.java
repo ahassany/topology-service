@@ -291,8 +291,24 @@ public class SLSTraverserImpl implements Traverser {
                 }
             }
             if (record.getHasOutboundPort() != null) {
-                for (String urn : record.getHasInboundPort()) {
+                for (String urn : record.getHasOutboundPort()) {
                     Port sLSRecord = getCache().getPort(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getHasInboundPortGroup() != null) {
+                for (String urn : record.getHasInboundPortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getHasOutboundPortGroup() != null) {
+                for (String urn : record.getHasOutboundPortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
                     if (sLSRecord != null) {
                         sLSRecord.accept(visitor);
                     }

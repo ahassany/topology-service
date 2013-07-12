@@ -48,14 +48,17 @@
 
         <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
             <nml:PortGroup id="urn:ogf:network:example.com:2013:nsatest:eth0-in">
-
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                    <nml:PortGroup id="urn:ogf:network:example.org:2013:nsatest:eth0-out"/>
+                </nml:Relation>
             </nml:PortGroup>
         </nml:Relation>
 
         <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
             <nml:PortGroup id="urn:ogf:network:example.com:2013:nsatest:eth0-out">
-
-
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                    <nml:PortGroup id="urn:ogf:network:example.org:2013:nsatest:eth0-in"/>
+                </nml:Relation>
             </nml:PortGroup>
         </nml:Relation>
     </nml:Topology>
