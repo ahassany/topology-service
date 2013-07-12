@@ -67,7 +67,7 @@ public class RecordsCache {
      * @throws ParserException
      */
     public Record getRecord(String urn, boolean getFreshCopy) throws LSClientException, ParserException {
-        getLogger().info("event=RecordsCache.getRecord.start getFreshCopy=" + getFreshCopy + " urn=" + urn + "guid=" + getLogGUID());
+        getLogger().info("event=RecordsCache.getRecord.start getFreshCopy=" + getFreshCopy + " urn=" + urn + " guid=" + getLogGUID());
         Record record = null;
         boolean isCached = recordMap.containsKey(urn);
         if (getUrnMask().getFromSLS(urn) == false) {
@@ -88,7 +88,7 @@ public class RecordsCache {
         } else if (isCached == true) {
             record = recordMap.get(urn);
         }
-        getLogger().info("event=RecordsCache.getRecord.end getFreshCopy=" + getFreshCopy + " urn=" + urn + "guid=" + getLogGUID());
+        getLogger().info("event=RecordsCache.getRecord.end getFreshCopy=" + getFreshCopy + " urn=" + urn + " guid=" + getLogGUID());
         return record;
     }
 
