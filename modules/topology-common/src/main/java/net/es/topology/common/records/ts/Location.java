@@ -57,7 +57,11 @@ public class Location {
      * @return
      */
     public Float getLongitude() {
-        return Float.valueOf(this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE)));
+        Object value = this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LONGITUDE);
+        if (value != null)
+            return Float.valueOf(this.networkObject.arrayToString(value));
+        else
+            return null;
     }
 
     /**
@@ -75,7 +79,11 @@ public class Location {
      * @return
      */
     public Float getLatitude() {
-        return Float.valueOf(this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE)));
+        Object value = this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_LATITUDE);
+        if (value != null)
+            return Float.valueOf(this.networkObject.arrayToString(value));
+        else
+            return null;
     }
 
     /**
@@ -93,7 +101,11 @@ public class Location {
      * @return
      */
     public Float getAltitude() {
-        return Float.valueOf(this.networkObject.arrayToString(this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE)));
+        Object value = this.networkObject.getValue(ReservedKeys.RECORD_LOCATION_ALTITUDE);
+        if (value != null)
+            return Float.valueOf(this.networkObject.arrayToString(value));
+        else
+            return null;
     }
 
     /**
