@@ -8,9 +8,7 @@ import net.es.lookup.records.Record;
 import net.es.topology.common.config.JAXBConfig;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.records.ts.*;
-import net.es.topology.common.records.ts.utils.RecordsCache;
-import net.es.topology.common.records.ts.utils.RecordsCollection;
-import net.es.topology.common.records.ts.utils.TSRecordFactory;
+import net.es.topology.common.records.ts.utils.*;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
 import net.es.topology.common.visitors.sls.SLSTraverserImpl;
@@ -87,7 +85,7 @@ public class SLSVisitorTest {
         JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
         sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(client, getLogGUID());
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
 
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
 
@@ -112,7 +110,7 @@ public class SLSVisitorTest {
 
         // Prepare the visitor
         SLSVisitor visitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(client, getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -157,7 +155,7 @@ public class SLSVisitorTest {
         JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
         sLSConfig.setFilename(sLSConfigFile);
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(registrationClient);
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
 
         logger.debug("event=SLSVisitorTest.registerSLS.end guid=" + getLogGUID());
 
@@ -174,11 +172,10 @@ public class SLSVisitorTest {
         JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
         sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(client, getLogGUID());
 
         // Prepare the visitor
         SLSVisitor visitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(client, getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -203,11 +200,10 @@ public class SLSVisitorTest {
         JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
         sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(client, getLogGUID());
 
         // Prepare the visitor
         SLSVisitor visitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(client, getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -236,11 +232,10 @@ public class SLSVisitorTest {
         JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
         sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(client, getLogGUID());
 
         // Prepare the visitor
         SLSVisitor visitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(client, getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);

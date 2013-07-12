@@ -5,6 +5,8 @@ import net.es.lookup.client.SimpleLS;
 import net.es.lookup.records.Record;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.records.ts.utils.RecordsCache;
+import net.es.topology.common.records.ts.utils.SLSClientDispatcherImpl;
+import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,10 +42,10 @@ public class RecordsCacheTest {
         SimpleLS client = sLSConfig.getClient();
 
         // Act
-        RecordsCache cache = new RecordsCache(client, getLogGUID());
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
 
         // Assert
-        Assert.assertSame(client, cache.getClient());
+        Assert.assertSame(client, cache.getClientDispatcher().getClient(""));
         logger.debug("event=RecordsCacheTest.testGetClient.end status=0 guid=" + getLogGUID());
     }
 
@@ -60,7 +62,7 @@ public class RecordsCacheTest {
         JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
         sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(client, getLogGUID());
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
 
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
 

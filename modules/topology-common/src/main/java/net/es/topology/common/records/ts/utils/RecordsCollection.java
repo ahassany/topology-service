@@ -439,50 +439,54 @@ public class RecordsCollection {
         return nsiService;
     }
 
-    public void sendTosLS(RegistrationClient client) throws LSClientException, ParserException {
+    public void sendTosLS(SLSRegistrationClientDispatcher clientDispatcher, URNMask urnMask) throws LSClientException, ParserException {
         logger.info("event=RecordsCollection.sendTosLS.start guid=" + this.logUUID);
         // Will be handy to do the rollbacks
-        Map<String, Record> registeredRecords = new HashMap<String, Record>();
+        Map<String, NetworkObject> registeredRecords = new HashMap<String, NetworkObject>();
 
-        Collection<Record> records = new ArrayList<Record>();
+        Collection<NetworkObject> records = new ArrayList<NetworkObject>();
         // Probably there is a better way than this
-        for (Record record : getNodes().values()) {
+        for (NetworkObject record : getNodes().values()) {
             records.add(record);
         }
-        for (Record record : getLinks().values()) {
+        for (NetworkObject record : getLinks().values()) {
             records.add(record);
         }
-        for (Record record : getLinkGroups().values()) {
+        for (NetworkObject record : getLinkGroups().values()) {
             records.add(record);
         }
-        for (Record record : getPorts().values()) {
+        for (NetworkObject record : getPorts().values()) {
             records.add(record);
         }
-        for (Record record : getPortGroups().values()) {
+        for (NetworkObject record : getPortGroups().values()) {
             records.add(record);
         }
-        for (Record record : getBidirectionalPorts().values()) {
+        for (NetworkObject record : getBidirectionalPorts().values()) {
             records.add(record);
         }
-        for (Record record : getBidirectionalLinks().values()) {
+        for (NetworkObject record : getBidirectionalLinks().values()) {
             records.add(record);
         }
-        for (Record record : getTopologies().values()) {
+        for (NetworkObject record : getTopologies().values()) {
             records.add(record);
         }
-        for (Record record : getNSAs().values()) {
+        for (NetworkObject record : getNSAs().values()) {
             records.add(record);
         }
-        for (Record record : getNSIServices().values()) {
+        for (NetworkObject record : getNSIServices().values()) {
             records.add(record);
         }
 
-        for (Record record : records) {
-            logger.info("event=RecordsCollection.sendTosLS.register.start id=" + record.getValue(ReservedKeys.RECORD_TS_ID) + " guid=" + this.logUUID);
+        for (NetworkObject record : records) {
+            if (urnMask.sendToSLS(record.getId()) == false) {
+                continue;
+            }
+            logger.info("event=RecordsCollection.sendTosLS.register.start id=" + record.getId() + " guid=" + this.logUUID);
+            RegistrationClient client = clientDispatcher.getRegistrationClient(record.getId());
             client.setRecord(record);
             client.register();
             registeredRecords.put(client.getRelativeUrl(), record);
-            logger.info("event=RecordsCollection.sendTosLS.register.end id=" + record.getValue(ReservedKeys.RECORD_TS_ID) + " relativeURL=" + client.getRelativeUrl() + " status=0 guid=" + this.logUUID);
+            logger.info("event=RecordsCollection.sendTosLS.register.end id=" + record.getId() + " relativeURL=" + client.getRelativeUrl() + " status=0 guid=" + this.logUUID);
         }
 
         logger.info("event=RecordsCollection.sendTosLS.end status=0 guid=" + this.logUUID);

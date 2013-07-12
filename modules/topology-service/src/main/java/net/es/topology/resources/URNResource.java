@@ -6,6 +6,8 @@ import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.topology.common.converter.nml.NMLVisitor;
 import net.es.topology.common.records.ts.utils.RecordsCollection;
+import net.es.topology.common.records.ts.utils.SLSRegistrationClientDispatcherImpl;
+import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
 import org.apache.commons.io.IOUtils;
@@ -103,7 +105,7 @@ public class URNResource {
             client = new SimpleLS("localhost", 8090);
             client.connect();
             RegistrationClient rclient = new RegistrationClient(client);
-            visitor.getRecordsCollection().sendTosLS(rclient);
+            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(rclient), new URNMaskGetAllImpl());
         } catch (LSClientException e) {
             throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
         } catch (ParserException e) {

@@ -27,20 +27,26 @@ public class RecordsCache {
      * @see <a href="http://netlogger.lbl.gov/">Netlogger</a> best practices document.
      */
     private String logGUID;
-    private SimpleLS client;
+    private SLSClientDispatcher clientDispatcher;
+    private URNMask urnMask;
     private Map<String, Record> recordMap = new HashMap<String, Record>();
 
-    public RecordsCache(SimpleLS client, String logGUID) {
-        this.client = client;
+    public RecordsCache(SLSClientDispatcher clientDispatcher, URNMask urnMask, String logGUID) {
+        this.clientDispatcher = clientDispatcher;
+        this.urnMask = urnMask;
         this.logGUID = logGUID;
     }
 
-    public RecordsCache(SimpleLS client) {
-        this(client, UUID.randomUUID().toString());
+    public RecordsCache(SLSClientDispatcher clientDispatcher, URNMask urnMask) {
+        this(clientDispatcher, urnMask, UUID.randomUUID().toString());
     }
 
-    public SimpleLS getClient() {
-        return this.client;
+    public SLSClientDispatcher getClientDispatcher() {
+        return this.clientDispatcher;
+    }
+
+    public URNMask getUrnMask() {
+        return this.urnMask;
     }
 
     public String getLogGUID() {
@@ -64,8 +70,12 @@ public class RecordsCache {
         getLogger().info("event=RecordsCache.getRecord.start getFreshCopy=" + getFreshCopy + " urn=" + urn + "guid=" + getLogGUID());
         Record record = null;
         boolean isCached = recordMap.containsKey(urn);
+        if (getUrnMask().getFromSLS(urn) == false) {
+            getLogger().info("event=RecordsCache.getRecord.end status=1 message=\"URN is not allowed\" getFreshCopy=" + getFreshCopy + " urn=" + urn + "guid=" + getLogGUID());
+            return null;
+        }
         if (getFreshCopy == true || isCached == false) {
-            SimpleLS client = getClient();
+            SimpleLS client = getClientDispatcher().getClient(urn);
             client.setRelativeUrl("lookup/records?ts-id=" + urn);
             client.connect();
             client.send();
