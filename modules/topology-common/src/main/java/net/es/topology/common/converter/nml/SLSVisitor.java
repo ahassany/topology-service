@@ -4,10 +4,10 @@ import net.es.topology.common.records.ts.*;
 import net.es.topology.common.records.ts.NetworkObject;
 import net.es.topology.common.visitors.sls.Visitor;
 import org.ogf.schemas.nml._2013._05.base.*;
+import org.ogf.schemas.nsi._2013._09.topology.NSARelationType;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceRelationType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
-import org.ogf.schemas.nsi._2013._09.topology.ObjectFactory;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -19,7 +19,7 @@ import java.util.*;
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class SLSVisitor implements Visitor {
-    private ObjectFactory nsiFactory = new ObjectFactory();
+    private org.ogf.schemas.nsi._2013._09.topology.ObjectFactory nsiFactory = new org.ogf.schemas.nsi._2013._09.topology.ObjectFactory();
     private org.ogf.schemas.nml._2013._05.base.ObjectFactory nmlFactory = new org.ogf.schemas.nml._2013._05.base.ObjectFactory();
     private Map<String, NSAType> nsaTypeMap = new HashMap<String, NSAType>();
     private Map<String, NsiServiceType> nsiServiceTypeMap = new HashMap<String, NsiServiceType>();
@@ -174,6 +174,55 @@ public class SLSVisitor implements Visitor {
     public void visit(NSA record) {
         NSAType obj = nsiFactory.createNSAType();
         setNetworkObejctValues(obj, record);
+
+        if (record.getNSIServices() != null) {
+            for (String urn : record.getNSIServices()) {
+                if (getNsiServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    NsiServiceType obj2 = nsiFactory.createNsiServiceType();
+                    obj.getService().add(obj2);
+                } else {
+                    obj.getService().add(getNsiServiceTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        // TODO (AH): Parse admin contacts
+
+        if (record.getPeersWith() != null) {
+            for (String urn : record.getPeersWith()) {
+                NSARelationType relation = nsiFactory.createNSARelationType();
+                relation.setType(NMLVisitor.RELATION_PEERS_WITH);
+                NSAType objR = null;
+                if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nsiFactory.createNSAType();
+                    objR.setId(urn);
+                } else {
+                    objR = getNsaTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getNSA().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+
+        if (record.getManagedBy() != null) {
+            for (String urn : record.getManagedBy()) {
+                NSARelationType relation = nsiFactory.createNSARelationType();
+                relation.setType(NMLVisitor.RELATION_MANAGED_BY);
+                NSAType objR = null;
+                if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nsiFactory.createNSAType();
+                    objR.setId(urn);
+                } else {
+                    objR = getNsaTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getNSA().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+
 
         if (record.getTopologies() != null) {
             for (String urn : record.getTopologies()) {
