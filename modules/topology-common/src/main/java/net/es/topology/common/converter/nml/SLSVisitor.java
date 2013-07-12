@@ -5,6 +5,7 @@ import net.es.topology.common.records.ts.NetworkObject;
 import net.es.topology.common.visitors.sls.Visitor;
 import org.ogf.schemas.nml._2013._05.base.*;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
+import org.ogf.schemas.nsi._2013._09.topology.NsiServiceRelationType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 import org.ogf.schemas.nsi._2013._09.topology.ObjectFactory;
 
@@ -191,7 +192,38 @@ public class SLSVisitor implements Visitor {
 
     @Override
     public void visit(NSIService record) {
+        NsiServiceType obj = nsiFactory.createNsiServiceType();
+        setNetworkObejctValues(obj, record);
 
+        if (record.getLink() != null) {
+            obj.setLink(record.getLink());
+        }
+
+        if (record.getDescribedBy() != null) {
+            obj.setDescribedBy(record.getDescribedBy());
+        }
+
+        if (record.getType() != null) {
+            obj.setType(record.getType());
+        }
+
+        if (record.getProvidedBy() != null) {
+            for (String urn : record.getProvidedBy()) {
+                NsiServiceRelationType relation = nsiFactory.createNsiServiceRelationType();
+                relation.setType(NMLVisitor.RELATION_PROVIDED_BY);
+                NSAType objR = null;
+                if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nsiFactory.createNSAType();
+                    objR.setId(urn);
+                } else {
+                    objR = getNsaTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getNSA().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+        getNsiServiceTypeMap().put(obj.getId(), obj);
     }
 
     @Override

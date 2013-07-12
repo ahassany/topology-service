@@ -7,10 +7,7 @@ import net.es.lookup.common.exception.ParserException;
 import net.es.lookup.records.Record;
 import net.es.topology.common.config.JAXBConfig;
 import net.es.topology.common.config.sls.JsonClientProvider;
-import net.es.topology.common.records.ts.NSA;
-import net.es.topology.common.records.ts.Port;
-import net.es.topology.common.records.ts.PortGroup;
-import net.es.topology.common.records.ts.Topology;
+import net.es.topology.common.records.ts.*;
 import net.es.topology.common.records.ts.utils.*;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
@@ -26,6 +23,7 @@ import org.ogf.schemas.nml._2013._05.base.PortGroupType;
 import org.ogf.schemas.nml._2013._05.base.TopologyType;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
+import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -308,5 +306,57 @@ public class SLSVisitorTest {
         Assert.assertTrue(visitor.getNsaTypeMap().containsKey(urn));
         NSAType nsa = visitor.getNsaTypeMap().get(urn);
         JAXBConfig.getMarshaller().marshal(new org.ogf.schemas.nsi._2013._09.topology.ObjectFactory().createNSA(nsa), System.out);
+    }
+
+    @Test
+    public void testVisitNSIService() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitNSIService.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-nsi-service.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<NsiServiceType> msg = (JAXBElement<NsiServiceType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
+        sLSConfig.setFilename(sLSConfigFile);
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.com:2013:nsi-service-test";
+
+        // Act
+        NSIService received = recordsCache.getNSIService(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getNsiServiceTypeMap().containsKey(urn));
+        NsiServiceType nmlObj = slsVisitor.getNsiServiceTypeMap().get(urn);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+
+        logger.debug("event=SLSVisitorTest.testVisitNSIService.end status=0 guid=" + getLogGUID());
     }
 }
