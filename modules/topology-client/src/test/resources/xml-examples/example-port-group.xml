@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nml:PortGroup xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+               id="urn:ogf:network:example.net:2013:portGroup2"
+               encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
+               version="2013-05-30T09:30:10Z">
+    <nml:Port id="urn:ogf:network:example.net:2013:portGroup2:portA">
+        <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
+    </nml:Port>
+    <nml:Port id="urn:ogf:network:example.net:2013:portGroup2:portB">
+        <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1502</nml:Label>
+    </nml:Port>
+
+    <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup2:portGroupC"/>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSink">
+        <nml:LinkGroup id="urn:ogf:network:example.net:2013:portGroup2:linkA"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSource">
+        <nml:LinkGroup id="urn:ogf:network:example.net:2013:portGroup2:linkB"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup2:portGroupB"/>
+    </nml:Relation>
+</nml:PortGroup>
