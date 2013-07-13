@@ -5,6 +5,7 @@ import net.es.topology.common.records.ts.keys.ReservedValues;
 import net.es.topology.common.visitors.sls.Visitable;
 import net.es.topology.common.visitors.sls.Visitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  * @see: NML schema docs for the meaning of the fields
  */
 public class LinkGroup extends NetworkObject implements Visitable {
+    private LabelGroup labelGroup;
 
     public LinkGroup() {
         super(ReservedValues.RECORD_TYPE_LINK_GROUP);
@@ -34,8 +36,11 @@ public class LinkGroup extends NetworkObject implements Visitable {
      *
      * @return one specific value taken from the labelset, e.g. a VLAN number
      */
-    public String getLabelGroup() {
-        return (String) this.getValue(ReservedKeys.RECORD_LABEL);
+    public LabelGroup getLabelGroup() {
+        //return arrayToString(this.getValue(ReservedKeys.RECORD_LABEL_GROUP));
+        if (labelGroup == null)
+            this.labelGroup = new LabelGroup(this);
+        return this.labelGroup;
     }
 
     /**
@@ -46,24 +51,16 @@ public class LinkGroup extends NetworkObject implements Visitable {
      *
      * @param labelGroup one specific value taken from the labelset, e.g. a VLAN number
      */
-    public void setLabelGroup(String labelGroup) {
-        this.add(ReservedKeys.RECORD_LABEL_GROUP, labelGroup);
-    }
+    public void setLabelGroup(LabelGroup labelGroup) {
+        if (labelGroup.getNetworkObject() == this)
+            return;
 
-    /**
-     * To refer to a technology-specific labelset, e.g. a URI for VLANs
-     *
-     * @return URI to refer to a technology-specific labelset, e.g. a URI for VLANs
-     */
-    public String getLabelGroupType() {
-        return (String) this.getValue(ReservedKeys.RECORD_LABEL_GROUP_TYPE);
-    }
-
-    /**
-     * @param labelGroupType to refer to a technology-specific labelset, e.g. a URI for VLANs
-     */
-    public void setLabelGroupType(String labelGroupType) {
-        this.add(ReservedKeys.RECORD_LABEL_GROUP_TYPE, labelGroupType);
+        this.add(ReservedKeys.RECORD_LABEL_GROUP, new ArrayList<String>());
+        this.add(ReservedKeys.RECORD_LABEL_GROUP_TYPE, new ArrayList<String>());
+        for (List<String> label : labelGroup.getLabels()) {
+            ((List<String>) this.getValue(ReservedKeys.RECORD_LABEL_GROUP_TYPE)).add(label.get(0));
+            ((List<String>) this.getValue(ReservedKeys.RECORD_LABEL_GROUP)).add(label.get(1));
+        }
     }
 
     /**

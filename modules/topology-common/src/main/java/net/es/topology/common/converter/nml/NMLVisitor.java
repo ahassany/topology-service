@@ -356,16 +356,12 @@ public class NMLVisitor extends BaseVisitor {
         if (portGroupType.getEncoding() != null)
             sLSPortGroup.setEncoding(portGroupType.getEncoding());
 
-        // TODO (AH): deal with labelgroup
-
-        /*
         if (portGroupType.getLabelGroup() != null) {
-            if (portGroupType.getLabelGroup().getValue() != null)
-                sLSPortGroup.setLabelGroup(portGroupType.getLabel().getValue());
-            if (portGroupType.getLabelGroup().getLabeltype() != null)
-                sLSPortGroup.setLabelGroupType(portGroupType.getLabelGroup().get());
+            LabelGroup labelGroup = sLSPortGroup.getLabelGroup();
+            for (LabelGroupType labelGroupType : portGroupType.getLabelGroup()) {
+                labelGroup.addLabel(labelGroupType.getLabeltype(), labelGroupType.getValue());
+            }
         }
-        */
 
         // ports in the group
         if (portGroupType.getPort() != null && portGroupType.getPort().size() != 0)
@@ -422,7 +418,12 @@ public class NMLVisitor extends BaseVisitor {
 
         this.setNetworkObject(linkGroupType, sLSLinkGroup);
 
-        // TODO (AH): deal with labelgroup
+        if (linkGroupType.getLabelGroup() != null) {
+            LabelGroup labelGroup = sLSLinkGroup.getLabelGroup();
+            for (LabelGroupType labelGroupType : linkGroupType.getLabelGroup()) {
+                labelGroup.addLabel(labelGroupType.getLabeltype(), labelGroupType.getValue());
+            }
+        }
 
         // Links in the group
         if (linkGroupType.getLink() != null && linkGroupType.getLink().size() != 0) {

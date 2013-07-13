@@ -352,7 +352,14 @@ public class SLSVisitor implements Visitor {
         if (record.getEncoding() != null)
             obj.setEncoding(record.getEncoding());
 
-        // TODO (AH): convert label group
+        if (record.getLabelGroup().getLabels().size() != 0) {
+            for (List<String> label : record.getLabelGroup().getLabels()) {
+                LabelGroupType labelGroupType = (nmlFactory.createLabelGroupType());
+                labelGroupType.setLabeltype(label.get(0));
+                labelGroupType.setValue(label.get(1));
+                obj.getLabelGroup().add(labelGroupType);
+            }
+        }
 
         if (record.getPorts() != null) {
             for (String urn : record.getPorts()) {
@@ -438,7 +445,7 @@ public class SLSVisitor implements Visitor {
     public void visit(Topology record) {
         TopologyType obj = nmlFactory.createTopologyType();
         setNetworkObejctValues(obj, record);
-
+        System.out.println("Visiting topology: " + record.getId());
         if (record.getPorts() != null) {
             for (String urn : record.getPorts()) {
                 if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {

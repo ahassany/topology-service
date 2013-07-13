@@ -212,6 +212,13 @@ public class NMLVisitorTest {
         Assert.assertEquals(this.version, sLSPortGroup.getVersion());
         Assert.assertEquals(VLAN_URI, sLSPortGroup.getEncoding());
 
+        Assert.assertEquals(2, sLSPortGroup.getLabelGroup().getLabels().size());
+        LabelGroup labelGroup = sLSPortGroup.getLabelGroup();
+        Assert.assertEquals(VLAN_URI, labelGroup.getLabel(0).get(0));
+        Assert.assertEquals("1780-1783", labelGroup.getLabel(0).get(1));
+        Assert.assertEquals(VLAN_URI, labelGroup.getLabel(1).get(0));
+        Assert.assertEquals("1880-1883", labelGroup.getLabel(1).get(1));
+
         Assert.assertEquals(2, sLSPortGroup.getPorts().size());
         Assert.assertTrue(sLSPortGroup.getPorts().contains("urn:ogf:network:example.net:2013:portA"));
         Assert.assertTrue(sLSPortGroup.getPorts().contains("urn:ogf:network:example.net:2013:portB"));
@@ -312,6 +319,13 @@ public class NMLVisitorTest {
         Assert.assertEquals(this.version, sLSLinkGroup.getVersion());
         Assert.assertEquals("urn:ogf:network:example.net:2013:linkGroup", sLSLinkGroup.getId());
         Assert.assertEquals(null, sLSLinkGroup.getName());
+
+        Assert.assertEquals(2, sLSLinkGroup.getLabelGroup().getLabels().size());
+        LabelGroup labelGroup = sLSLinkGroup.getLabelGroup();
+        Assert.assertEquals(VLAN_URI, labelGroup.getLabel(0).get(0));
+        Assert.assertEquals("1780-1783", labelGroup.getLabel(0).get(1));
+        Assert.assertEquals(VLAN_URI, labelGroup.getLabel(1).get(0));
+        Assert.assertEquals("1880-1883", labelGroup.getLabel(1).get(1));
 
         Assert.assertEquals(2, sLSLinkGroup.getLinks().size());
         Assert.assertTrue(sLSLinkGroup.getLinks().contains("urn:ogf:network:example.net:2013:linkA:XY"));
