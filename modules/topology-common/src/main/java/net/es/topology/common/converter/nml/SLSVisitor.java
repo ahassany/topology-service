@@ -352,7 +352,8 @@ public class SLSVisitor implements Visitor {
         if (record.getEncoding() != null)
             obj.setEncoding(record.getEncoding());
 
-        if (record.getLabelGroup().getLabels().size() != 0) {
+        if (record.getLabelGroup().getLabels() != null &&
+                record.getLabelGroup().getLabels().size() != 0) {
             for (List<String> label : record.getLabelGroup().getLabels()) {
                 LabelGroupType labelGroupType = (nmlFactory.createLabelGroupType());
                 labelGroupType.setLabeltype(label.get(0));
