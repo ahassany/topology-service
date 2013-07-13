@@ -34,6 +34,33 @@ public class SLSVisitor implements Visitor {
      */
     private List<String> serializedURNS = new ArrayList<String>();
 
+    /**
+     * Helper method to get specific NML NetworkObject
+     * @param urn
+     * @return
+     */
+    public org.ogf.schemas.nml._2013._05.base.NetworkObject getNetworkObject(String urn) {
+        if (getNsaTypeMap().containsKey(urn)) {
+            return getNsaTypeMap().get(urn);
+        } else if (getNsiServiceTypeMap().containsKey(urn)) {
+            return getNsiServiceTypeMap().get(urn);
+        } else if (getTopologyTypeMap().containsKey(urn)) {
+            return getTopologyTypeMap().get(urn);
+        } else if (getPortGroupTypeMap().containsKey(urn)) {
+            return getPortGroupTypeMap().get(urn);
+        } else if (getPortTypeMap().containsKey(urn)) {
+            return getPortTypeMap().get(urn);
+        } else if (getLinkTypeMap().containsKey(urn)) {
+            return getLinkTypeMap().get(urn);
+        } else if (getLinkGroupTypeMap().containsKey(urn)) {
+            return getLinkGroupTypeMap().get(urn);
+        } else if (getNodeTypeMap().containsKey(urn)) {
+            return getNodeTypeMap().get(urn);
+        } else {
+            return null;
+        }
+    }
+
     public Map<String, NSAType> getNsaTypeMap() {
         return nsaTypeMap;
     }

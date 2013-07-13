@@ -235,6 +235,18 @@ public class RecordsCache {
         return getTopology(urn, false);
     }
 
+    public NetworkObject getNetworkObject(String urn, boolean getFreshCopy) throws LSClientException, ParserException {
+        Record record = getRecord(urn, getFreshCopy);
+        if (record instanceof NetworkObject) {
+            return (NetworkObject) record;
+        } else {
+            return null;
+        }
+    }
+
+    public NetworkObject getNetworkObject(String urn) throws LSClientException, ParserException {
+        return getNetworkObject(urn, false);
+    }
 
     // TODO (AH) add support for the different services defined in NML
 
