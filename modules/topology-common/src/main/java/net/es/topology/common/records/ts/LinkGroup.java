@@ -10,9 +10,6 @@ import java.util.List;
 
 /**
  * A LinkGroup is an unordered set of LInk
- * <p/>
- * <p/>
- * FIXME (AH): fix handling of labelgroup
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  * @see: NML schema docs for the meaning of the fields

@@ -62,7 +62,6 @@ public abstract class NetworkObject extends Record implements Visitable {
         return (Lifetime) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_LIFETIME);
     }
 
-    // TODO (AH): Convert version to Java datetime.
     public String getVersion() {
         return arrayToString(this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_VERSION));
     }

@@ -10,9 +10,7 @@ import java.util.List;
 /**
  * A Topology is a set of connected Network Objects.
  * <p/>
- * TODO (AH): deal with xs:group nml:Service
- * TODO (AH): deal with xs:group nml:Group
- * TODO (AH): deal with relations to portgroup
+ * TODO (AH): deal with nml:Service
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  * @see NML schema docs for the description of the fields

@@ -201,7 +201,6 @@ public class NMLVisitorTest {
         msg.getBody().accept(tv);
 
         // Assert
-        // TODO (AH): this should assert only one port group is in there
         Assert.assertEquals(3, collection.getPortGroups().size());
         PortGroup ports[] = collection.getPortGroups().values().toArray(new PortGroup[collection.getPortGroups().size()]);
         PortGroup sLSPortGroup = ports[0];
@@ -262,7 +261,6 @@ public class NMLVisitorTest {
         msg.getBody().accept(tv);
 
         // Assert
-        // FIXME (AH): this should be 1 link only
         Assert.assertEquals(6, collection.getLinks().size());
         Assert.assertTrue(collection.getLinks().containsKey(linkURN));
         Link record = collection.getLinks().get(linkURN);

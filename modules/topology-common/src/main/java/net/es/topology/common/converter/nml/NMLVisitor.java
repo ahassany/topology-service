@@ -689,7 +689,7 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
 
-        // TODO (AH): deal with location, version, services, etc..
+        // TODO (AH): deal with services.
         logger.trace("event=NMLVisitor.visit.TopologyType.end status=0 guid=" + this.logUUID);
     }
 }

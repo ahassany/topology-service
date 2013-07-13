@@ -203,8 +203,6 @@ public class SLSTraverserImpl implements Traverser {
                     }
                 }
             }
-
-            // TODO (AH) travers labelGroup
         } catch (LSClientException ex) {
             getLogger().warn("event=SLSTraverserImpl.traverse.PortGroup.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
         } catch (ParserException ex) {
