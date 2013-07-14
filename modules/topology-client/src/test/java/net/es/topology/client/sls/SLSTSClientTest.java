@@ -29,6 +29,7 @@ public class SLSTSClientTest {
     private final String sLSConfigFile = getClass().getClassLoader().getResource("config/sls.json").getFile();
     private final Logger logger = LoggerFactory.getLogger(SLSTSClientTest.class);
     private String logGUID = null;
+    private JsonClientProvider sLSConfig;
 
     /**
      * get the UUID of the current test case
@@ -43,6 +44,9 @@ public class SLSTSClientTest {
     public void setup() {
         // Make sure that each test case has it's own ID to make it easier to trace.
         this.logGUID = UUID.randomUUID().toString();
+        this.sLSConfig = JsonClientProvider.getInstance();
+        sLSConfig.setFilename(this.sLSConfigFile);
+        sLSConfig.setLogGUID(this.getLogGUID());
     }
 
     @Test
@@ -69,8 +73,6 @@ public class SLSTSClientTest {
         /**
          * register with sLS
          */
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
         collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
         SimpleLS client = sLSConfig.getClient();

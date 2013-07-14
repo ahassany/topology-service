@@ -42,7 +42,7 @@ public class SLSVisitorTest {
     private final String sLSConfigFile = getClass().getClassLoader().getResource("config/sls.json").getFile();
     private final Logger logger = LoggerFactory.getLogger(SLSVisitorTest.class);
     private String logGUID = null;
-
+    private JsonClientProvider sLSConfig;
     /**
      * get the UUID of the current test case
      *
@@ -56,6 +56,9 @@ public class SLSVisitorTest {
     public void setup() {
         // Make sure that each test case has it's own ID to make it easier to trace.
         this.logGUID = UUID.randomUUID().toString();
+        this.sLSConfig = JsonClientProvider.getInstance();
+        sLSConfig.setFilename(this.sLSConfigFile);
+        sLSConfig.setLogGUID(this.getLogGUID());
     }
 
     @Test
@@ -85,8 +88,6 @@ public class SLSVisitorTest {
         // Arrange
         String urn = "urn:ogf:network:example.org:2013:nsa1";
         String topoURN = "urn:ogf:network:example.org:2013:topo";
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
         RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
 
@@ -155,8 +156,6 @@ public class SLSVisitorTest {
         /**
          * register with sLS
          */
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
         collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
 
@@ -172,8 +171,6 @@ public class SLSVisitorTest {
         registerSLS("xml-examples/example-message-port.xml");
 
         // Prepare the sLS client
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
 
         // Prepare the visitor
@@ -215,8 +212,6 @@ public class SLSVisitorTest {
         /**
          * register with sLS
          */
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
         collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
         SimpleLS client = sLSConfig.getClient();
@@ -252,8 +247,6 @@ public class SLSVisitorTest {
         registerSLS("xml-examples/example-message-topology.xml");
 
         // Prepare the sLS client
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
 
         // Prepare the visitor
@@ -299,8 +292,6 @@ public class SLSVisitorTest {
         /**
          * register with sLS
          */
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
         collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
         SimpleLS client = sLSConfig.getClient();
@@ -352,8 +343,6 @@ public class SLSVisitorTest {
         /**
          * register with sLS
          */
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
         collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
         SimpleLS client = sLSConfig.getClient();

@@ -8,10 +8,13 @@ import net.es.topology.common.records.ts.utils.RecordsCache;
 import net.es.topology.common.records.ts.utils.SLSClientDispatcherImpl;
 import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.UUID;
 
 /**
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
@@ -23,6 +26,7 @@ public class RecordsCacheTest {
     private final String nsa1URN = "urn:ogf:network:example.org:2013:nsa1";
     private final String nsa2URN = "urn:ogf:network:example.org:2013:nsa2";
     private String logGUID = null;
+    private JsonClientProvider sLSConfig;
 
     /**
      * get the UUID of the current test case
@@ -33,12 +37,19 @@ public class RecordsCacheTest {
         return this.logGUID;
     }
 
+    @Before
+    public void setup() {
+        // Make sure that each test case has it's own ID to make it easier to trace.
+        this.logGUID = UUID.randomUUID().toString();
+        this.sLSConfig = JsonClientProvider.getInstance();
+        sLSConfig.setFilename(this.sLSConfigFile);
+        sLSConfig.setLogGUID(this.getLogGUID());
+    }
+
     @Test
     public void testGetClient() throws Exception {
         logger.debug("event=RecordsCacheTest.testGetClient.start guid=" + getLogGUID());
         // Arrange
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
 
         // Act
@@ -59,8 +70,6 @@ public class RecordsCacheTest {
     public void testGetRecord() throws Exception {
         logger.debug("event=RecordsCacheTest.testGetClient.start guid=" + getLogGUID());
         // Arrange
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
         RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
 

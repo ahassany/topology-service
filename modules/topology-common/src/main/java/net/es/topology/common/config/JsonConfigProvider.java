@@ -10,9 +10,6 @@ public abstract class JsonConfigProvider implements ConfigProvider {
     private long timeStamp;
     private File file;
 
-    public JsonConfigProvider() {
-
-    }
     /**
      * Check if the file has changed sine the last time it was read.
      *

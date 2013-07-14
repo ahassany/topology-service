@@ -30,16 +30,20 @@ public class RecordsCollectionTest {
     private final Logger logger = LoggerFactory.getLogger(RecordsCollectionTest.class);
     private final String sLSConfigFile = getClass().getClassLoader().getResource("config/sls.json").getFile();
     private RecordsCollection collection;
+    private JsonClientProvider sLSConfig;
     /**
      * this UUID changes for each test case
      */
     private String logGUID = null;
 
     @Before
-    public void createCollection() {
+    public void setup() {
         // Make sure that each test case has it's own ID to make it easier to trace.
         this.logGUID = UUID.randomUUID().toString();
         this.collection = new RecordsCollection(getLogGUID());
+        this.sLSConfig = JsonClientProvider.getInstance();
+        sLSConfig.setFilename(this.sLSConfigFile);
+        sLSConfig.setLogGUID(this.getLogGUID());
     }
 
     /**
@@ -487,8 +491,6 @@ public class RecordsCollectionTest {
         Message msg = (Message) um.unmarshal(ss);
 
         // Load sLS client
-        JsonClientProvider sLSConfig = new JsonClientProvider(getLogGUID());
-        sLSConfig.setFilename(sLSConfigFile);
         SimpleLS client = sLSConfig.getClient();
 
         // Prepare client

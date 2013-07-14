@@ -26,13 +26,21 @@ public class JsonClientProvider extends JsonConfigProvider implements ClientProv
     private final Logger logger = LoggerFactory.getLogger(JsonClientProvider.class);
     private Map<String, String> configs = new HashMap<String, String>();
     private String logGUID = null;
+    private static JsonClientProvider instance;
 
-    public JsonClientProvider(String logGUID) {
-        this.logGUID = logGUID;
+    private JsonClientProvider() {
+        this.logGUID = UUID.randomUUID().toString();
     }
 
-    public JsonClientProvider() {
-        this(UUID.randomUUID().toString());
+    public static JsonClientProvider getInstance() {
+        if (instance == null) {
+            instance = new JsonClientProvider();
+        }
+        return instance;
+    }
+
+    public void setLogGUID(String logGUID) {
+        this.logGUID = logGUID;
     }
 
     public String getLogGUID() {

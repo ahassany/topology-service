@@ -24,6 +24,8 @@ public class JsonClientProviderTest {
     public void setup() {
         // Make sure that each test case has it's own ID to make it easier to trace.
         this.logGUID = UUID.randomUUID().toString();
+        JsonClientProvider provider = JsonClientProvider.getInstance();
+        provider.setLogGUID(getLogGUID());
     }
 
     @Test
@@ -31,7 +33,7 @@ public class JsonClientProviderTest {
         logger.debug("event=JsonClientProviderTest.testLoadConfig.start guid=" + getLogGUID());
         // Arrange
         String fileName = getClass().getClassLoader().getResource("config/sls.json").getFile();
-        JsonClientProvider provider = new JsonClientProvider(getLogGUID());
+        JsonClientProvider provider = JsonClientProvider.getInstance();
         provider.setFilename(fileName);
 
         // Act
@@ -47,7 +49,7 @@ public class JsonClientProviderTest {
         logger.debug("event=JsonClientProviderTest.testGetClient.start guid=" + getLogGUID());
         // Arrange
         String fileName = getClass().getClassLoader().getResource("config/sls.json").getFile();
-        JsonClientProvider provider = new JsonClientProvider(getLogGUID());
+        JsonClientProvider provider = JsonClientProvider.getInstance();
         provider.setFilename(fileName);
 
         // Act
@@ -64,7 +66,7 @@ public class JsonClientProviderTest {
         logger.debug("event=JsonClientProviderTest.testGetFilename.start guid=" + getLogGUID());
         // Arrange
         String fileName = getClass().getClassLoader().getResource("config/sls.json").getFile();
-        JsonClientProvider provider = new JsonClientProvider(getLogGUID());
+        JsonClientProvider provider = JsonClientProvider.getInstance();
 
         // Act
         provider.setFilename(fileName);
