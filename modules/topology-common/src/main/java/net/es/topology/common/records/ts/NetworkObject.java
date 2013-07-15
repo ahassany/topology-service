@@ -54,12 +54,42 @@ public abstract class NetworkObject extends Record implements Visitable {
         this.add(ReservedKeys.RECORD_TS_ID, id);
     }
 
-    public void setLifeTime(Lifetime lifetime) {
-        this.add(ReservedKeys.RECORD_NETWORKOBJECT_LIFETIME, lifetime);
+    /**
+     * the start time and date formatted as ISO 8601 calendar date, and should be a
+     * basic (compact) representation with UTC timezone (YYYYMMDDThhmmssZ)
+     */
+    public String getLifetimeStart() {
+        return arrayToString(this.getValue(ReservedKeys.RECORD_LIFETIME_START));
     }
 
-    public Lifetime getLifetime() {
-        return (Lifetime) this.getValue(ReservedKeys.RECORD_NETWORKOBJECT_LIFETIME);
+    /**
+     * the start time and date formatted as ISO 8601 calendar date, and should be a
+     * basic (compact) representation with UTC timezone (YYYYMMDDThhmmssZ)
+     *
+     * @param start
+     */
+    public void setLifetimeStart(String start) {
+        this.add(ReservedKeys.RECORD_LIFETIME_START, start);
+    }
+
+    /**
+     * the end time and date formatted as ISO 8601 calendar date, and should be a
+     * basic (compact) representation with UTC timezone (YYYYMMDDThhmmssZ)
+     *
+     * @return
+     */
+    public String getLifetimeEnd() {
+        return arrayToString(this.getValue(ReservedKeys.RECORD_LIFETIME_END));
+    }
+
+    /**
+     * the end time and date formatted as ISO 8601 calendar date, and should be a
+     * basic (compact) representation with UTC timezone (YYYYMMDDThhmmssZ)
+     *
+     * @param end
+     */
+    public void setLifetimeEnd(String end) {
+        this.add(ReservedKeys.RECORD_LIFETIME_END, end);
     }
 
     public String getVersion() {

@@ -158,7 +158,38 @@ public class SLSVisitor implements Visitor {
             nmlNetObj.setLocation(nmlLocation);
         }
 
-        // TODO (AH): set lifetime
+        if (slsNetObj.getLifetimeStart() != null) {
+            Calendar calendar = DatatypeConverter.parseDateTime(slsNetObj.getLifetimeStart());
+            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(calendar.getTime());
+            if (nmlNetObj.getLifetime() == null) {
+                nmlNetObj.setLifetime(nmlFactory.createLifeTimeType());
+            }
+            try {
+                XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                nmlNetObj.getLifetime().setStart(xmlCalendar);
+            } catch (DatatypeConfigurationException e) {
+                // TODO (AH): handle error in version date format
+                e.printStackTrace();
+            }
+        }
+
+        if (slsNetObj.getLifetimeEnd() != null) {
+            Calendar calendar = DatatypeConverter.parseDateTime(slsNetObj.getLifetimeEnd());
+            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(calendar.getTime());
+            if (nmlNetObj.getLifetime() == null) {
+                nmlNetObj.setLifetime(nmlFactory.createLifeTimeType());
+            }
+            try {
+                XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                nmlNetObj.getLifetime().setEnd(xmlCalendar);
+            } catch (DatatypeConfigurationException e) {
+                // TODO (AH): handle error in version date format
+                e.printStackTrace();
+            }
+        }
+
         if (slsNetObj.getVersion() != null) {
             Calendar calendar = DatatypeConverter.parseDateTime(slsNetObj.getVersion());
             GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -171,7 +202,6 @@ public class SLSVisitor implements Visitor {
                 // TODO (AH): handle error in version date format
                 e.printStackTrace();
             }
-
         }
 
     }

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nml:Node id="urn:ogf:network:example.net:2013:nodeA" xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#">
     <nml:name>Node_A</nml:name>
+    <nml:Lifetime>
+        <nml:start>2012-05-30T09:30:10Z</nml:start>
+        <nml:end>2015-05-30T09:30:10Z</nml:end>
+    </nml:Lifetime>
     <nml:Location id="urn:ogf:network:example.net:2013:redcity"/>
     <nml:Node id="urn:ogf:network:example.net:2013:nodeA:subnode"/>
     <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">

@@ -123,6 +123,11 @@ public class NMLVisitor extends BaseVisitor {
 
         if (networkObject.getVersion() != null)
             slSObject.setVersion(networkObject.getVersion().toString());
+
+        if (networkObject.getLifetime() != null) {
+            slSObject.setLifetimeStart(networkObject.getLifetime().getStart().toString());
+            slSObject.setLifetimeEnd(networkObject.getLifetime().getEnd().toString());
+        }
     }
 
     /**
@@ -562,20 +567,6 @@ public class NMLVisitor extends BaseVisitor {
             }
         }
         logger.trace("event=NMLVisitor.visit.NsiServiceType.end status=0 guid=" + this.logUUID);
-    }
-
-    /**
-     * Visit nml lifetime to generate sLS lifetime record
-     *
-     * @param lifetimeType
-     */
-    @Override
-    public void visit(LifeTimeType lifetimeType) {
-        logger.trace("event=NMLVisitor.visit.LifeTimeType.start guid=" + this.logUUID);
-        Lifetime lifetime = new Lifetime();
-        lifetime.setStart(lifetimeType.getStart().toXMLFormat());
-        lifetime.setEnd(lifetimeType.getEnd().toXMLFormat());
-        logger.trace("event=NMLVisitor.visit.LifeTimeType.end status=0 guid=" + this.logUUID);
     }
 
     /**
