@@ -30,6 +30,7 @@ public class SLSVisitor implements Visitor {
     private Map<String, LinkGroupType> linkGroupTypeMap = new HashMap<String, LinkGroupType>();
     private Map<String, NodeType> nodeTypeMap = new HashMap<String, NodeType>();
     private Map<String, BidirectionalLinkType> bidirectionalLinkTypeMap = new HashMap<String, BidirectionalLinkType>();
+    private Map<String, BidirectionalPortType> bidirectionalPortTypeMap = new HashMap<String, BidirectionalPortType>();
     /**
      * to make sure each object serialized once.
      */
@@ -97,6 +98,10 @@ public class SLSVisitor implements Visitor {
 
     public Map<String, BidirectionalLinkType> getBidirectionalLinkTypeMap() {
         return bidirectionalLinkTypeMap;
+    }
+
+    public Map<String, BidirectionalPortType> getBidirectionalPortTypeMap() {
+        return bidirectionalPortTypeMap;
     }
 
     /**
@@ -212,7 +217,36 @@ public class SLSVisitor implements Visitor {
 
     @Override
     public void visit(BidirectionalPort record) {
+        BidirectionalPortType obj = nmlFactory.createBidirectionalPortType();
+        setNetworkObejctValues(obj, record);
 
+        if (record.getPorts() != null) {
+            for (String urn : record.getPorts()) {
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    PortType obj2 = nmlFactory.createPortType();
+                    obj2.setId(urn);
+                    obj.getRest().add(nmlFactory.createPort(obj2));
+                } else {
+                    obj.getRest().add(nmlFactory.createPort(getPortTypeMap().get(urn)));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getPortGroups() != null) {
+            for (String urn : record.getPortGroups()) {
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    PortGroupType obj2 = nmlFactory.createPortGroupType();
+                    obj2.setId(urn);
+                    obj.getRest().add(nmlFactory.createPortGroup(obj2));
+                } else {
+                    obj.getRest().add(nmlFactory.createPortGroup(getPortGroupTypeMap().get(urn)));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        getBidirectionalPortTypeMap().put(obj.getId(), obj);
     }
 
     @Override

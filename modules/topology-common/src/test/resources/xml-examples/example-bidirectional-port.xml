@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<nml:BidirectionalPort xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+                       id="urn:ogf:network:example.net:2013:BidirPortA"
+                       version="2013-05-30T09:30:10Z">
+    <nml:name>PortA</nml:name>
+    <nml:Port id="urn:ogf:network:example.net:2013:BidirPortA:portA:out"/>
+    <nml:Port id="urn:ogf:network:example.net:2013:BidirPortA:portA:in"/>
+</nml:BidirectionalPort>

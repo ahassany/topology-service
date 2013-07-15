@@ -592,4 +592,54 @@ public class SLSVisitorTest {
         Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitBidirectionalLinkWithLinkGroups.end status=0 guid=" + getLogGUID());
     }
+
+    @Test
+    public void testVisitBidirectionalPort() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitBidirectionalPort.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-bidirectional-port.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<BidirectionalPortType> msg = (JAXBElement<BidirectionalPortType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.net:2013:BidirPortA";
+
+        // Act
+        BidirectionalPort received = recordsCache.getBidirectionalPort(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getBidirectionalPortTypeMap().containsKey(urn));
+        BidirectionalPortType nmlObj = slsVisitor.getBidirectionalPortTypeMap().get(urn);
+        JAXBConfig.getMarshaller().marshal(new ObjectFactory().createBidirectionalPort(nmlObj), System.out);
+        //Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitBidirectionalPort.end status=0 guid=" + getLogGUID());
+    }
 }
