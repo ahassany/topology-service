@@ -321,8 +321,8 @@ public class SLSVisitor implements Visitor {
         // TODO (AH): Parse admin contacts
 
         if (record.getPeersWith() != null) {
+            NSARelationType relation = nsiFactory.createNSARelationType();
             for (String urn : record.getPeersWith()) {
-                NSARelationType relation = nsiFactory.createNSARelationType();
                 relation.setType(NMLVisitor.RELATION_PEERS_WITH);
                 NSAType objR = null;
                 if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
@@ -333,13 +333,13 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getNSA().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         if (record.getManagedBy() != null) {
+            NSARelationType relation = nsiFactory.createNSARelationType();
             for (String urn : record.getManagedBy()) {
-                NSARelationType relation = nsiFactory.createNSARelationType();
                 relation.setType(NMLVisitor.RELATION_MANAGED_BY);
                 NSAType objR = null;
                 if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
@@ -350,8 +350,8 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getNSA().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
 
@@ -388,8 +388,8 @@ public class SLSVisitor implements Visitor {
         }
 
         if (record.getProvidedBy() != null) {
+            NsiServiceRelationType relation = nsiFactory.createNsiServiceRelationType();
             for (String urn : record.getProvidedBy()) {
-                NsiServiceRelationType relation = nsiFactory.createNsiServiceRelationType();
                 relation.setType(NMLVisitor.RELATION_PROVIDED_BY);
                 NSAType objR = null;
                 if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -400,8 +400,8 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getNSA().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
         getNsiServiceTypeMap().put(obj.getId(), obj);
     }
@@ -420,8 +420,8 @@ public class SLSVisitor implements Visitor {
         }
 
         if (record.getIsSource() != null) {
+            PortRelationType relation = nmlFactory.createPortRelationType();
             for (String urn : record.getIsSource()) {
-                PortRelationType relation = nmlFactory.createPortRelationType();
                 relation.setType(NMLVisitor.RELATION_IS_SOURCE);
                 LinkType objR = null;
                 if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -433,13 +433,13 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getLink().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         if (record.getIsSink() != null) {
+            PortRelationType relation = nmlFactory.createPortRelationType();
             for (String urn : record.getIsSink()) {
-                PortRelationType relation = nmlFactory.createPortRelationType();
                 relation.setType(NMLVisitor.RELATION_IS_SINK);
                 LinkType objR = null;
                 if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -453,13 +453,14 @@ public class SLSVisitor implements Visitor {
                 relation.getLink().add(objR);
                 obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         getPortTypeMap().put(obj.getId(), obj);
 
         if (record.getIsAlias() != null) {
+            PortRelationType relation = nmlFactory.createPortRelationType();
             for (String urn : record.getIsAlias()) {
-                PortRelationType relation = nmlFactory.createPortRelationType();
                 relation.setType(NMLVisitor.RELATION_IS_ALIAS);
                 PortType objR = null;
                 if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
@@ -470,8 +471,8 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getPort().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
     }
 
@@ -518,8 +519,8 @@ public class SLSVisitor implements Visitor {
         }
 
         if (record.getIsSink() != null) {
+            PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
             for (String urn : record.getIsSink()) {
-                PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
                 relation.setType(NMLVisitor.RELATION_IS_SINK);
                 LinkGroupType objR = null;
                 if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -531,13 +532,13 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getLinkGroup().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         if (record.getIsSource() != null) {
+            PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
             for (String urn : record.getIsSource()) {
-                PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
                 relation.setType(NMLVisitor.RELATION_IS_SOURCE);
                 LinkGroupType objR = null;
                 if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -549,15 +550,15 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getLinkGroup().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         getPortGroupTypeMap().put(obj.getId(), obj);
 
         if (record.getIsAlias() != null) {
+            PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
             for (String urn : record.getIsAlias()) {
-                PortGroupRelationType relation = nmlFactory.createPortGroupRelationType();
                 relation.setType(NMLVisitor.RELATION_IS_ALIAS);
                 PortGroupType objR = null;
                 if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
@@ -568,8 +569,8 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getPortGroup().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
     }
 
@@ -604,8 +605,8 @@ public class SLSVisitor implements Visitor {
 
 
         if (record.getHasInboundPortGroup() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
             for (String urn : record.getHasInboundPortGroup()) {
-                TopologyRelationType relation = nmlFactory.createTopologyRelationType();
                 relation.setType(NMLVisitor.RELATION_HAS_INBOUND_PORT);
                 PortGroupType objR = null;
                 if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -616,13 +617,13 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getPortGroup().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         if (record.getHasOutboundPortGroup() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
             for (String urn : record.getHasOutboundPortGroup()) {
-                TopologyRelationType relation = nmlFactory.createTopologyRelationType();
                 relation.setType(NMLVisitor.RELATION_HAS_OUTBOUND_PORT);
                 PortGroupType objR = null;
                 if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
@@ -633,8 +634,8 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getPortGroup().add(objR);
-                obj.getRelation().add(relation);
             }
+            obj.getRelation().add(relation);
         }
 
         getTopologyTypeMap().put(obj.getId(), obj);
