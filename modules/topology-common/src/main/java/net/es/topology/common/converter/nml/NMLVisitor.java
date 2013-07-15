@@ -239,7 +239,7 @@ public class NMLVisitor extends BaseVisitor {
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
                 if (sLSPort.getIsAlias() == null) {
-                    sLSPort.setHasService(new ArrayList<String>());
+                    sLSPort.setIsAlias(new ArrayList<String>());
                 }
                 for (PortType port : relation.getPort()) {
                     sLSPort.getIsAlias().add(port.getId());

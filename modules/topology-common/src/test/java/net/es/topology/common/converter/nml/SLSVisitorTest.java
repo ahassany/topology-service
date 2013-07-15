@@ -167,25 +167,49 @@ public class SLSVisitorTest {
         // Prepare
         logger.debug("event=SLSVisitorTest.testVisitPort.start guid=" + getLogGUID());
         // Load data to sLS
-        registerSLS("xml-examples/example-message-port.xml");
+        String filename = "xml-examples/example-port.xml";
 
-        // Prepare the sLS client
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<PortType> msg = (JAXBElement<PortType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
         SimpleLS client = sLSConfig.getClient();
 
         // Prepare the visitor
-        SLSVisitor visitor = new SLSVisitor();
+        SLSVisitor slsVisitor = new SLSVisitor();
         RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
-        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
         tv.setTraverseFirst(true);
 
-        String urn = "urn:ogf:network:example.net:2013:portA";
+        String urn = "urn:ogf:network:example.net:2013:portTest";
+
         // Act
         Port received = recordsCache.getPort(urn);
         Assert.assertNotNull(received);
         received.accept(tv);
 
+        // Assert
+        Assert.assertTrue(slsVisitor.getPortTypeMap().containsKey(urn));
+        PortType nmlObj = slsVisitor.getPortTypeMap().get(urn);
+        //JAXBConfig.getMarshaller().marshal(new ObjectFactory().createPort(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitPort.end status=0 guid=" + getLogGUID());
     }
 
     @Test
@@ -418,7 +442,6 @@ public class SLSVisitorTest {
         Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitNode.end status=0 guid=" + getLogGUID());
     }
-
 
     @Test
     public void testVisitLink() throws Exception {

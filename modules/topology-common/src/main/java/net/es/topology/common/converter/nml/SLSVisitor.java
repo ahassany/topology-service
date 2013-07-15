@@ -199,7 +199,6 @@ public class SLSVisitor implements Visitor {
         }
 
 
-
         if (record.getIsSerialCompoundLink() != null) {
             LinkRelationType relation = nmlFactory.createLinkRelationType();
             for (String urn : record.getIsSerialCompoundLink()) {
@@ -485,24 +484,6 @@ public class SLSVisitor implements Visitor {
             obj.getLabel().setValue(record.getLabel());
         }
 
-        if (record.getIsSource() != null) {
-            PortRelationType relation = nmlFactory.createPortRelationType();
-            for (String urn : record.getIsSource()) {
-                relation.setType(NMLVisitor.RELATION_IS_SOURCE);
-                LinkType objR = null;
-                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
-
-                    objR = nmlFactory.createLinkType();
-                    objR.setId(urn);
-                } else {
-                    objR = getLinkTypeMap().get(urn);
-                    serializedURNS.add(urn);
-                }
-                relation.getLink().add(objR);
-            }
-            obj.getRelation().add(relation);
-        }
-
         if (record.getIsSink() != null) {
             PortRelationType relation = nmlFactory.createPortRelationType();
             for (String urn : record.getIsSink()) {
@@ -517,7 +498,24 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getLink().add(objR);
-                obj.getRelation().add(relation);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getIsSource() != null) {
+            PortRelationType relation = nmlFactory.createPortRelationType();
+            for (String urn : record.getIsSource()) {
+                relation.setType(NMLVisitor.RELATION_IS_SOURCE);
+                LinkType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+
+                    objR = nmlFactory.createLinkType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLink().add(objR);
             }
             obj.getRelation().add(relation);
         }
