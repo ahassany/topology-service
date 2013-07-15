@@ -46,6 +46,7 @@ public class SLSTSClient {
         this.traversingVisitor = new SLSTraversingVisitor(
                 new SLSTraverserImpl(recordsCache, logGUID),
                 this.slsVisitor, logGUID);
+        this.traversingVisitor.setTraverseFirst(true);
         this.logGUID = logGUID;
     }
 
@@ -83,6 +84,8 @@ public class SLSTSClient {
 
     public NetworkObject getNetworkObject(String urn) throws LSClientException, ParserException {
         net.es.topology.common.records.ts.NetworkObject record = recordsCache.getNetworkObject(urn);
+        if (record == null)
+            return null;
         record.accept(getTraversingVisitor());
         return getSlsVisitor().getNetworkObject(urn);
     }
