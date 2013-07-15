@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<nml:LinkGroup xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+               id="urn:ogf:network:example.net:2013:linkGroupA"
+               version="2013-05-30T09:30:10Z">
+    <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1780-1783</nml:LabelGroup>
+    <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1880-1883</nml:LabelGroup>
+    <nml:Link id="urn:ogf:network:example.net:2013:linkA:XY"/>
+    <nml:Link id="urn:ogf:network:example.net:2013:linkA:YX"/>
+    <nml:LinkGroup id="urn:ogf:network:example.net:2013:linkGroupB"/>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink">
+        <nml:LinkGroup id="urn:ogf:network:example.net:2013:linkA:YX"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+        <nml:LinkGroup id="urn:ogf:network:example.net:2013:linkGroupC"/>
+    </nml:Relation>
+</nml:LinkGroup>

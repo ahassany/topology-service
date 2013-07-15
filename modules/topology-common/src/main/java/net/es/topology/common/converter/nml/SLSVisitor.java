@@ -323,7 +323,79 @@ public class SLSVisitor implements Visitor {
 
     @Override
     public void visit(LinkGroup record) {
+        LinkGroupType obj = nmlFactory.createLinkGroupType();
+        setNetworkObejctValues(obj, record);
 
+        if (record.getLabelGroup().getLabels() != null &&
+                record.getLabelGroup().getLabels().size() != 0) {
+            for (List<String> label : record.getLabelGroup().getLabels()) {
+                LabelGroupType labelGroupType = (nmlFactory.createLabelGroupType());
+                labelGroupType.setLabeltype(label.get(0));
+                labelGroupType.setValue(label.get(1));
+                obj.getLabelGroup().add(labelGroupType);
+            }
+        }
+
+        if (record.getLinks() != null) {
+            for (String urn : record.getLinks()) {
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    LinkType obj2 = nmlFactory.createLinkType();
+                    obj.getLink().add(obj2);
+                } else {
+                    obj.getLink().add(getLinkTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getLinkGroups() != null) {
+            for (String urn : record.getLinkGroups()) {
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    LinkGroupType obj2 = nmlFactory.createLinkGroupType();
+                    obj.getLinkGroup().add(obj2);
+                } else {
+                    obj.getLinkGroup().add(getLinkGroupTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getIsSerialCompoundLink() != null) {
+            LinkGroupRelationType relation = nmlFactory.createLinkGroupRelationType();
+            for (String urn : record.getIsSerialCompoundLink()) {
+                relation.setType(NMLVisitor.RELATION_IS_SERIAL_COMPOUND_LINK);
+                LinkGroupType objR = null;
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createLinkGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLinkGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+
+        getLinkGroupTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            LinkGroupRelationType relation = nmlFactory.createLinkGroupRelationType();
+            for (String urn : record.getIsAlias()) {
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                LinkGroupType objR = null;
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createLinkGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLinkGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
     }
 
     @Override
@@ -655,8 +727,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getIsSink()) {
                 relation.setType(NMLVisitor.RELATION_IS_SINK);
                 LinkGroupType objR = null;
-                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
-
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
                     objR = nmlFactory.createLinkGroupType();
                     objR.setId(urn);
                 } else {
@@ -673,7 +744,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getIsSource()) {
                 relation.setType(NMLVisitor.RELATION_IS_SOURCE);
                 LinkGroupType objR = null;
-                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
 
                     objR = nmlFactory.createLinkGroupType();
                     objR.setId(urn);

@@ -638,8 +638,58 @@ public class SLSVisitorTest {
         // Assert
         Assert.assertTrue(slsVisitor.getBidirectionalPortTypeMap().containsKey(urn));
         BidirectionalPortType nmlObj = slsVisitor.getBidirectionalPortTypeMap().get(urn);
-        JAXBConfig.getMarshaller().marshal(new ObjectFactory().createBidirectionalPort(nmlObj), System.out);
-        //Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        //JAXBConfig.getMarshaller().marshal(new ObjectFactory().createBidirectionalPort(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitBidirectionalPort.end status=0 guid=" + getLogGUID());
+    }
+
+    @Test
+    public void testVisitLinkGroup() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitLinkGroup.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-link-group.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<LinkGroupType> msg = (JAXBElement<LinkGroupType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.net:2013:linkGroupA";
+
+        // Act
+        LinkGroup received = recordsCache.getLinkGroup(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getLinkGroupTypeMap().containsKey(urn));
+        LinkGroupType nmlObj = slsVisitor.getLinkGroupTypeMap().get(urn);
+        JAXBConfig.getMarshaller().marshal(new ObjectFactory().createLinkGroup(nmlObj), System.out);
+        //Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitLinkGroup.end status=0 guid=" + getLogGUID());
     }
 }
