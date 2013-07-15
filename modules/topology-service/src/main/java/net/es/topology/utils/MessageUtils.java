@@ -1,0 +1,58 @@
+package net.es.topology.utils;
+
+import org.ogf.schemas.nml._2013._05.base.*;
+import org.ogf.schemas.nsi._2013._09.messaging.Message;
+import org.ogf.schemas.nsi._2013._09.messaging.ObjectFactory;
+import org.ogf.schemas.nsi._2013._09.topology.NSAType;
+import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
+
+/**
+ * Helper class to make messages
+ *
+ * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ */
+public class MessageUtils {
+
+    /**
+     * Encapsulate a NetworkObject in NSI Message
+     *
+     * @param networkObject
+     * @return
+     * @throws Exception
+     */
+    public static Message makeMessage(NetworkObject networkObject) throws Exception {
+        ObjectFactory msgFactory = new ObjectFactory();
+        Message msg = msgFactory.createMessage();
+        Message.Body body = msgFactory.createMessageBody();
+        msg.setBody(body);
+
+        if (networkObject instanceof NSAType) {
+            body.getNSA().add((NSAType) networkObject);
+        } else if (networkObject instanceof NsiServiceType) {
+            body.getService().add((NsiServiceType) networkObject);
+        } else if (networkObject instanceof TopologyType) {
+            body.getTopology().add((TopologyType) networkObject);
+        } else if (networkObject instanceof PortGroupType) {
+            body.getPortGroup().add((PortGroupType) networkObject);
+        } else if (networkObject instanceof AdaptationServiceType) {
+            body.getAdaptationService().add((AdaptationServiceType) networkObject);
+        } else if (networkObject instanceof BidirectionalPortType) {
+            body.getBidirectionalPort().add((BidirectionalPortType) networkObject);
+        } else if (networkObject instanceof BidirectionalLinkType) {
+            body.getBidirectionalLink().add((BidirectionalLinkType) networkObject);
+        } else if (networkObject instanceof DeadaptationServiceType) {
+            body.getDeadaptationService().add((DeadaptationServiceType) networkObject);
+        } else if (networkObject instanceof LinkGroupType) {
+            body.getLinkGroup().add((LinkGroupType) networkObject);
+        } else if (networkObject instanceof NodeType) {
+            body.getNode().add((NodeType) networkObject);
+        } else if (networkObject instanceof SwitchingServiceType) {
+            body.getSwitchingService().add((SwitchingServiceType) networkObject);
+        } else if (networkObject instanceof PortType) {
+            body.getPort().add((PortType) networkObject);
+        } else
+            throw new Exception("Unable to handle networkobject in a message");
+
+        return msg;
+    }
+}

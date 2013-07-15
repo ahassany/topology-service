@@ -4,19 +4,22 @@ import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
+import net.es.topology.client.sls.SLSTSClient;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
-import net.es.topology.common.records.ts.utils.RecordsCollection;
-import net.es.topology.common.records.ts.utils.SLSRegistrationClientDispatcherImpl;
-import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
+import net.es.topology.common.records.ts.utils.*;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
+import net.es.topology.utils.MessageUtils;
+import net.es.topology.utils.SLSCallbackListener;
 import org.apache.commons.io.IOUtils;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.jersey.Broadcastable;
 import org.atmosphere.jersey.SuspendResponse;
+import org.ogf.schemas.nml._2013._05.base.NetworkObject;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
+import org.ogf.schemas.nsi._2013._09.messaging.ObjectFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -43,7 +46,7 @@ public class URNResource {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public SuspendResponse<Message> subscribe(@Context HttpHeaders headers) {
+    public SuspendResponse<Message> subscribe(@PathParam("urn") String urnPath, @Context HttpHeaders headers) {
 
         // Check if the client want to keep the connection open for HTTP
         // streaming
@@ -56,10 +59,44 @@ public class URNResource {
         } else {
             resumeOnBroadcast = true;
         }
+
+        SimpleLS slsClient;
+        try {
+            slsClient = JsonClientProvider.getInstance().getClient();
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.serverError().entity("Unable to init sLS client: '" + e.getMessage() + "'.\n").build());
+        }
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(slsClient), new URNMaskGetAllImpl(), "");
+        SLSTSClient tsClient = new SLSTSClient(cache, "");
+        NetworkObject networkObject;
+        try {
+            networkObject = tsClient.getNetworkObject(urnPath);
+        } catch (LSClientException e) {
+            throw new WebApplicationException(Response.serverError().entity("LSClient exception: '" + e.getMessage() + "'.\n").build());
+        } catch (ParserException e) {
+            throw new WebApplicationException(Response.serverError().entity("Unable to parse sLS output: '" + e.getMessage() + "'.\n").build());
+        }
+        Message msg;
+
+        if (networkObject == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("NOT FOUND URN='" + urnPath + "'.\n").build());
+            //atmosphereResourceEvent.broadcaster().broadcast("");
+        } else {
+            ObjectFactory objectFactory = new ObjectFactory();
+            msg = objectFactory.createMessage();
+            msg.setBody(objectFactory.createMessageBody());
+            try {
+                msg = MessageUtils.makeMessage(networkObject);
+            } catch (Exception e) {
+                throw new WebApplicationException(Response.serverError().entity("Unable pack response message: '" + e.getMessage() + "'.\n").build());
+            }
+        }
+
         return new SuspendResponse.SuspendResponseBuilder<Message>()
                 .broadcaster(urn)
                 .resumeOnBroadcast(resumeOnBroadcast)
                 .outputComments(true)
+                .addListener(new SLSCallbackListener(msg))
                 .build();
     }
 
