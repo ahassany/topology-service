@@ -137,20 +137,42 @@ public class NMLVisitor extends BaseVisitor {
 
         this.setNetworkObject(nodeType, sLSNode);
 
+        // Add Refs to the Nodes in the Node
+        if (nodeType.getNode() != null && nodeType.getNode().size() != 0) {
+            if (sLSNode.getNodes() == null)
+                sLSNode.setNodes(new ArrayList<String>());
+        }
+        for (NodeType node : nodeType.getNode()) {
+            sLSNode.getNodes().add(node.getId());
+        }
+
         for (NodeRelationType relation : nodeType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
-                if (sLSNode.getHasInboundPort() == null) {
+                if (relation.getPort().size() > 0 && sLSNode.getHasInboundPort() == null) {
                     sLSNode.setHasInboundPort(new ArrayList<String>());
                 }
                 for (PortType port : relation.getPort()) {
                     sLSNode.getHasInboundPort().add(port.getId());
                 }
+                if (relation.getPortGroup().size() > 0 && sLSNode.getHasInboundPortGroup() == null) {
+                    sLSNode.setHasInboundPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    sLSNode.getHasInboundPortGroup().add(port.getId());
+                }
             } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_OUTBOUND_PORT)) {
-                if (sLSNode.getHasOutboundPort() == null) {
+                if (relation.getPort().size() > 0 && sLSNode.getHasOutboundPort() == null) {
                     sLSNode.setHasOutboundPort(new ArrayList<String>());
                 }
                 for (PortType port : relation.getPort()) {
                     sLSNode.getHasOutboundPort().add(port.getId());
+                }
+
+                if (relation.getPortGroup().size() > 0 && sLSNode.getHasOutboundPortGroup() == null) {
+                    sLSNode.setHasOutboundPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    sLSNode.getHasOutboundPortGroup().add(port.getId());
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_SERVICE)) {
                 if (sLSNode.getHasService() == null) {
@@ -588,7 +610,7 @@ public class NMLVisitor extends BaseVisitor {
                 for (PortType port : relation.getPort()) {
                     sLSTopo.getHasInboundPort().add(port.getId());
                 }
-                if (relation.getPortGroup().size() > 0 && sLSTopo.getHasOutboundPort() == null) {
+                if (relation.getPortGroup().size() > 0 && sLSTopo.getHasInboundPortGroup() == null) {
                     sLSTopo.setHasInboundPortGroup(new ArrayList<String>());
                 }
                 for (PortGroupType port : relation.getPortGroup()) {
@@ -602,7 +624,7 @@ public class NMLVisitor extends BaseVisitor {
                     sLSTopo.getHasOutboundPort().add(port.getId());
                 }
 
-                if (relation.getPortGroup().size() > 0 && sLSTopo.getHasOutboundPort() == null) {
+                if (relation.getPortGroup().size() > 0 && sLSTopo.getHasOutboundPortGroup() == null) {
                     sLSTopo.setHasOutboundPortGroup(new ArrayList<String>());
                 }
                 for (PortGroupType port : relation.getPortGroup()) {

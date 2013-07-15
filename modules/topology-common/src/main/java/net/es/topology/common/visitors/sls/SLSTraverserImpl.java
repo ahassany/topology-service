@@ -87,6 +87,25 @@ public class SLSTraverserImpl implements Traverser {
             }
             if (record.getHasOutboundPort() != null) {
                 for (String urn : record.getHasOutboundPort()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getHasInboundPortGroup() != null) {
+                for (String urn : record.getHasInboundPortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getHasOutboundPortGroup() != null) {
+                for (String urn : record.getHasOutboundPortGroup()) {
                     PortGroup sLSRecord = getCache().getPortGroup(urn);
                     // to stop cyclic dependencies
                     if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
@@ -94,9 +113,18 @@ public class SLSTraverserImpl implements Traverser {
                     }
                 }
             }
-            // TODO (AH): deal with port groups
+
+            if (record.getNodes() != null) {
+                for (String urn : record.getNodes()) {
+                    Node sLSRecord = getCache().getNode(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
             // TODO (AH): deal with services
-            // TODO (AH): deal with inner nodes
 
             if (record.getIsAlias() != null) {
                 for (String urn : record.getIsAlias()) {

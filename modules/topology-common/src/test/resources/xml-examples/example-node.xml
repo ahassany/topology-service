@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nml:Node id="urn:ogf:network:example.net:2013:nodeA" xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#">
-  <nml:name>Node_A</nml:name>
-  <nml:Location id="urn:ogf:network:example.net:2013:redcity"/>
-  <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
-    <nml:Port id="urn:ogf:network:example.net:2013:port_X:out"/>
-    <nml:Port id="urn:ogf:network:example.net:2013:port_Y:out"/>
-  </nml:Relation>
-  <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
-    <nml:Port id="urn:ogf:network:example.net:2013:port_X:in"/>
-    <nml:Port id="urn:ogf:network:example.net:2013:port_Y:in"/>
-  </nml:Relation>
+    <nml:name>Node_A</nml:name>
+    <nml:Location id="urn:ogf:network:example.net:2013:redcity"/>
+    <nml:Node id="urn:ogf:network:example.net:2013:nodeA:subnode"/>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:port_X:out"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:port_Y:out"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:port_X:in"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:port_Y:in"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+        <nml:PortGroup id="urn:ogf:network:example.com:2013:nsatest:eth0-out">
+            <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1780-1783</nml:LabelGroup>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                <nml:PortGroup id="urn:ogf:network:example.org:2013:nsatest:eth0-in"/>
+            </nml:Relation>
+        </nml:PortGroup>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+        <nml:PortGroup id="urn:ogf:network:example.com:2013:nsatest:eth0-in">
+            <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1780-1783</nml:LabelGroup>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                <nml:PortGroup id="urn:ogf:network:example.org:2013:nsatest:eth0-out"/>
+            </nml:Relation>
+        </nml:PortGroup>
+    </nml:Relation>
+
 </nml:Node>

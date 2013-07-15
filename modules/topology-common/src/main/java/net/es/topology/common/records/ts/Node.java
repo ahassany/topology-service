@@ -26,6 +26,24 @@ public class Node extends NetworkObject implements Visitable {
     }
 
     /**
+     * List of the URNs of nodes in the node
+     *
+     * @return list of nodes' URNs
+     */
+    public List<String> getNodes() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_NODE);
+    }
+
+    /**
+     * List of the URNs nodes in the node
+     *
+     * @param nodes list of nodes' URNs
+     */
+    public void setNodes(List<String> nodes) {
+        this.add(ReservedKeys.RECORD_TS_NODE, nodes);
+    }
+
+    /**
      * This defines that the related Network Object has an inbound Port or PortGroup object.
      *
      * @return list of the URNs of inbound ports
@@ -59,6 +77,42 @@ public class Node extends NetworkObject implements Visitable {
      */
     public void setHasOutboundPort(List<String> ports) {
         this.add(ReservedKeys.RECORD_RELATION_HAS_OUTBOUND_PORT, ports);
+    }
+
+    /**
+     * This defines that the related Node has an inbound PortGroup object.
+     *
+     * @return list of the URNs of inbound ports
+     */
+    public List<String> getHasInboundPortGroup() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_INBOUND_PORT_GROUP);
+    }
+
+    /**
+     * This defines that the related Node has an inbound PortGroup object.
+     *
+     * @param ports list of the URNs of inbound ports
+     */
+    public void setHasInboundPortGroup(List<String> ports) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_INBOUND_PORT_GROUP, ports);
+    }
+
+    /**
+     * This defines that the related Node has an outbound Port or PortGroup object.
+     *
+     * @return list of the URNs of outbound ports
+     */
+    public List<String> getHasOutboundPortGroup() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_OUTBOUND_PORT_GROUP);
+    }
+
+    /**
+     * This defines that the related Node has an outbound PortGroup object.
+     *
+     * @param ports list of the URNs of outbound ports
+     */
+    public void setHasOutboundPortGroup(List<String> ports) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_OUTBOUND_PORT_GROUP, ports);
     }
 
     /**
