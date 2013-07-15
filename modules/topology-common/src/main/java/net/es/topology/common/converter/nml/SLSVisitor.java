@@ -36,6 +36,7 @@ public class SLSVisitor implements Visitor {
 
     /**
      * Helper method to get specific NML NetworkObject
+     *
      * @param urn
      * @return
      */
@@ -194,7 +195,103 @@ public class SLSVisitor implements Visitor {
 
     @Override
     public void visit(Node record) {
+        NodeType obj = nmlFactory.createNodeType();
+        setNetworkObejctValues(obj, record);
 
+
+        if (record.getHasOutboundPort() != null) {
+            NodeRelationType relation = nmlFactory.createNodeRelationType();
+            for (String urn : record.getHasOutboundPort()) {
+                relation.setType(NMLVisitor.RELATION_HAS_OUTBOUND_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasInboundPort() != null) {
+            NodeRelationType relation = nmlFactory.createNodeRelationType();
+            for (String urn : record.getHasInboundPort()) {
+
+                relation.setType(NMLVisitor.RELATION_HAS_INBOUND_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        // TODO (AH): deal with port groups
+        // TODO (AH): deal with services
+        // TODO (AH): deal with inner nodes
+
+        /*
+        if (record.getHasInboundPortGroup() != null) {
+            for (String urn : record.getHasInboundPortGroup()) {
+                TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+                relation.setType(NMLVisitor.RELATION_HAS_INBOUND_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+
+        if (record.getHasOutboundPortGroup() != null) {
+            for (String urn : record.getHasOutboundPortGroup()) {
+                TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+                relation.setType(NMLVisitor.RELATION_HAS_OUTBOUND_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+                obj.getRelation().add(relation);
+            }
+        }
+        */
+
+        getNodeTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            NodeRelationType relation = nmlFactory.createNodeRelationType();
+            for (String urn : record.getIsAlias()) {
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                NodeType objR = null;
+                if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createNodeType();
+                    objR.setId(urn);
+                } else {
+                    objR = getNodeTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getNode().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
     }
 
     @Override

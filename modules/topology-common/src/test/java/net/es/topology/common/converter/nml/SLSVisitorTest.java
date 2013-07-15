@@ -18,6 +18,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.ogf.schemas.nml._2013._05.base.NodeType;
 import org.ogf.schemas.nml._2013._05.base.ObjectFactory;
 import org.ogf.schemas.nml._2013._05.base.PortGroupType;
 import org.ogf.schemas.nml._2013._05.base.TopologyType;
@@ -43,6 +44,7 @@ public class SLSVisitorTest {
     private final Logger logger = LoggerFactory.getLogger(SLSVisitorTest.class);
     private String logGUID = null;
     private JsonClientProvider sLSConfig;
+
     /**
      * get the UUID of the current test case
      *
@@ -368,5 +370,55 @@ public class SLSVisitorTest {
         Assert.assertTrue(nmlObj.equals(msg.getValue()));
 
         logger.debug("event=SLSVisitorTest.testVisitNSIService.end status=0 guid=" + getLogGUID());
+    }
+
+    @Test
+    public void testVisitNode() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitNode.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-node.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<NodeType> msg = (JAXBElement<NodeType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.net:2013:nodeA";
+
+        // Act
+        Node received = recordsCache.getNode(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getNodeTypeMap().containsKey(urn));
+        NodeType nmlObj = slsVisitor.getNodeTypeMap().get(urn);
+        //JAXBConfig.getMarshaller().marshal(new ObjectFactory().createNode(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitNode.end status=0 guid=" + getLogGUID());
     }
 }

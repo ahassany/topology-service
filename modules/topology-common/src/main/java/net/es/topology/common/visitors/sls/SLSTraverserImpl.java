@@ -74,7 +74,45 @@ public class SLSTraverserImpl implements Traverser {
 
     @Override
     public void traverse(Node record, Visitor visitor) {
+        getLogger().trace("event=SLSTraverserImpl.traverse.Node.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        try {
 
+            if (record.getHasInboundPort() != null) {
+                for (String urn : record.getHasInboundPort()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getHasOutboundPort() != null) {
+                for (String urn : record.getHasOutboundPort()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            // TODO (AH): deal with port groups
+            // TODO (AH): deal with services
+            // TODO (AH): deal with inner nodes
+
+            if (record.getIsAlias() != null) {
+                for (String urn : record.getIsAlias()) {
+                    Node sLSRecord = getCache().getNode(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+        } catch (LSClientException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.Node.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        } catch (ParserException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.Node.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        }
+        getLogger().trace("event=SLSTraverserImpl.traverse.Node.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 
     @Override
@@ -218,7 +256,7 @@ public class SLSTraverserImpl implements Traverser {
             if (record.getTopologies() != null) {
                 for (String urn : record.getTopologies()) {
                     Topology sLSRecord = getCache().getTopology(urn);
-                    if (sLSRecord != null  && sLSRecord.getId().equalsIgnoreCase(record.getId()) == false) {
+                    if (sLSRecord != null && sLSRecord.getId().equalsIgnoreCase(record.getId()) == false) {
                         sLSRecord.accept(visitor);
                     }
                 }
