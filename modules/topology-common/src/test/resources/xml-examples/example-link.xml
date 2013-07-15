@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<nml:Link xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+          id="urn:ogf:network:example.net:2013:linkTest:XY"
+          noReturnTraffic="false"
+          encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
+          version="2013-05-30T09:30:10Z">
+    <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink">
+        <nml:Link id="urn:ogf:network:example.net:2013:linkTest:linkD"/>
+        <nml:Link id="urn:ogf:network:example.net:2013:linkTest:linkE"/>
+        <nml:Link id="urn:ogf:network:example.net:2013:linkTest:linkF"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#next">
+        <nml:Link id="urn:ogf:network:example.net:2013:linkTest:linkC"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+        <nml:Link id="urn:ogf:network:example.net:2013:linkTest:linkB"/>
+    </nml:Relation>
+</nml:Link>

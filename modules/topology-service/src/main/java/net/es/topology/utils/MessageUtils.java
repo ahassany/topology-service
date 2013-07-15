@@ -50,6 +50,8 @@ public class MessageUtils {
             body.getSwitchingService().add((SwitchingServiceType) networkObject);
         } else if (networkObject instanceof PortType) {
             body.getPort().add((PortType) networkObject);
+        } else if (networkObject instanceof LinkType) {
+            body.getLink().add((LinkType) networkObject);
         } else
             throw new Exception("Unable to handle networkobject in a message");
 

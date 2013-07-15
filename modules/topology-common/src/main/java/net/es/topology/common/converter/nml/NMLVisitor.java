@@ -294,7 +294,7 @@ public class NMLVisitor extends BaseVisitor {
         if (linkType.getEncoding() != null)
             sLSLink.setEncoding(linkType.getEncoding());
         if (linkType.isNoReturnTraffic() != null)
-            sLSLink.setNoReturnTraffic(linkType.isNoReturnTraffic());
+            sLSLink.setNoReturnTraffic((Boolean) linkType.isNoReturnTraffic());
 
         if (linkType.getLabel() != null) {
             if (linkType.getLabel().getValue() != null)

@@ -91,8 +91,12 @@ public class Link extends NetworkObject implements Visitable {
      *
      * @return
      */
-    public boolean getNoReturnTraffic() {
-        return (Boolean) this.getValue(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC);
+    public Boolean getNoReturnTraffic() {
+        Object value = this.getValue(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC);
+        if (value != null)
+            return Boolean.valueOf(this.arrayToString(value));
+        else
+            return null;
     }
 
     /**
@@ -102,8 +106,8 @@ public class Link extends NetworkObject implements Visitable {
      *
      * @param noReturnTraffic
      */
-    public void setNoReturnTraffic(boolean noReturnTraffic) {
-        this.add(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC, noReturnTraffic);
+    public void setNoReturnTraffic(Boolean noReturnTraffic) {
+        this.add(ReservedKeys.RECORD_LINK_NORETURN_TRAFFIC, noReturnTraffic.toString());
     }
 
     /**

@@ -185,7 +185,73 @@ public class SLSVisitor implements Visitor {
     public void visit(Link record) {
         LinkType obj = nmlFactory.createLinkType();
         setNetworkObejctValues(obj, record);
+
+        if (record.getEncoding() != null)
+            obj.setEncoding(record.getEncoding());
+        if (record.getNoReturnTraffic() != null) {
+            obj.setNoReturnTraffic(record.getNoReturnTraffic());
+        }
+
+        if (record.getLabelType() != null) {
+            obj.setLabel(nmlFactory.createLabelType());
+            obj.getLabel().setLabeltype(record.getLabelType());
+            obj.getLabel().setValue(record.getLabel());
+        }
+
+
+
+        if (record.getIsSerialCompoundLink() != null) {
+            LinkRelationType relation = nmlFactory.createLinkRelationType();
+            for (String urn : record.getIsSerialCompoundLink()) {
+                relation.setType(NMLVisitor.RELATION_IS_SERIAL_COMPOUND_LINK);
+                LinkType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createLinkType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLink().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getNext() != null) {
+            LinkRelationType relation = nmlFactory.createLinkRelationType();
+            for (String urn : record.getNext()) {
+                relation.setType(NMLVisitor.RELATION_NEXT);
+                LinkType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createLinkType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLink().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
         getLinkTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            LinkRelationType relation = nmlFactory.createLinkRelationType();
+            for (String urn : record.getIsAlias()) {
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                LinkType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createLinkType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLink().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
     }
 
     @Override
