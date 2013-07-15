@@ -4,6 +4,7 @@ import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
+import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
 import net.es.topology.common.records.ts.utils.RecordsCollection;
 import net.es.topology.common.records.ts.utils.SLSRegistrationClientDispatcherImpl;
@@ -101,8 +102,7 @@ public class URNResource {
         msg.getBody().accept(tv);
         SimpleLS client;
         try {
-            // TODO (AH): define a better way to specify the sLS address
-            client = new SimpleLS("localhost", 8090);
+            client = JsonClientProvider.getInstance().getClient();
             client.connect();
             RegistrationClient rclient = new RegistrationClient(client);
             visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(rclient), new URNMaskGetAllImpl());
@@ -110,6 +110,8 @@ public class URNResource {
             throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
         } catch (ParserException e) {
             throw new WebApplicationException(Response.serverError().entity("Parser exception: '" + e.getMessage() + "'.\n").build());
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.serverError().entity("Unknown exception: '" + e.getMessage() + "'.\n").build());
         }
         return new Broadcastable(message, "", urn);
     }
