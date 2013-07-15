@@ -96,6 +96,10 @@
                 <configuration>
                     <!-- Changes the default schema directory -->
                     <schemaDirectory>src/main/resources/schemas</schemaDirectory>
+                    <bindingDirectory>src/main/resources</bindingDirectory>
+                    <bindingIncludes>
+                        <include>bindings.xml</include>
+                    </bindingIncludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -110,6 +114,8 @@
                                 <arg>-Xcopyable</arg>
                                 <arg>-Xvisitor</arg>
                                 <arg>-Xvisitor-package:net.es.topology.common.visitors.nml</arg>
+                                <arg>-extension</arg>
+                                <arg>-Xnamespace-prefix</arg>
                             </args>
                             <plugins>
                                 <plugin>
@@ -126,6 +132,13 @@
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-namespace-prefix</artifactId>
+                        <version>1.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
