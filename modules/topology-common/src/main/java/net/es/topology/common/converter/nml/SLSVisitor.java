@@ -29,6 +29,7 @@ public class SLSVisitor implements Visitor {
     private Map<String, LinkType> linkTypeMap = new HashMap<String, LinkType>();
     private Map<String, LinkGroupType> linkGroupTypeMap = new HashMap<String, LinkGroupType>();
     private Map<String, NodeType> nodeTypeMap = new HashMap<String, NodeType>();
+    private Map<String, BidirectionalLinkType> bidirectionalLinkTypeMap = new HashMap<String, BidirectionalLinkType>();
     /**
      * to make sure each object serialized once.
      */
@@ -92,6 +93,10 @@ public class SLSVisitor implements Visitor {
 
     public Map<String, NodeType> getNodeTypeMap() {
         return nodeTypeMap;
+    }
+
+    public Map<String, BidirectionalLinkType> getBidirectionalLinkTypeMap() {
+        return bidirectionalLinkTypeMap;
     }
 
     /**
@@ -173,7 +178,36 @@ public class SLSVisitor implements Visitor {
 
     @Override
     public void visit(BidirectionalLink record) {
+        BidirectionalLinkType obj = nmlFactory.createBidirectionalLinkType();
+        setNetworkObejctValues(obj, record);
 
+        if (record.getLinks() != null) {
+            for (String urn : record.getLinks()) {
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    LinkType obj2 = nmlFactory.createLinkType();
+                    obj2.setId(urn);
+                    obj.getRest().add(nmlFactory.createLink(obj2));
+                } else {
+                    obj.getRest().add(nmlFactory.createLink(getLinkTypeMap().get(urn)));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getLinkGroups() != null) {
+            for (String urn : record.getLinkGroups()) {
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    LinkGroupType obj2 = nmlFactory.createLinkGroupType();
+                    obj2.setId(urn);
+                    obj.getRest().add(nmlFactory.createLinkGroup(obj2));
+                } else {
+                    obj.getRest().add(nmlFactory.createLinkGroup(getLinkGroupTypeMap().get(urn)));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        getBidirectionalLinkTypeMap().put(obj.getId(), obj);
     }
 
     @Override

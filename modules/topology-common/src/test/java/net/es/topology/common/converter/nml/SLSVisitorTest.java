@@ -492,4 +492,104 @@ public class SLSVisitorTest {
         Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitLink.end status=0 guid=" + getLogGUID());
     }
+
+    @Test
+    public void testVisitBidirectionalLink() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitBidirectionalLink.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-bidirectional-link.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<BidirectionalLinkType> msg = (JAXBElement<BidirectionalLinkType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.net:2013:BidirLinkA";
+
+        // Act
+        BidirectionalLink received = recordsCache.getBidirectionalLink(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getBidirectionalLinkTypeMap().containsKey(urn));
+        BidirectionalLinkType nmlObj = slsVisitor.getBidirectionalLinkTypeMap().get(urn);
+        //JAXBConfig.getMarshaller().marshal(new ObjectFactory().createBidirectionalLink(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitBidirectionalLink.end status=0 guid=" + getLogGUID());
+    }
+
+    @Test
+    public void testVisitBidirectionalLinkWithLinkGroups() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitBidirectionalLinkWithLinkGroups.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-bidirectional-link-with-linkgroup.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<BidirectionalLinkType> msg = (JAXBElement<BidirectionalLinkType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.net:2013:BidirLinkB";
+
+        // Act
+        BidirectionalLink received = recordsCache.getBidirectionalLink(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getBidirectionalLinkTypeMap().containsKey(urn));
+        BidirectionalLinkType nmlObj = slsVisitor.getBidirectionalLinkTypeMap().get(urn);
+        JAXBConfig.getMarshaller().marshal(new ObjectFactory().createBidirectionalLink(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitBidirectionalLinkWithLinkGroups.end status=0 guid=" + getLogGUID());
+    }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<nml:BidirectionalLink
+        xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+        id="urn:ogf:network:example.net:2013:BidirLinkB"
+        version="2013-05-30T09:30:10Z">
+    <nml:name>LinkB</nml:name>
+    <nml:LinkGroup id="urn:ogf:network:example.net:2013:BidirLinkB:linkA:XY"/>
+    <nml:LinkGroup id="urn:ogf:network:example.net:2013:BidirLinkB:linkA:YX"/>
+</nml:BidirectionalLink>

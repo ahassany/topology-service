@@ -54,7 +54,32 @@ public class SLSTraverserImpl implements Traverser {
 
     @Override
     public void traverse(BidirectionalLink record, Visitor visitor) {
+        getLogger().trace("event=SLSTraverserImpl.traverse.BidirectionalLink.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        try {
 
+            if (record.getLinks() != null) {
+                for (String urn : record.getLinks()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getLinkGroups() != null) {
+                for (String urn : record.getLinkGroups()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+        } catch (LSClientException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.BidirectionalLink.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        } catch (ParserException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.BidirectionalLink.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        }
+        getLogger().trace("event=SLSTraverserImpl.traverse.BidirectionalLink.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 
     @Override
