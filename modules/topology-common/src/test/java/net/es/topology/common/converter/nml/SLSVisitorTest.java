@@ -257,6 +257,7 @@ public class SLSVisitorTest {
         // Assert
         Assert.assertTrue(slsVisitor.getPortGroupTypeMap().containsKey(urn));
         PortGroupType nmlObj = slsVisitor.getPortGroupTypeMap().get(urn);
+        JAXBConfig.getMarshaller().marshal(new ObjectFactory().createPortGroup(nmlObj), System.out);
         Assert.assertTrue(nmlObj.equals(msg.getValue()));
 
         logger.debug("event=SLSVisitorTest.testVisitPortGroup.end status=0 guid=" + getLogGUID());
@@ -692,4 +693,61 @@ public class SLSVisitorTest {
         //Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitLinkGroup.end status=0 guid=" + getLogGUID());
     }
+
+    /**
+     * Testing with complete NSA
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testVisitESnet() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitESnet.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/es.net.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<NSAType> msg = (JAXBElement<NSAType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:es.net:2013:nsa";
+
+        // Act
+        NSA received = recordsCache.getNSA(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getNsaTypeMap().containsKey(urn));
+        NSAType nmlObj = slsVisitor.getNsaTypeMap().get(urn);
+        JAXBConfig.getMarshaller().marshal(new org.ogf.schemas.nsi._2013._09.topology.ObjectFactory().createNSA(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+
+        logger.debug("event=SLSVisitorTest.testVisitESnet.end status=0 guid=" + getLogGUID());
+    }
+
 }
