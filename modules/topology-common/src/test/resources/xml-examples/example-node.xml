@@ -32,5 +32,7 @@
             </nml:Relation>
         </nml:PortGroup>
     </nml:Relation>
-
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasService">
+        <nml:SwitchingService id="urn:ogf:network:example.com:2013:nodeTestA:nsatest:service"/>
+    </nml:Relation>
 </nml:Node>

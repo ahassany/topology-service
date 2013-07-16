@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+         xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
+    <body>
+        <nml:SwitchingService id="urn:ogf:network:example.net:2013:switchingServiceA"
+                              version="2013-05-30T09:30:10Z"
+                              encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
+                              labelSwapping="true">
+            <nml:name>SwitchingServiceA</nml:name>
+
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+                <nml:Port id="urn:ogf:network:example.net:2013:port_X:switchingServiceA:in"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:port_Y:switchingServiceA:in"/>
+            </nml:Relation>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+                <nml:Port id="urn:ogf:network:example.net:2013:port_X:switchingServiceA:out"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:port_Y:switchingServiceA:out"/>
+            </nml:Relation>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesLink">
+                <nml:Link id="urn:ogf:network:example.net:2013:switchingServiceA:linkA"/>
+            </nml:Relation>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                <nml:SwitchingService id="urn:ogf:network:example.net:2013:switchingServiceA:switchingServiceB" />
+            </nml:Relation>
+        </nml:SwitchingService>
+    </body>
+</message>

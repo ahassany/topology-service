@@ -28,6 +28,9 @@ public class ReservedKeys {
     // Link Keys
     public static final String RECORD_LINK_NORETURN_TRAFFIC = "link-noreturntraffic";
 
+    // Services
+    public static final String RECORD_SERVICE_LABEL_SWAPPING = "service-label-swapping";
+
     // Location Keys
     public static final String RECORD_LOCATION_ID = "location-id";
     public static final String RECORD_LOCATION_NAME = "location-name";
@@ -57,6 +60,8 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_PEERS_WITH = "relation-peers-with";
     public static final String RECORD_RELATION_MANAGED_BY = "relation-managed-by";
     public static final String RECORD_RELATION_PROVIDED_BY = "relation-provided-by";
+    public static final String RECORD_RELATION_PROVIDES_LINK = "relation-provides-link";
+    public static final String RECORD_RELATION_PROVIDES_LINK_GROUP = "relation-provides-link-group";
 
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";

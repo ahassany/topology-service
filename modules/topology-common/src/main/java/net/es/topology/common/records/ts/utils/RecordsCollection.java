@@ -3,9 +3,7 @@ package net.es.topology.common.records.ts.utils;
 import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
-import net.es.lookup.records.Record;
 import net.es.topology.common.records.ts.*;
-import net.es.topology.common.records.ts.keys.ReservedKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +31,7 @@ public class RecordsCollection {
     private Map<String, LinkGroup> linkGroups = null;
     private Map<String, NSA> NSAs = null;
     private Map<String, NSIService> NSIServices = null;
+    private Map<String, SwitchingService> switchingServices = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -41,17 +40,7 @@ public class RecordsCollection {
     private String logUUID;
 
     public RecordsCollection() {
-        this.logUUID = UUID.randomUUID().toString();
-        this.setNodes(new HashMap<String, Node>());
-        this.setPorts(new HashMap<String, Port>());
-        this.setLinks(new HashMap<String, Link>());
-        this.setTopologies(new HashMap<String, Topology>());
-        this.setBidirectionalPorts(new HashMap<String, BidirectionalPort>());
-        this.setBidirectionalLinks(new HashMap<String, BidirectionalLink>());
-        this.setPortGroups(new HashMap<String, PortGroup>());
-        this.setLinkGroups(new HashMap<String, LinkGroup>());
-        this.setNSAs(new HashMap<String, NSA>());
-        this.setNSIServices(new HashMap<String, NSIService>());
+        this(UUID.randomUUID().toString());
     }
 
     public RecordsCollection(String logUUID) {
@@ -66,6 +55,15 @@ public class RecordsCollection {
         this.setLinkGroups(new HashMap<String, LinkGroup>());
         this.setNSAs(new HashMap<String, NSA>());
         this.setNSIServices(new HashMap<String, NSIService>());
+        this.setSwitchingServices(new HashMap<String, SwitchingService>());
+    }
+
+    public Map<String, SwitchingService> getSwitchingServices() {
+        return switchingServices;
+    }
+
+    public void setSwitchingServices(Map<String, SwitchingService> switchingServices) {
+        this.switchingServices = switchingServices;
     }
 
     public Map<String, Node> getNodes() {
@@ -439,6 +437,36 @@ public class RecordsCollection {
         return nsiService;
     }
 
+    /**
+     * Create/or return a SwitchingService instance
+     * If the a SwitchingService  with the same id already exists this method will return a reference to it
+     * If there is not SwitchingService with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return NSI Service instance
+     */
+    public SwitchingService switchingServiceInstance(String id) {
+        logger.trace("event=RecordsCollection.switchingServiceInstance.start id=" + id + " guid=" + this.logUUID);
+        SwitchingService switchingService = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.switchingServiceInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getNSIServices().containsKey(id)) {
+            switchingService = getSwitchingServices().get(id);
+        } else {
+            switchingService = new SwitchingService();
+            switchingService.setId(id);
+            getSwitchingServices().put(id, switchingService);
+            logger.trace("event=RecordsCollection.switchingServiceInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.switchingServiceInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return switchingService;
+    }
+
+
     public void sendTosLS(SLSRegistrationClientDispatcher clientDispatcher, URNMask urnMask) throws LSClientException, ParserException {
         logger.info("event=RecordsCollection.sendTosLS.start guid=" + this.logUUID);
         // Will be handy to do the rollbacks
@@ -476,6 +504,11 @@ public class RecordsCollection {
         for (NetworkObject record : getNSIServices().values()) {
             records.add(record);
         }
+        for (NetworkObject record : getSwitchingServices().values()) {
+            records.add(record);
+        }
+
+        // TODO (AH): deal with other types of services
 
         for (NetworkObject record : records) {
             if (urnMask.sendToSLS(record.getId()) == false) {

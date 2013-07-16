@@ -489,6 +489,49 @@ public class NMLVisitorTest {
     }
 
     @Test
+    public void testVisitSwitchingServiceType() throws JAXBException {
+        // Prepare
+        // Prepare logger
+        logger.debug("event=NMLVisitorTest.testVisitSwitchingServiceType.start guid=" + getLogGUID());
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-switching-service.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        msg.getBody().accept(tv);
+
+        // Assert
+        String urn = "urn:ogf:network:example.net:2013:switchingServiceA";
+        Assert.assertEquals(2, collection.getSwitchingServices().size());
+        Assert.assertTrue(collection.getSwitchingServices().containsKey(urn));
+        SwitchingService slsSwitchingService = collection.getSwitchingServices().get(urn);
+
+        Assert.assertEquals(urn, slsSwitchingService.getId());
+        Assert.assertEquals("SwitchingServiceA", slsSwitchingService.getName());
+        Assert.assertEquals(this.version, slsSwitchingService.getVersion());
+        Assert.assertEquals(true, slsSwitchingService.getLabelSwaping());
+        Assert.assertEquals(VLAN_URI, slsSwitchingService.getEncoding());
+
+        Assert.assertEquals(2, slsSwitchingService.getHasInboundPort().size());
+        Assert.assertEquals(2, slsSwitchingService.getHasOutboundPort().size());
+        Assert.assertEquals(1, slsSwitchingService.getProvidesLink().size());
+        Assert.assertEquals(1, slsSwitchingService.getIsAlias().size());
+
+        logger.debug("event=NMLVisitorTest.testVisitSwitchingServiceType.end status=0 guid=" + getLogGUID());
+    }
+
+    @Test
     public void testVisitNSAType() throws JAXBException {
         // Prepare
         // Prepare logger

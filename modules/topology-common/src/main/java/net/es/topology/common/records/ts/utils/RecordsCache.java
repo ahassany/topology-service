@@ -256,7 +256,20 @@ public class RecordsCache {
         return getNetworkObject(urn, false);
     }
 
-    // TODO (AH) add support for the different services defined in NML
+    public SwitchingService getSwitchingService(String urn) throws LSClientException, ParserException {
+        return getSwitchingService(urn, false);
+    }
+
+    public SwitchingService getSwitchingService(String urn, boolean getFreshCopy) throws LSClientException, ParserException {
+        Record record = getRecord(urn, getFreshCopy);
+        if (record instanceof SwitchingService) {
+            return (SwitchingService) record;
+        } else {
+            return null;
+        }
+    }
+
+    // TODO (AH) add support for the different services (adaptation and deadaptation) defined in NML
 
 
 }

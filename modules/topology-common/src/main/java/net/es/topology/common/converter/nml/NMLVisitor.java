@@ -35,6 +35,7 @@ public class NMLVisitor extends BaseVisitor {
     public static final String RELATION_PEERS_WITH = "http://schemas.ogf.org/nsi/2013/09/topology#peersWith";
     public static final String RELATION_MANAGED_BY = "http://schemas.ogf.org/nsi/2013/09/topology#managedBy";
     public static final String RELATION_PROVIDED_BY = "http://schemas.ogf.org/nsi/2013/09/topology#providedBy";
+    public static final String RELATION_PROVIDES_LINK = "http://schemas.ogf.org/nml/2013/05/base#providesLink";
     // JAXB Bindings
     public final static String jaxb_bindings = "org.ogf.schemas.nsi._2013._09.topology:org.ogf.schemas.nsi._2013._09.messaging:org.ogf.schemas.nml._2013._05.base";
     /**
@@ -630,7 +631,7 @@ public class NMLVisitor extends BaseVisitor {
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
                 if (sLSTopo.getIsAlias() == null) {
-                    sLSTopo.setHasService(new ArrayList<String>());
+                    sLSTopo.setIsAlias(new ArrayList<String>());
                 }
                 for (TopologyType topologies : relation.getTopology()) {
                     sLSTopo.getIsAlias().add(topologies.getId());
@@ -704,5 +705,79 @@ public class NMLVisitor extends BaseVisitor {
 
         // TODO (AH): deal with services.
         logger.trace("event=NMLVisitor.visit.TopologyType.end status=0 guid=" + this.logUUID);
+    }
+
+    /**
+     * Visit NML SwitchingService to generate sLS switching service record
+     *
+     * @param switchingServiceType
+     */
+    @Override
+    public void visit(SwitchingServiceType switchingServiceType) {
+        logger.trace("event=NMLVisitor.visit.SwitchingServiceType.start id=" + switchingServiceType.getId() + " guid=" + this.logUUID);
+        SwitchingService slsService = getRecordsCollection().switchingServiceInstance(switchingServiceType.getId());
+
+        this.setNetworkObject(switchingServiceType, slsService);
+
+        if (switchingServiceType.getEncoding() != null)
+            slsService.setEncoding(switchingServiceType.getEncoding());
+
+        if (switchingServiceType.isLabelSwapping() != null)
+            slsService.setLabelSwaping(switchingServiceType.isLabelSwapping());
+
+        // Parse relations
+        for (SwitchingServiceRelationType relation : switchingServiceType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
+                if (relation.getPort().size() > 0 && slsService.getHasInboundPort() == null) {
+                    slsService.setHasInboundPort(new ArrayList<String>());
+                }
+                for (PortType port : relation.getPort()) {
+                    slsService.getHasInboundPort().add(port.getId());
+                }
+                if (relation.getPortGroup().size() > 0 && slsService.getHasInboundPortGroup() == null) {
+                    slsService.setHasInboundPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    slsService.getHasInboundPortGroup().add(port.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_OUTBOUND_PORT)) {
+                if (relation.getPort().size() > 0 && slsService.getHasOutboundPort() == null) {
+                    slsService.setHasOutboundPort(new ArrayList<String>());
+                }
+                for (PortType port : relation.getPort()) {
+                    slsService.getHasOutboundPort().add(port.getId());
+                }
+
+                if (relation.getPortGroup().size() > 0 && slsService.getHasOutboundPortGroup() == null) {
+                    slsService.setHasOutboundPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    slsService.getHasOutboundPortGroup().add(port.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
+                if (slsService.getIsAlias() == null) {
+                    slsService.setIsAlias(new ArrayList<String>());
+                }
+                for (SwitchingServiceType services : relation.getSwitchingService()) {
+                    slsService.getIsAlias().add(services.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_PROVIDES_LINK)) {
+                if (relation.getLink().size() > 0 && slsService.getProvidesLink() == null) {
+                    slsService.setProvidesLink(new ArrayList<String>());
+                }
+                for (LinkType link : relation.getLink()) {
+                    slsService.getProvidesLink().add(link.getId());
+                }
+
+                if (relation.getLinkGroup().size() > 0 && slsService.getProvidesLinkGroup() == null) {
+                    slsService.setProvidesLinkGroup(new ArrayList<String>());
+                }
+                for (LinkGroupType link : relation.getLinkGroup()) {
+                    slsService.getProvidesLinkGroup().add(link.getId());
+                }
+            }
+        }
+
+        logger.trace("event=NMLVisitor.visit.SwitchingServiceType.end status=0 guid=" + this.logUUID);
     }
 }

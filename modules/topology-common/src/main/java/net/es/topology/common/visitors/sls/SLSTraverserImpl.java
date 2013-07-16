@@ -251,7 +251,15 @@ public class SLSTraverserImpl implements Traverser {
                 }
             }
 
-            // TODO (AH): deal with services
+            if (record.getHasService() != null) {
+                for (String urn : record.getHasService()) {
+                    SwitchingService sLSRecord = getCache().getSwitchingService(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
 
             if (record.getIsAlias() != null) {
                 for (String urn : record.getIsAlias()) {
@@ -268,6 +276,85 @@ public class SLSTraverserImpl implements Traverser {
             getLogger().warn("event=SLSTraverserImpl.traverse.Node.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
         }
         getLogger().trace("event=SLSTraverserImpl.traverse.Node.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
+    }
+
+    @Override
+    public void traverse(SwitchingService record, Visitor visitor) {
+        getLogger().trace("event=SLSTraverserImpl.traverse.SwitchingService.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        try {
+
+            if (record.getHasInboundPort() != null) {
+                for (String urn : record.getHasInboundPort()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+            if (record.getHasOutboundPort() != null) {
+                for (String urn : record.getHasOutboundPort()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getHasInboundPortGroup() != null) {
+                for (String urn : record.getHasInboundPortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getHasOutboundPortGroup() != null) {
+                for (String urn : record.getHasOutboundPortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getProvidesLink() != null) {
+                for (String urn : record.getProvidesLink()) {
+                    Link sLSRecord = getCache().getLink(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getProvidesLinkGroup() != null) {
+                for (String urn : record.getProvidesLinkGroup()) {
+                    LinkGroup sLSRecord = getCache().getLinkGroup(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getIsAlias() != null) {
+                for (String urn : record.getIsAlias()) {
+                    Node sLSRecord = getCache().getNode(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+        } catch (LSClientException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.SwitchingService.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        } catch (ParserException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.SwitchingService.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        }
+        getLogger().trace("event=SLSTraverserImpl.traverse.SwitchingService.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
     }
 
     @Override

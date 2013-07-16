@@ -18,5 +18,6 @@ public interface Visitor {
     public void visit(Port record);
     public void visit(PortGroup record);
     public void visit(Topology record);
+    public void visit(SwitchingService record);
 
 }

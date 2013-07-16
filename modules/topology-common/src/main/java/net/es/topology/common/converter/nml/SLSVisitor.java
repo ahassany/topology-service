@@ -31,6 +31,7 @@ public class SLSVisitor implements Visitor {
     private Map<String, NodeType> nodeTypeMap = new HashMap<String, NodeType>();
     private Map<String, BidirectionalLinkType> bidirectionalLinkTypeMap = new HashMap<String, BidirectionalLinkType>();
     private Map<String, BidirectionalPortType> bidirectionalPortTypeMap = new HashMap<String, BidirectionalPortType>();
+    private Map<String, SwitchingServiceType> switchingServiceTypeMap = new HashMap<String, SwitchingServiceType>();
     /**
      * to make sure each object serialized once.
      */
@@ -59,6 +60,8 @@ public class SLSVisitor implements Visitor {
             return getLinkGroupTypeMap().get(urn);
         } else if (getNodeTypeMap().containsKey(urn)) {
             return getNodeTypeMap().get(urn);
+        } else if (getSwitchingServiceTypeMap().containsKey(urn)) {
+            return getSwitchingServiceTypeMap().get(urn);
         } else {
             return null;
         }
@@ -102,6 +105,10 @@ public class SLSVisitor implements Visitor {
 
     public Map<String, BidirectionalPortType> getBidirectionalPortTypeMap() {
         return bidirectionalPortTypeMap;
+    }
+
+    public Map<String, SwitchingServiceType> getSwitchingServiceTypeMap() {
+        return switchingServiceTypeMap;
     }
 
     /**
@@ -209,6 +216,138 @@ public class SLSVisitor implements Visitor {
     @Override
     public void visit(NetworkObject record) {
 
+    }
+
+    public void visit(SwitchingService record) {
+        SwitchingServiceType obj = nmlFactory.createSwitchingServiceType();
+        setNetworkObejctValues(obj, record);
+
+        if (record.getEncoding() != null)
+            obj.setEncoding(record.getEncoding());
+        if (record.getLabelSwaping() != null) {
+            obj.setLabelSwapping(record.getLabelSwaping());
+        }
+
+        if (record.getHasInboundPort() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getHasInboundPort()) {
+                relation.setType(NMLVisitor.RELATION_HAS_INBOUND_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasOutboundPort() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getHasOutboundPort()) {
+                relation.setType(NMLVisitor.RELATION_HAS_OUTBOUND_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasInboundPortGroup() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getHasInboundPortGroup()) {
+                relation.setType(NMLVisitor.RELATION_HAS_INBOUND_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasOutboundPortGroup() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getHasOutboundPortGroup()) {
+                relation.setType(NMLVisitor.RELATION_HAS_OUTBOUND_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getProvidesLink() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getProvidesLink()) {
+                relation.setType(NMLVisitor.RELATION_PROVIDES_LINK);
+                LinkType objR = null;
+                if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createLinkType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLink().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getProvidesLinkGroup() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getProvidesLinkGroup()) {
+                relation.setType(NMLVisitor.RELATION_PROVIDES_LINK);
+                LinkGroupType objR = null;
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createLinkGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getLinkGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getLinkGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        getSwitchingServiceTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            SwitchingServiceRelationType relation = nmlFactory.createSwitchingServiceRelationType();
+            for (String urn : record.getIsAlias()) {
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                SwitchingServiceType objR = null;
+                if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createSwitchingServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getSwitchingServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getSwitchingService().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
     }
 
     @Override
@@ -433,6 +572,17 @@ public class SLSVisitor implements Visitor {
         NodeType obj = nmlFactory.createNodeType();
         setNetworkObejctValues(obj, record);
 
+        if (record.getNodes() != null) {
+            for (String urn : record.getNodes()) {
+                if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    NodeType obj2 = nmlFactory.createNodeType();
+                    obj.getNode().add(obj2);
+                } else {
+                    obj.getNode().add(getNodeTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
 
         if (record.getHasOutboundPort() != null) {
             NodeRelationType relation = nmlFactory.createNodeRelationType();
@@ -468,20 +618,6 @@ public class SLSVisitor implements Visitor {
             obj.getRelation().add(relation);
         }
 
-        // TODO (AH): deal with services
-
-        if (record.getNodes() != null) {
-            for (String urn : record.getNodes()) {
-                if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
-                    NodeType obj2 = nmlFactory.createNodeType();
-                    obj.getNode().add(obj2);
-                } else {
-                    obj.getNode().add(getNodeTypeMap().get(urn));
-                    serializedURNS.add(urn);
-                }
-            }
-        }
-
         if (record.getHasOutboundPortGroup() != null) {
             NodeRelationType relation = nmlFactory.createNodeRelationType();
             for (String urn : record.getHasOutboundPortGroup()) {
@@ -512,6 +648,23 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasService() != null) {
+            NodeRelationType relation = nmlFactory.createNodeRelationType();
+            for (String urn : record.getHasService()) {
+                relation.setType(NMLVisitor.RELATION_HAS_SERVICE);
+                SwitchingServiceType objR = null;
+                if (getSwitchingServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createSwitchingServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getSwitchingServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getSwitchingService().add(objR);
             }
             obj.getRelation().add(relation);
         }
