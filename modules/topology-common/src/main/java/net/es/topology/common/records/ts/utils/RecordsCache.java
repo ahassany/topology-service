@@ -8,6 +8,8 @@ import net.es.topology.common.records.ts.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +78,13 @@ public class RecordsCache {
         }
         if (getFreshCopy == true || isCached == false) {
             SimpleLS client = getClientDispatcher().getClient(urn);
-            client.setRelativeUrl("lookup/records?ts-id=" + urn);
+            String encodedURN = urn;
+            try {
+                encodedURN = URLEncoder.encode(urn, "utf8");
+            } catch (UnsupportedEncodingException e) {
+            }
+
+            client.setRelativeUrl("lookup/records?ts-id=" + encodedURN);
             client.connect();
             client.send();
             String resp = client.getResponse();
