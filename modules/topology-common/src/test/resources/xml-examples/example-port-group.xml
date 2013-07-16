@@ -3,6 +3,9 @@
                id="urn:ogf:network:example.net:2013:portGroup"
                encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
                version="2013-05-30T09:30:10Z">
+    <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1780-1783</nml:LabelGroup>
+    <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1880-1883</nml:LabelGroup>
+
     <nml:Port id="urn:ogf:network:example.net:2013:portGroup:portA">
         <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
     </nml:Port>
