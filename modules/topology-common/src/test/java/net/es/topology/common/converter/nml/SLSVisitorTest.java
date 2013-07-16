@@ -429,7 +429,7 @@ public class SLSVisitorTest {
         tv.setProgressMonitor(monitorLogging);
         tv.setTraverseFirst(true);
 
-        String urn = "urn:ogf:network:example.net:2013:nodeA";
+        String urn = "urn:ogf:network:example.net:2013:nodeTestA";
 
         // Act
         Node received = recordsCache.getNode(urn);
@@ -439,7 +439,7 @@ public class SLSVisitorTest {
         // Assert
         Assert.assertTrue(slsVisitor.getNodeTypeMap().containsKey(urn));
         NodeType nmlObj = slsVisitor.getNodeTypeMap().get(urn);
-        //JAXBConfig.getMarshaller().marshal(new ObjectFactory().createNode(nmlObj), System.out);
+        // JAXBConfig.getMarshaller().marshal(new ObjectFactory().createNode(nmlObj), System.out);
         Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitNode.end status=0 guid=" + getLogGUID());
     }
