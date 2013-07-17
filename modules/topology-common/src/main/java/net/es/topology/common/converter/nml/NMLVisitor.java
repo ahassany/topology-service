@@ -19,8 +19,35 @@ import java.util.UUID;
 
 /**
  * Implements a Visitor pattern to travers NML objects and generate sLS records.
+ * <p/>
+ * <p/>
+ * Example use:
+ * <pre>
+ *     {@code
+ *     // This is helpful to track log traces
+ *       String logID UUID.randomUUID().toString()
+ *
+ *       // a container that contains the generated sLS records
+ *       RecordsCollection collection = new RecordsCollection(logID);
+ *
+ *       // Instance of the actual visitor
+ *       NMLVisitor visitor = new NMLVisitor(collection, logID);
+ *
+ *       // The traveser that actually traverses the NML objects and apply the visitor to each one
+ *       TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+ *
+ *
+ *       // let's say that we have a NML Topology java object called 'topo'.
+ *       //See net.es.topology.common.converter.nml.NMLVisitorTest to find more about how to load NML XML from a file
+ *       // Apply the visitor
+ *        topo.accept(tv);
+ *
+ *       // The generate topology will be stored in the collection object see collection.getTopologies()
+ *     }
+ * </pre>
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ * @see RecordsCollection
  */
 public class NMLVisitor extends BaseVisitor {
     // Relations
@@ -735,8 +762,6 @@ public class NMLVisitor extends BaseVisitor {
                 sLSTopo.getTopologies().add(object.getId());
             }
         }
-
-        // TODO (AH): deal with services.
         logger.trace("event=NMLVisitor.visit.TopologyType.end status=0 guid=" + this.logUUID);
     }
 

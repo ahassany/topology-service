@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 /**
+ * The purpose of this visitor is to decouple the traversing of sLS records from the actual visiting.
+ * The is just simply a depth first search traverser.
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class SLSTraversingVisitor implements Visitor {

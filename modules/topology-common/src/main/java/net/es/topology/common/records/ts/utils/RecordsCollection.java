@@ -15,6 +15,7 @@ import java.util.*;
  * TODO (AH): decouple the interface and the implementation of this collection.
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ * @see net.es.topology.common.converter.nml.NMLVisitor for example use
  */
 
 

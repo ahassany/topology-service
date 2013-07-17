@@ -3,6 +3,8 @@ package net.es.topology.common.visitors.sls;
 import net.es.topology.common.records.ts.*;
 
 /**
+ * SLS Records visitor interface
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public interface Visitor {

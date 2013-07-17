@@ -15,7 +15,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ogf.schemas.nml._2013._05.base.*;
-import org.ogf.schemas.nsi._2013._09.messaging.Message;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 import org.slf4j.Logger;
@@ -29,6 +28,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
+ * This test is more like an integration test. It does require contacting the sLS service to pass.
+ *
+ * TODO (AH): move this test to integration tests suit.
+ * TODO (AH): mock SimpleLS to make this test a unit test
+ * FIXME (AH): clean up mongodb after the test is done.
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class SLSVisitorTest {
@@ -102,37 +106,6 @@ public class SLSVisitorTest {
         Assert.assertTrue(visitor.getNsaTypeMap().containsKey(urn));
         NSAType topo = visitor.getNsaTypeMap().get(urn);
         // JAXBConfig.getMarshaller().marshal(new org.ogf.schemas.nsi._2013._09.topology.ObjectFactory().createNSA(topo), System.out);
-    }
-
-    /**
-     * Helper method to read NML/NSI XML then convert it and register it with sLS instance
-     *
-     * @param filename
-     * @throws Exception
-     */
-    protected void registerSLS(String filename) throws Exception {
-        logger.debug("event=SLSVisitorTest.registerSLS.start guid=" + getLogGUID());
-        // Read the example and send it to sLS
-        RecordsCollection collection = new RecordsCollection(getLogGUID());
-        NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
-        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
-
-        // Prepare for by reading the example message
-        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
-
-        StreamSource ss = new StreamSource(in);
-        Unmarshaller um = JAXBConfig.getUnMarshaller();
-        Message msg = (Message) um.unmarshal(ss);
-        msg.getBody().accept(nmlTraversingVisitor);
-
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-
-        logger.debug("event=SLSVisitorTest.registerSLS.end guid=" + getLogGUID());
-
     }
 
     @Test

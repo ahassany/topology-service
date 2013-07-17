@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 /**
+ * Traverse each NML/NSI record in the sLS to resolve URN references
+ * and get the actual record from the sLS service if possible.
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */
 public class SLSTraverserImpl implements Traverser {
@@ -22,6 +25,15 @@ public class SLSTraverserImpl implements Traverser {
      */
     private String logGUID;
 
+
+    /**
+     * Create instance of the traverser. The record cache will
+     * cache the records from the sLS, so if a URN is referenced twice
+     * it wont call sLS twice to get it.
+     *
+     * @param cache
+     * @param logGUID
+     */
     public SLSTraverserImpl(RecordsCache cache, String logGUID) {
         this.cache = cache;
         this.logGUID = logGUID;
@@ -49,7 +61,7 @@ public class SLSTraverserImpl implements Traverser {
 
     @Override
     public void traverse(NetworkObject record, Visitor visitor) {
-
+        // this is an abstract object, no need to travers it.
     }
 
     @Override

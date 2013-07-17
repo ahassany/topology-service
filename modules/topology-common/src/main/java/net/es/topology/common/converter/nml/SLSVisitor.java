@@ -16,7 +16,33 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
 /**
+ * Visits sLS records to generate NML objects.
+ * Example use:
+ * <pre>
+ *     {@code
+ *      SLSVisitor slsVisitor = new SLSVisitor();
+ *      // RecordsCache to cache the sLS records retrieved from the sLS service
+ *      // Client dispatcher to obtain the right sLS client for each URN
+ *      // URN mask to allow/disallow resolving entire object based on the URN.
+ *      RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new   URNMaskGetAllImpl(), getLogGUID());
+ *
+ *      SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+ *      tv.setTraverseFirst(true);
+ *
+ *      // Get a port from sLS
+ *      Port received = recordsCache.getPort(urn);
+ *      // Do the conversion
+ *      received.accept(tv);
+ *
+ *      // And this is the output NML object
+ *      PortType nmlObj = slsVisitor.getPortTypeMap().get(urn);
+ *     }
+ * </pre>
+ *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ * @see net.es.topology.common.records.ts.utils.RecordsCache
+ * @see net.es.topology.common.records.ts.utils.URNMask
+ * @see net.es.topology.common.records.ts.utils.SLSClientDispatcher
  */
 public class SLSVisitor implements Visitor {
     private org.ogf.schemas.nsi._2013._09.topology.ObjectFactory nsiFactory = new org.ogf.schemas.nsi._2013._09.topology.ObjectFactory();

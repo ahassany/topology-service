@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Helper class to parse and create sLS Topology records
+ * Helper class to parse and create sLS Topology records based on the record typ
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
  */

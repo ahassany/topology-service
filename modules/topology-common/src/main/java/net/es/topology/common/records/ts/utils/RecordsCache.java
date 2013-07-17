@@ -20,6 +20,7 @@ import java.util.UUID;
  * Also this class makes it easy not have to cast java types all the time!
  *
  * @author <a href="mailto:a.hassany@gmail.com">Ahmed El-Hassany</a>
+ * @see net.es.topology.common.converter.nml.SLSVisitor
  */
 public class RecordsCache {
     private final Logger logger = LoggerFactory.getLogger(RecordsCache.class);
