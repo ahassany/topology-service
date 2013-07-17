@@ -662,8 +662,8 @@ public class SLSVisitorTest {
         // Assert
         Assert.assertTrue(slsVisitor.getLinkGroupTypeMap().containsKey(urn));
         LinkGroupType nmlObj = slsVisitor.getLinkGroupTypeMap().get(urn);
-        JAXBConfig.getMarshaller().marshal(new ObjectFactory().createLinkGroup(nmlObj), System.out);
-        //Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        //JAXBConfig.getMarshaller().marshal(new ObjectFactory().createLinkGroup(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
         logger.debug("event=SLSVisitorTest.testVisitLinkGroup.end status=0 guid=" + getLogGUID());
     }
 

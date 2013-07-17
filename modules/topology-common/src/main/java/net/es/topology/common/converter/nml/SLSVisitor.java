@@ -365,7 +365,6 @@ public class SLSVisitor implements Visitor {
         }
     }
 
-
     @Override
     public void visit(AdaptationService record) {
         AdaptationServiceType obj = nmlFactory.createAdaptationServiceType();
@@ -464,7 +463,6 @@ public class SLSVisitor implements Visitor {
         }
     }
 
-
     @Override
     public void visit(DeadaptationService record) {
         DeadaptationServiceType obj = nmlFactory.createDeadaptationServiceType();
@@ -562,7 +560,6 @@ public class SLSVisitor implements Visitor {
             obj.getRelation().add(relation);
         }
     }
-
 
     @Override
     public void visit(BidirectionalLink record) {
@@ -723,6 +720,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getLinks()) {
                 if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
                     LinkType obj2 = nmlFactory.createLinkType();
+                    obj2.setId(urn);
                     obj.getLink().add(obj2);
                 } else {
                     obj.getLink().add(getLinkTypeMap().get(urn));
@@ -735,6 +733,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getLinkGroups()) {
                 if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
                     LinkGroupType obj2 = nmlFactory.createLinkGroupType();
+                    obj2.setId(urn);
                     obj.getLinkGroup().add(obj2);
                 } else {
                     obj.getLinkGroup().add(getLinkGroupTypeMap().get(urn));
@@ -790,6 +789,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getNodes()) {
                 if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
                     NodeType obj2 = nmlFactory.createNodeType();
+                    obj2.setId(urn);
                     obj.getNode().add(obj2);
                 } else {
                     obj.getNode().add(getNodeTypeMap().get(urn));
@@ -961,6 +961,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getTopologies()) {
                 if (getTopologyTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
                     TopologyType obj2 = nmlFactory.createTopologyType();
+                    obj2.setId(urn);
                     obj.getTopology().add(obj2);
                 } else {
                     obj.getTopology().add(getTopologyTypeMap().get(urn));
@@ -1099,6 +1100,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getPorts()) {
                 if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
                     PortType obj2 = nmlFactory.createPortType();
+                    obj2.setId(urn);
                     obj.getPort().add(obj2);
                 } else {
                     obj.getPort().add(getPortTypeMap().get(urn));
@@ -1111,6 +1113,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getPortGroups()) {
                 if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
                     PortGroupType obj2 = nmlFactory.createPortGroupType();
+                    obj2.setId(urn);
                     obj.getPortGroup().add(obj2);
                 } else {
                     obj.getPortGroup().add(getPortGroupTypeMap().get(urn));
@@ -1183,6 +1186,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getPorts()) {
                 if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
                     PortType obj2 = nmlFactory.createPortType();
+                    obj2.setId(urn);
                     obj.getPort().add(obj2);
                 } else {
                     obj.getPort().add(getPortTypeMap().get(urn));
@@ -1195,6 +1199,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getLinks()) {
                 if (getLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
                     LinkType obj2 = nmlFactory.createLinkType();
+                    obj2.setId(urn);
                     obj.getLink().add(obj2);
                 } else {
                     obj.getLink().add(getLinkTypeMap().get(urn));
