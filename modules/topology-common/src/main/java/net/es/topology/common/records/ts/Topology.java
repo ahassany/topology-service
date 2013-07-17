@@ -139,6 +139,60 @@ public class Topology extends NetworkObject implements Visitable {
     }
 
     /**
+     * List of the URNs SwitchingServices in the topology
+     *
+     * @return llist of SwitchingServices' URNs
+     */
+    public List<String> getSwitchingServices() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_SWITCHING_SERVICE);
+    }
+
+    /**
+     * List of the URNs SwitchingServices in the topology
+     *
+     * @param links list of SwitchingServices' URNs
+     */
+    public void setSwitchingServices(List<String> links) {
+        this.add(ReservedKeys.RECORD_TS_SWITCHING_SERVICE, links);
+    }
+
+    /**
+     * List of the URNs AdaptationServices in the topology
+     *
+     * @return llist of AdaptationServices' URNs
+     */
+    public List<String> getAdaptationServices() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_ADAPTATION_SERVICE);
+    }
+
+    /**
+     * List of the URNs AdaptationServices in the topology
+     *
+     * @param links list of AdaptationServices' URNs
+     */
+    public void setAdaptationServices(List<String> links) {
+        this.add(ReservedKeys.RECORD_TS_ADAPTATION_SERVICE, links);
+    }
+
+    /**
+     * List of the URNs DeadaptationServices in the topology
+     *
+     * @return llist of DeadaptationServices' URNs
+     */
+    public List<String> getDeadaptationServices() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_TS_DEADAPTATION_SERVICE);
+    }
+
+    /**
+     * List of the URNs DeadaptationServices in the topology
+     *
+     * @param links list of DeadaptationServices' URNs
+     */
+    public void setDeadaptationServices(List<String> links) {
+        this.add(ReservedKeys.RECORD_TS_DEADAPTATION_SERVICE, links);
+    }
+
+    /**
      * List of the URNs of topologies in the topology
      *
      * @return list of topologies' URNs
@@ -251,8 +305,8 @@ public class Topology extends NetworkObject implements Visitable {
      *
      * @return List of SwitchingServices URNs
      */
-    public List<String> getHasService() {
-        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_SERVICE);
+    public List<String> getHasSwitchingService() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_SWITCHING_SERVICE);
     }
 
     /**
@@ -260,8 +314,44 @@ public class Topology extends NetworkObject implements Visitable {
      *
      * @param services List of SwitchingServices URNs
      */
-    public void setHasService(List<String> services) {
-        this.add(ReservedKeys.RECORD_RELATION_HAS_SERVICE, services);
+    public void setHasSwitchingService(List<String> services) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_SWITCHING_SERVICE, services);
+    }
+
+    /**
+     * Topology related to AdaptationService, describing a switching ability of that Topology.
+     *
+     * @return List of AdaptationServices URNs
+     */
+    public List<String> getHasAdaptationService() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_ADAPTATION_SERVICE);
+    }
+
+    /**
+     * Node related to AdaptationServices, describing a switching ability of that Topology
+     *
+     * @param services List of AdaptationServices URNs
+     */
+    public void setHasAdaptationService(List<String> services) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_ADAPTATION_SERVICE, services);
+    }
+
+    /**
+     * Topology related to DeadaptationService, describing a switching ability of that Topology.
+     *
+     * @return List of DeadaptationService URNs
+     */
+    public List<String> getHasDeadaptationService() {
+        return (List<String>) this.getValue(ReservedKeys.RECORD_RELATION_HAS_DEADAPTATION_SERVICE);
+    }
+
+    /**
+     * Node related to DeadaptationService, describing a switching ability of that Topology
+     *
+     * @param services List of DeadaptationService URNs
+     */
+    public void setHasDeadaptationService(List<String> services) {
+        this.add(ReservedKeys.RECORD_RELATION_HAS_DEADAPTATION_SERVICE, services);
     }
 
     /**

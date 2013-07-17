@@ -595,6 +595,25 @@ public class NMLVisitor extends BaseVisitor {
 
         this.setNetworkObject(topologyType, sLSTopo);
 
+        for (NetworkObject service : topologyType.getService()) {
+            if (service instanceof SwitchingServiceType) {
+                if (sLSTopo.getSwitchingServices() == null) {
+                    sLSTopo.setSwitchingServices(new ArrayList<String>());
+                }
+                sLSTopo.getSwitchingServices().add(service.getId());
+            } else if (service instanceof AdaptationServiceType) {
+                if (sLSTopo.getAdaptationServices() == null) {
+                    sLSTopo.setAdaptationServices(new ArrayList<String>());
+                }
+                sLSTopo.getAdaptationServices().add(service.getId());
+            } else if (service instanceof DeadaptationServiceType) {
+                if (sLSTopo.getDeadaptationServices() == null) {
+                    sLSTopo.setDeadaptationServices(new ArrayList<String>());
+                }
+                sLSTopo.getDeadaptationServices().add(service.getId());
+            }
+        }
+
         // Parse relations
         for (TopologyRelationType relation : topologyType.getRelation()) {
             if (relation.getType().equalsIgnoreCase(RELATION_HAS_INBOUND_PORT)) {
@@ -625,11 +644,23 @@ public class NMLVisitor extends BaseVisitor {
                     sLSTopo.getHasOutboundPortGroup().add(port.getId());
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_HAS_SERVICE)) {
-                if (sLSTopo.getHasService() == null) {
-                    sLSTopo.setHasService(new ArrayList<String>());
-                }
                 for (NetworkObject service : relation.getService()) {
-                    sLSTopo.getHasService().add(service.getId());
+                    if (service instanceof SwitchingServiceType) {
+                        if (sLSTopo.getHasSwitchingService() == null) {
+                            sLSTopo.setHasSwitchingService(new ArrayList<String>());
+                        }
+                        sLSTopo.getHasSwitchingService().add(service.getId());
+                    } else if (service instanceof AdaptationServiceType) {
+                        if (sLSTopo.getHasAdaptationService() == null) {
+                            sLSTopo.setHasAdaptationService(new ArrayList<String>());
+                        }
+                        sLSTopo.getHasAdaptationService().add(service.getId());
+                    } else if (service instanceof DeadaptationServiceType) {
+                        if (sLSTopo.getHasDeadaptationService() == null) {
+                            sLSTopo.setHasDeadaptationService(new ArrayList<String>());
+                        }
+                        sLSTopo.getHasDeadaptationService().add(service.getId());
+                    }
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
                 if (sLSTopo.getIsAlias() == null) {

@@ -1,18 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nml:Topology xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
-              id="urn:ogf:network:example.net:2013:org"
-              version="20130529T121112Z">
-    <nml:Node id="urn:ogf:network:example.net:2013:nodeA">
+              id="urn:ogf:network:example.net:2013:orgTopo"
+              version="2013-05-30T09:30:10Z">
+    <nml:Link id="urn:ogf:network:example.net:2013:orgTopo:linkA:XY" noReturnTraffic="false"
+              encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
+              version="2013-05-30T09:30:10Z">
+        <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
+        <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSerialCompoundLink">
+            <nml:Link id="urn:ogf:network:example.net:orgTopo:2013:linkD"/>
+            <nml:Link id="urn:ogf:network:example.net:orgTopo:2013:linkE"/>
+            <nml:Link id="urn:ogf:network:example.net:orgTopo:2013:linkF"/>
+        </nml:Relation>
+        <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#next">
+            <nml:Link id="urn:ogf:network:example.net:orgTopo:2013:linkC"/>
+        </nml:Relation>
+        <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+            <nml:Link id="urn:ogf:network:example.net:orgTopo:2013:linkB"/>
+        </nml:Relation>
+    </nml:Link>
+
+    <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:portA"
+              version="2013-05-30T09:30:10Z">
+        <nml:Label labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1501</nml:Label>
+        <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isSink">
+            <nml:Link id="urn:ogf:network:example.net:2013:orgTopo:linkA"/>
+        </nml:Relation>
+    </nml:Port>
+
+    <nml:Node id="urn:ogf:network:example.net:2013::orgTopo:nodeA">
         <nml:name>Node_A</nml:name>
         <nml:Location id="urn:ogf:network:example.net:2013:redcity"/>
         <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
-            <nml:Port id="urn:ogf:network:example.net:2013:port_X:out"/>
-            <nml:Port id="urn:ogf:network:example.net:2013:port_Y:out"/>
+            <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_X:out"/>
+            <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_Y:out"/>
         </nml:Relation>
         <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
-            <nml:Port id="urn:ogf:network:example.net:2013:port_X:in"/>
-            <nml:Port id="urn:ogf:network:example.net:2013:port_Y:in"/>
+            <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_X:in"/>
+            <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_Y:in"/>
         </nml:Relation>
     </nml:Node>
 
+
+    <!-- TODO (AH): add services
+    <nml:SwitchingService id="urn:ogf:network:example.net:2013:orgTopo:SwitchingServiceA"/>
+    <nml:AdaptationService id="urn:ogf:network:example.net:2013:orgTopo:AdaptationServiceA"/>
+    <nml:DeadaptationService id="urn:ogf:network:example.net:2013:orgTopo:DeadaptationServiceA"/>
+
+    -->
+
+    <nml:Topology id="urn:ogf:network:example.net:2013:orgTopo:comTopo"/>
+    <nml:PortGroup
+            id="urn:ogf:network:example.net:2013:orgTopo:portGroup"
+            encoding="http://schemas.ogf.org/nml/2013/05/ethernet#vlan"
+            version="2013-05-30T09:30:10Z">
+        <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">1780-1783</nml:LabelGroup>
+    </nml:PortGroup>
+
+    <nml:LinkGroup id="urn:ogf:network:example.net:2013:orgTopo:linkGroup"/>
+    <nml:BidirectionalPort id="urn:ogf:network:example.net:2013:orgTopo:BidirectionalPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_K:in"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_L:in"/>
+    </nml:BidirectionalPort>
+
+    <nml:BidirectionalLink id="urn:ogf:network:example.net:2013:orgTopo:BidirectionalLink">
+        <nml:Link id="urn:ogf:network:example.net:2013:orgTopo:link_K:in"/>
+        <nml:Link id="urn:ogf:network:example.net:2013:orgTopo:link_L:in"/>
+    </nml:BidirectionalLink>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_G:in"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:orgTopo:portGroup_G:in"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:orgTopo:port_E:in"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:orgTopo:portGroup_E:in"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasService">
+        <nml:SwitchingService id="urn:ogf:network:example.net:2013:orgTopo:SwitchingServiceB"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasService">
+        <nml:AdaptationService id="urn:ogf:network:example.net:2013:orgTopo:AdaptationServiceB"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasService">
+        <nml:DeadaptationService id="urn:ogf:network:example.net:2013:orgTopo:DeadaptationServiceB"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+        <nml:Topology id="urn:ogf:network:example.net:2013:orgTopo:netTopo"/>
+    </nml:Relation>
 </nml:Topology>

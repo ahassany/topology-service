@@ -16,6 +16,9 @@ public class ReservedKeys {
     public static final String RECORD_TS_BIDIRECTIONAL_PORT = "ts-bidirectional-port";
     public static final String RECORD_TS_BIDIRECTIONAL_LINK = "ts-bidirectional-link";
     public static final String RECORD_TS_TOPOLOGY = "ts-topology";
+    public static final String RECORD_TS_SWITCHING_SERVICE = "ts-switching-service";
+    public static final String RECORD_TS_ADAPTATION_SERVICE = "ts-adaptation-service";
+    public static final String RECORD_TS_DEADAPTATION_SERVICE = "ts-deadaptation-service";
 
     // NetworkObject Keys
     public static final String RECORD_NETWORKOBJECT_NAME = "networkobject-name";
@@ -67,6 +70,9 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_CAN_PROVIDE_PORT_GROUP = "relation-can-provide-port-group";
     public static final String RECORD_RELATION_PROVIDES_PORT = "relation-provides-port";
     public static final String RECORD_RELATION_PROVIDES_PORT_GROUP = "relation-provides-port-group";
+    public static final String RECORD_RELATION_HAS_SWITCHING_SERVICE = "relation-has-switching-service";
+    public static final String RECORD_RELATION_HAS_ADAPTATION_SERVICE = "relation-has-adaptation-service";
+    public static final String RECORD_RELATION_HAS_DEADAPTATION_SERVICE = "relation-has-deadaptation-service";
 
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";

@@ -1181,19 +1181,6 @@ public class SLSVisitor implements Visitor {
     public void visit(Topology record) {
         TopologyType obj = nmlFactory.createTopologyType();
         setNetworkObejctValues(obj, record);
-        System.out.println("Visiting topology: " + record.getId());
-        if (record.getPorts() != null) {
-            for (String urn : record.getPorts()) {
-                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
-                    PortType obj2 = nmlFactory.createPortType();
-                    obj2.setId(urn);
-                    obj.getPort().add(obj2);
-                } else {
-                    obj.getPort().add(getPortTypeMap().get(urn));
-                    serializedURNS.add(urn);
-                }
-            }
-        }
 
         if (record.getLinks() != null) {
             for (String urn : record.getLinks()) {
@@ -1208,6 +1195,152 @@ public class SLSVisitor implements Visitor {
             }
         }
 
+        if (record.getPorts() != null) {
+            for (String urn : record.getPorts()) {
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    PortType obj2 = nmlFactory.createPortType();
+                    obj2.setId(urn);
+                    obj.getPort().add(obj2);
+                } else {
+                    obj.getPort().add(getPortTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getNodes() != null) {
+            for (String urn : record.getNodes()) {
+                if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    NodeType obj2 = nmlFactory.createNodeType();
+                    obj2.setId(urn);
+                    obj.getNode().add(obj2);
+                } else {
+                    obj.getNode().add(getNodeTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getSwitchingServices() != null) {
+            for (String urn : record.getSwitchingServices()) {
+                if (getSwitchingServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    SwitchingServiceType obj2 = nmlFactory.createSwitchingServiceType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getSwitchingServiceTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getAdaptationServices() != null) {
+            for (String urn : record.getAdaptationServices()) {
+                if (getAdaptationServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    AdaptationServiceType obj2 = nmlFactory.createAdaptationServiceType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getAdaptationServiceTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getDeadaptationServices() != null) {
+            for (String urn : record.getDeadaptationServices()) {
+                if (getDeadaptationServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    DeadaptationServiceType obj2 = nmlFactory.createDeadaptationServiceType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getDeadaptationServiceTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getTopologies() != null) {
+            for (String urn : record.getTopologies()) {
+                if (getTopologyTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    TopologyType obj2 = nmlFactory.createTopologyType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getTopologyTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getPortGroups() != null) {
+            for (String urn : record.getPortGroups()) {
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    PortGroupType obj2 = nmlFactory.createPortGroupType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getPortGroupTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getLinkGroups() != null) {
+            for (String urn : record.getLinkGroups()) {
+                if (getLinkGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    LinkGroupType obj2 = nmlFactory.createLinkGroupType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getLinkGroupTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+        if (record.getBidirectionalPorts() != null) {
+            for (String urn : record.getBidirectionalPorts()) {
+                if (getBidirectionalPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    BidirectionalPortType obj2 = nmlFactory.createBidirectionalPortType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getBidirectionalPortTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+        if (record.getBidirectionalLinks() != null) {
+            for (String urn : record.getBidirectionalLinks()) {
+                if (getBidirectionalLinkTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    BidirectionalLinkType obj2 = nmlFactory.createBidirectionalLinkType();
+                    obj2.setId(urn);
+                    obj.getGroup().add(obj2);
+                } else {
+                    obj.getGroup().add(getBidirectionalLinkTypeMap().get(urn));
+                    serializedURNS.add(urn);
+                }
+            }
+        }
+
+
+        if (record.getHasInboundPort() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+            for (String urn : record.getHasInboundPort()) {
+                relation.setType(NMLVisitor.RELATION_HAS_INBOUND_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
 
         if (record.getHasInboundPortGroup() != null) {
             TopologyRelationType relation = nmlFactory.createTopologyRelationType();
@@ -1222,6 +1355,23 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasOutboundPort() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+            for (String urn : record.getHasOutboundPort()) {
+                relation.setType(NMLVisitor.RELATION_HAS_OUTBOUND_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
             }
             obj.getRelation().add(relation);
         }
@@ -1243,20 +1393,74 @@ public class SLSVisitor implements Visitor {
             obj.getRelation().add(relation);
         }
 
+        if (record.getHasSwitchingService() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+            for (String urn : record.getHasSwitchingService()) {
+                relation.setType(NMLVisitor.RELATION_HAS_SERVICE);
+                SwitchingServiceType objR = null;
+                if (getSwitchingServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createSwitchingServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getSwitchingServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getService().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasAdaptationService() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+            for (String urn : record.getHasAdaptationService()) {
+                relation.setType(NMLVisitor.RELATION_HAS_SERVICE);
+                AdaptationServiceType objR = null;
+                if (getAdaptationServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createAdaptationServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getAdaptationServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getService().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getHasDeadaptationService() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
+            for (String urn : record.getHasDeadaptationService()) {
+                relation.setType(NMLVisitor.RELATION_HAS_SERVICE);
+                DeadaptationServiceType objR = null;
+                if (getDeadaptationServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createDeadaptationServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getDeadaptationServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getService().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
         getTopologyTypeMap().put(obj.getId(), obj);
 
         if (record.getIsAlias() != null) {
+            TopologyRelationType relation = nmlFactory.createTopologyRelationType();
             for (String urn : record.getIsAlias()) {
-                if (getTopologyTypeMap().containsKey(urn)) {
-                    org.ogf.schemas.nml._2013._05.base.ObjectFactory factory = new org.ogf.schemas.nml._2013._05.base.ObjectFactory();
-                    TopologyRelationType relation = factory.createTopologyRelationType();
-                    relation.setType(NMLVisitor.RELATION_IS_ALIAS);
-                    TopologyType topo = factory.createTopologyType();
-                    topo.setId(urn);
-                    relation.getTopology().add(topo);
-                    obj.getRelation().add(relation);
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                TopologyType objR = null;
+                if (getTopologyTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createTopologyType();
+                    objR.setId(urn);
+                } else {
+                    objR = getTopologyTypeMap().get(urn);
+                    serializedURNS.add(urn);
                 }
+                relation.getTopology().add(objR);
             }
+            obj.getRelation().add(relation);
         }
     }
 }

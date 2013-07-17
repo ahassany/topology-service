@@ -241,29 +241,50 @@ public class SLSVisitorTest {
         // Prepare
         logger.debug("event=SLSVisitorTest.testVisitTopology.start guid=" + getLogGUID());
         // Load data to sLS
-        registerSLS("xml-examples/example-message-topology.xml");
+        String filename = "xml-examples/example-topology.xml";
 
-        // Prepare the sLS client
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<TopologyType> msg = (JAXBElement<TopologyType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
         SimpleLS client = sLSConfig.getClient();
 
         // Prepare the visitor
-        SLSVisitor visitor = new SLSVisitor();
+        SLSVisitor slsVisitor = new SLSVisitor();
         RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
-        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
         tv.setTraverseFirst(true);
 
-        String urn = "urn:ogf:network:example.net:2013:org";
+        String urn = "urn:ogf:network:example.net:2013:orgTopo";
+
         // Act
         Topology received = recordsCache.getTopology(urn);
         Assert.assertNotNull(received);
         received.accept(tv);
 
         // Assert
-        Assert.assertTrue(visitor.getTopologyTypeMap().containsKey(urn));
-        TopologyType topo = visitor.getTopologyTypeMap().get(urn);
-        // JAXBConfig.getMarshaller().marshal(new ObjectFactory().createTopology(topo), System.out);
+        Assert.assertTrue(slsVisitor.getTopologyTypeMap().containsKey(urn));
+        TopologyType nmlObj = slsVisitor.getTopologyTypeMap().get(urn);
+        // JAXBConfig.getMarshaller().marshal(new ObjectFactory().createTopology(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+
+        logger.debug("event=SLSVisitorTest.testVisitTopology.end status=0 guid=" + getLogGUID());
     }
 
     @Test
