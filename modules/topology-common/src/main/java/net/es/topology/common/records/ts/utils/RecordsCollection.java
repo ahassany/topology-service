@@ -32,6 +32,7 @@ public class RecordsCollection {
     private Map<String, NSA> NSAs = null;
     private Map<String, NSIService> NSIServices = null;
     private Map<String, SwitchingService> switchingServices = null;
+    private Map<String, AdaptationService> adaptationServices = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -56,6 +57,7 @@ public class RecordsCollection {
         this.setNSAs(new HashMap<String, NSA>());
         this.setNSIServices(new HashMap<String, NSIService>());
         this.setSwitchingServices(new HashMap<String, SwitchingService>());
+        this.setAdaptationServices(new HashMap<String, AdaptationService>());
     }
 
     public Map<String, SwitchingService> getSwitchingServices() {
@@ -64,6 +66,14 @@ public class RecordsCollection {
 
     public void setSwitchingServices(Map<String, SwitchingService> switchingServices) {
         this.switchingServices = switchingServices;
+    }
+
+    public Map<String, AdaptationService> getAdaptationServices() {
+        return this.adaptationServices;
+    }
+
+    public void setAdaptationServices(Map<String, AdaptationService> services) {
+        this.adaptationServices = services;
     }
 
     public Map<String, Node> getNodes() {
@@ -454,7 +464,7 @@ public class RecordsCollection {
             id = UUID.randomUUID().toString();
             logger.trace("event=RecordsCollection.switchingServiceInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
         }
-        if (getNSIServices().containsKey(id)) {
+        if (getSwitchingServices().containsKey(id)) {
             switchingService = getSwitchingServices().get(id);
         } else {
             switchingService = new SwitchingService();
@@ -466,6 +476,34 @@ public class RecordsCollection {
         return switchingService;
     }
 
+    /**
+     * Create/or return a AdaptationService instance
+     * If the a SwitchingService  with the same id already exists this method will return a reference to it
+     * If there is not SwitchingService with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return NSI Service instance
+     */
+    public AdaptationService adaptationServiceInstance(String id) {
+        logger.trace("event=RecordsCollection.adaptationServiceInstance.start id=" + id + " guid=" + this.logUUID);
+        AdaptationService adaptationService = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.adaptationServiceInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getAdaptationServices().containsKey(id)) {
+            adaptationService = getAdaptationServices().get(id);
+        } else {
+            adaptationService = new AdaptationService();
+            adaptationService.setId(id);
+            getAdaptationServices().put(id, adaptationService);
+            logger.trace("event=RecordsCollection.adaptationServiceInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.adaptationServiceInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return adaptationService;
+    }
 
     public void sendTosLS(SLSRegistrationClientDispatcher clientDispatcher, URNMask urnMask) throws LSClientException, ParserException {
         logger.info("event=RecordsCollection.sendTosLS.start guid=" + this.logUUID);
@@ -505,6 +543,9 @@ public class RecordsCollection {
             records.add(record);
         }
         for (NetworkObject record : getSwitchingServices().values()) {
+            records.add(record);
+        }
+        for (NetworkObject record : getAdaptationServices().values()) {
             records.add(record);
         }
 

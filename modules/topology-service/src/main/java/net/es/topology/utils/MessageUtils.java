@@ -48,6 +48,10 @@ public class MessageUtils {
             body.getNode().add((NodeType) networkObject);
         } else if (networkObject instanceof SwitchingServiceType) {
             body.getSwitchingService().add((SwitchingServiceType) networkObject);
+        } else if (networkObject instanceof AdaptationServiceType) {
+            body.getAdaptationService().add((AdaptationServiceType) networkObject);
+        } else if (networkObject instanceof DeadaptationServiceType) {
+            body.getDeadaptationService().add((DeadaptationServiceType) networkObject);
         } else if (networkObject instanceof PortType) {
             body.getPort().add((PortType) networkObject);
         } else if (networkObject instanceof LinkType) {

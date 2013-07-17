@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<nml:AdaptationService xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+                       id="urn:ogf:network:example.net:2013:adaptationServiceB"
+                       version="2013-05-30T09:30:10Z"
+                       adaptationFunction="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">
+    <nml:name>adaptationServiceB</nml:name>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#canProvidePort">
+        <nml:Port id="urn:ogf:network:example.net:2013:port_X:adaptationServiceB:in"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:port_Y:adaptationServiceB:in"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#canProvidePort">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_X:adaptationServiceB:in"/>
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_Y:adaptationServiceB:in"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:port_X:adaptationServiceB:out"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:port_Y:adaptationServiceB:out"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesPort">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_X:adaptationServiceB:out"/>
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_Y:adaptationServiceB:out"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+        <nml:AdaptationService id="urn:ogf:network:example.net:2013:adaptationServiceB:adaptationServiceB"/>
+    </nml:Relation>
+</nml:AdaptationService>

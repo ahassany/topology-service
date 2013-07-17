@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+         xmlns="http://schemas.ogf.org/nsi/2013/09/messaging#">
+    <body>
+        <nml:AdaptationService id="urn:ogf:network:example.net:2013:adaptationServiceA"
+                              version="2013-05-30T09:30:10Z"
+                              adaptationFunction="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">
+            <nml:name>AdaptationServiceA</nml:name>
+
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#canProvidePort">
+                <nml:Port id="urn:ogf:network:example.net:2013:port_X:adaptationServiceA:in"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:port_Y:adaptationServiceA:in"/>
+            </nml:Relation>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#canProvidePort">
+                <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_X:adaptationServiceA:in"/>
+                <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_Y:adaptationServiceA:in"/>
+            </nml:Relation>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesPort">
+                <nml:Port id="urn:ogf:network:example.net:2013:port_X:adaptationServiceA:out"/>
+                <nml:Port id="urn:ogf:network:example.net:2013:port_Y:adaptationServiceA:out"/>
+            </nml:Relation>
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesPort">
+                <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_X:adaptationServiceA:out"/>
+                <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_Y:adaptationServiceA:out"/>
+            </nml:Relation>
+
+            <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                <nml:AdaptationService id="urn:ogf:network:example.net:2013:adaptationServiceA:adaptationServiceB" />
+            </nml:Relation>
+        </nml:AdaptationService>
+    </body>
+</message>

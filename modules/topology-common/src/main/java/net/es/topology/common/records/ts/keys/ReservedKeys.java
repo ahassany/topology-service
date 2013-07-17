@@ -30,6 +30,7 @@ public class ReservedKeys {
 
     // Services
     public static final String RECORD_SERVICE_LABEL_SWAPPING = "service-label-swapping";
+    public static final String RECORD_ADAPTATION_SERVICE_FUNCTION = "service-adaptation-function";
 
     // Location Keys
     public static final String RECORD_LOCATION_ID = "location-id";
@@ -62,6 +63,10 @@ public class ReservedKeys {
     public static final String RECORD_RELATION_PROVIDED_BY = "relation-provided-by";
     public static final String RECORD_RELATION_PROVIDES_LINK = "relation-provides-link";
     public static final String RECORD_RELATION_PROVIDES_LINK_GROUP = "relation-provides-link-group";
+    public static final String RECORD_RELATION_CAN_PROVIDE_PORT = "relation-can-provide-port";
+    public static final String RECORD_RELATION_CAN_PROVIDE_PORT_GROUP = "relation-can-provide-port-group";
+    public static final String RECORD_RELATION_PROVIDES_PORT = "relation-provides-port";
+    public static final String RECORD_RELATION_PROVIDES_PORT_GROUP = "relation-provides-port-group";
 
     // Label Keys
     public static final String RECORD_LABEL = "ts-label";

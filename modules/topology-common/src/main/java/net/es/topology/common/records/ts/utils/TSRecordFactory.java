@@ -61,6 +61,8 @@ public class TSRecordFactory {
             record = new Topology();
         } else if (recordType.equals(ReservedValues.RECORD_TYPE_SWITCHING_SERVICE)) {
             record = new SwitchingService();
+        } else if (recordType.equals(ReservedValues.RECORD_TYPE_ADAPTATION_SERVICE)) {
+            record = new AdaptationService();
         } else {
             // not TS record go to the parent to figure it out
             logger.trace("event=TSRecordFactory.getRecord.calling_recordFactory.start recordType=" + recordType + " guid=" + logGUID);

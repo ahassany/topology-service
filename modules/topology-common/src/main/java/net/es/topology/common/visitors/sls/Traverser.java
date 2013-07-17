@@ -33,4 +33,6 @@ public interface Traverser {
 
     public void traverse(SwitchingService record, Visitor visitor);
 
+    public void traverse(AdaptationService record, Visitor visitor);
+
 }

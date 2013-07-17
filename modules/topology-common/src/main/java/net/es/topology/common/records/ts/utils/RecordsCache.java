@@ -96,7 +96,10 @@ public class RecordsCache {
         } else if (isCached == true) {
             record = recordMap.get(urn);
         }
-        getLogger().info("event=RecordsCache.getRecord.end getFreshCopy=" + getFreshCopy + " urn=" + urn + " guid=" + getLogGUID());
+        String status = "0";
+        if (record == null)
+            status = "1";
+        getLogger().info("event=RecordsCache.getRecord.end status=" + status + " getFreshCopy=" + getFreshCopy + " urn=" + urn + " guid=" + getLogGUID());
         return record;
     }
 
@@ -267,6 +270,19 @@ public class RecordsCache {
         } else {
             return null;
         }
+    }
+
+    public AdaptationService getAdaptationService(String urn, boolean getFreshCopy) throws LSClientException, ParserException {
+        Record record = getRecord(urn, getFreshCopy);
+        if (record instanceof AdaptationService) {
+            return (AdaptationService) record;
+        } else {
+            return null;
+        }
+    }
+
+    public AdaptationService getAdaptationService(String urn) throws LSClientException, ParserException {
+        return getAdaptationService(urn, false);
     }
 
     // TODO (AH) add support for the different services (adaptation and deadaptation) defined in NML

@@ -335,4 +335,26 @@ public class SLSTraversingVisitor implements Visitor {
         }
         logger.trace("event=SLSTraversingVisitor.visit.SwitchingService.end status=0 recordURI=" + record.getURI() + " guid=" + getLogGUID());
     }
+
+    @Override
+    public void visit(AdaptationService record) {
+        logger.trace("event=SLSTraversingVisitor.visit.AdaptationService.start recordURI=" + record.getURI() + " guid=" + getLogGUID());
+        if (traverseFirst == true) {
+            getTraverser().traverse(record, this);
+            if (progressMonitor != null) {
+                progressMonitor.traversed(record);
+            }
+        }
+        record.accept(getVisitor());
+        if (progressMonitor != null) {
+            progressMonitor.visited(record);
+        }
+        if (traverseFirst == false) {
+            getTraverser().traverse(record, this);
+            if (progressMonitor != null) {
+                progressMonitor.traversed(record);
+            }
+        }
+        logger.trace("event=SLSTraversingVisitor.visit.AdaptationService.end status=0 recordURI=" + record.getURI() + " guid=" + getLogGUID());
+    }
 }

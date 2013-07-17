@@ -32,6 +32,7 @@ public class SLSVisitor implements Visitor {
     private Map<String, BidirectionalLinkType> bidirectionalLinkTypeMap = new HashMap<String, BidirectionalLinkType>();
     private Map<String, BidirectionalPortType> bidirectionalPortTypeMap = new HashMap<String, BidirectionalPortType>();
     private Map<String, SwitchingServiceType> switchingServiceTypeMap = new HashMap<String, SwitchingServiceType>();
+    private Map<String, AdaptationServiceType> adaptationServiceTypeMap = new HashMap<String, AdaptationServiceType>();
     /**
      * to make sure each object serialized once.
      */
@@ -62,6 +63,8 @@ public class SLSVisitor implements Visitor {
             return getNodeTypeMap().get(urn);
         } else if (getSwitchingServiceTypeMap().containsKey(urn)) {
             return getSwitchingServiceTypeMap().get(urn);
+        } else if (getAdaptationServiceTypeMap().containsKey(urn)) {
+            return getAdaptationServiceTypeMap().get(urn);
         } else {
             return null;
         }
@@ -109,6 +112,10 @@ public class SLSVisitor implements Visitor {
 
     public Map<String, SwitchingServiceType> getSwitchingServiceTypeMap() {
         return switchingServiceTypeMap;
+    }
+
+    public Map<String, AdaptationServiceType> getAdaptationServiceTypeMap() {
+        return adaptationServiceTypeMap;
     }
 
     /**
@@ -218,6 +225,7 @@ public class SLSVisitor implements Visitor {
 
     }
 
+    @Override
     public void visit(SwitchingService record) {
         SwitchingServiceType obj = nmlFactory.createSwitchingServiceType();
         setNetworkObejctValues(obj, record);
@@ -337,7 +345,7 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getIsAlias()) {
                 relation.setType(NMLVisitor.RELATION_IS_ALIAS);
                 SwitchingServiceType objR = null;
-                if (getNodeTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                if (getSwitchingServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
                     objR = nmlFactory.createSwitchingServiceType();
                     objR.setId(urn);
                 } else {
@@ -345,6 +353,105 @@ public class SLSVisitor implements Visitor {
                     serializedURNS.add(urn);
                 }
                 relation.getSwitchingService().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+    }
+
+
+    @Override
+    public void visit(AdaptationService record) {
+        AdaptationServiceType obj = nmlFactory.createAdaptationServiceType();
+        setNetworkObejctValues(obj, record);
+
+        if (record.getAdaptationFunction() != null) {
+            obj.setAdaptationFunction(record.getAdaptationFunction());
+        }
+
+        if (record.getCanProvidePort() != null) {
+            AdaptationServiceRelationType relation = nmlFactory.createAdaptationServiceRelationType();
+            for (String urn : record.getCanProvidePort()) {
+                relation.setType(NMLVisitor.RELATION_CAN_PROVIDE_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getCanProvidePortGroup() != null) {
+            AdaptationServiceRelationType relation = nmlFactory.createAdaptationServiceRelationType();
+            for (String urn : record.getCanProvidePortGroup()) {
+                relation.setType(NMLVisitor.RELATION_CAN_PROVIDE_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+
+        if (record.getProvidesPort() != null) {
+            AdaptationServiceRelationType relation = nmlFactory.createAdaptationServiceRelationType();
+            for (String urn : record.getProvidesPort()) {
+                relation.setType(NMLVisitor.RELATION_PROVIDES_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getProvidesPortGroup() != null) {
+            AdaptationServiceRelationType relation = nmlFactory.createAdaptationServiceRelationType();
+            for (String urn : record.getProvidesPortGroup()) {
+                relation.setType(NMLVisitor.RELATION_PROVIDES_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        getAdaptationServiceTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            AdaptationServiceRelationType relation = nmlFactory.createAdaptationServiceRelationType();
+            for (String urn : record.getIsAlias()) {
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                AdaptationServiceType objR = null;
+                if (getAdaptationServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createAdaptationServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getAdaptationServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getAdaptationService().add(objR);
             }
             obj.getRelation().add(relation);
         }
