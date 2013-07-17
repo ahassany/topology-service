@@ -20,5 +20,6 @@ public interface Visitor {
     public void visit(Topology record);
     public void visit(SwitchingService record);
     public void visit(AdaptationService record);
+    public void visit(DeadaptationService record);
 
 }

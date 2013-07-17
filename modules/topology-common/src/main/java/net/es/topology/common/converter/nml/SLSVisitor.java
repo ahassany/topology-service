@@ -33,6 +33,7 @@ public class SLSVisitor implements Visitor {
     private Map<String, BidirectionalPortType> bidirectionalPortTypeMap = new HashMap<String, BidirectionalPortType>();
     private Map<String, SwitchingServiceType> switchingServiceTypeMap = new HashMap<String, SwitchingServiceType>();
     private Map<String, AdaptationServiceType> adaptationServiceTypeMap = new HashMap<String, AdaptationServiceType>();
+    private Map<String, DeadaptationServiceType> deadaptationServiceTypeMap = new HashMap<String, DeadaptationServiceType>();
     /**
      * to make sure each object serialized once.
      */
@@ -65,6 +66,8 @@ public class SLSVisitor implements Visitor {
             return getSwitchingServiceTypeMap().get(urn);
         } else if (getAdaptationServiceTypeMap().containsKey(urn)) {
             return getAdaptationServiceTypeMap().get(urn);
+        } else if (getDeadaptationServiceTypeMap().containsKey(urn)) {
+            return getDeadaptationServiceTypeMap().get(urn);
         } else {
             return null;
         }
@@ -116,6 +119,10 @@ public class SLSVisitor implements Visitor {
 
     public Map<String, AdaptationServiceType> getAdaptationServiceTypeMap() {
         return adaptationServiceTypeMap;
+    }
+
+    public Map<String, DeadaptationServiceType> getDeadaptationServiceTypeMap() {
+        return deadaptationServiceTypeMap;
     }
 
     /**
@@ -456,6 +463,106 @@ public class SLSVisitor implements Visitor {
             obj.getRelation().add(relation);
         }
     }
+
+
+    @Override
+    public void visit(DeadaptationService record) {
+        DeadaptationServiceType obj = nmlFactory.createDeadaptationServiceType();
+        setNetworkObejctValues(obj, record);
+
+        if (record.getAdaptationFunction() != null) {
+            obj.setAdaptationFunction(record.getAdaptationFunction());
+        }
+
+        if (record.getCanProvidePort() != null) {
+            DeadaptationServiceRelationType relation = nmlFactory.createDeadaptationServiceRelationType();
+            for (String urn : record.getCanProvidePort()) {
+                relation.setType(NMLVisitor.RELATION_CAN_PROVIDE_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getCanProvidePortGroup() != null) {
+            DeadaptationServiceRelationType relation = nmlFactory.createDeadaptationServiceRelationType();
+            for (String urn : record.getCanProvidePortGroup()) {
+                relation.setType(NMLVisitor.RELATION_CAN_PROVIDE_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+
+        if (record.getProvidesPort() != null) {
+            DeadaptationServiceRelationType relation = nmlFactory.createDeadaptationServiceRelationType();
+            for (String urn : record.getProvidesPort()) {
+                relation.setType(NMLVisitor.RELATION_PROVIDES_PORT);
+                PortType objR = null;
+                if (getPortTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPort().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        if (record.getProvidesPortGroup() != null) {
+            DeadaptationServiceRelationType relation = nmlFactory.createDeadaptationServiceRelationType();
+            for (String urn : record.getProvidesPortGroup()) {
+                relation.setType(NMLVisitor.RELATION_PROVIDES_PORT);
+                PortGroupType objR = null;
+                if (getPortGroupTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true) {
+                    objR = nmlFactory.createPortGroupType();
+                    objR.setId(urn);
+                } else {
+                    objR = getPortGroupTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getPortGroup().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+
+        getDeadaptationServiceTypeMap().put(obj.getId(), obj);
+
+        if (record.getIsAlias() != null) {
+            DeadaptationServiceRelationType relation = nmlFactory.createDeadaptationServiceRelationType();
+            for (String urn : record.getIsAlias()) {
+                relation.setType(NMLVisitor.RELATION_IS_ALIAS);
+                DeadaptationServiceType objR = null;
+                if (getDeadaptationServiceTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                    objR = nmlFactory.createDeadaptationServiceType();
+                    objR.setId(urn);
+                } else {
+                    objR = getDeadaptationServiceTypeMap().get(urn);
+                    serializedURNS.add(urn);
+                }
+                relation.getDeadaptationService().add(objR);
+            }
+            obj.getRelation().add(relation);
+        }
+    }
+
 
     @Override
     public void visit(BidirectionalLink record) {

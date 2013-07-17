@@ -33,6 +33,7 @@ public class RecordsCollection {
     private Map<String, NSIService> NSIServices = null;
     private Map<String, SwitchingService> switchingServices = null;
     private Map<String, AdaptationService> adaptationServices = null;
+    private Map<String, DeadaptationService> deadaptationServices = null;
     /**
      * A Unique UUID to identify the log trace withing each instance.
      *
@@ -58,6 +59,7 @@ public class RecordsCollection {
         this.setNSIServices(new HashMap<String, NSIService>());
         this.setSwitchingServices(new HashMap<String, SwitchingService>());
         this.setAdaptationServices(new HashMap<String, AdaptationService>());
+        this.setDeadaptationServices(new HashMap<String, DeadaptationService>());
     }
 
     public Map<String, SwitchingService> getSwitchingServices() {
@@ -74,6 +76,14 @@ public class RecordsCollection {
 
     public void setAdaptationServices(Map<String, AdaptationService> services) {
         this.adaptationServices = services;
+    }
+
+    public Map<String, DeadaptationService> getDeadaptationServices() {
+        return this.deadaptationServices;
+    }
+
+    public void setDeadaptationServices(Map<String, DeadaptationService> services) {
+        this.deadaptationServices = services;
     }
 
     public Map<String, Node> getNodes() {
@@ -505,6 +515,35 @@ public class RecordsCollection {
         return adaptationService;
     }
 
+    /**
+     * Create/or return a DeadaptationService instance
+     * If the a SwitchingService  with the same id already exists this method will return a reference to it
+     * If there is not SwitchingService with the same id, a new instance will be created
+     * <p/>
+     * If the ID is null a UUID will be generated.
+     *
+     * @param id
+     * @return NSI Service instance
+     */
+    public DeadaptationService deadaptationServiceInstance(String id) {
+        logger.trace("event=RecordsCollection.deadaptationServiceInstance.start id=" + id + " guid=" + this.logUUID);
+        DeadaptationService deadaptationService = null;
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+            logger.trace("event=RecordsCollection.deadaptationServiceInstance.idCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        if (getDeadaptationServices().containsKey(id)) {
+            deadaptationService = getDeadaptationServices().get(id);
+        } else {
+            deadaptationService = new DeadaptationService();
+            deadaptationService.setId(id);
+            getDeadaptationServices().put(id, deadaptationService);
+            logger.trace("event=RecordsCollection.deadaptationServiceInstance.newInstanceCreated id=" + id + " status=0 guid=" + this.logUUID);
+        }
+        logger.trace("event=RecordsCollection.deadaptationServiceInstance.end id=" + id + " status=0 guid=" + this.logUUID);
+        return deadaptationService;
+    }
+
     public void sendTosLS(SLSRegistrationClientDispatcher clientDispatcher, URNMask urnMask) throws LSClientException, ParserException {
         logger.info("event=RecordsCollection.sendTosLS.start guid=" + this.logUUID);
         // Will be handy to do the rollbacks
@@ -546,6 +585,9 @@ public class RecordsCollection {
             records.add(record);
         }
         for (NetworkObject record : getAdaptationServices().values()) {
+            records.add(record);
+        }
+        for (NetworkObject record : getDeadaptationServices().values()) {
             records.add(record);
         }
 

@@ -575,6 +575,49 @@ public class NMLVisitorTest {
     }
 
     @Test
+    public void testVisitDeadaptationServiceType() throws JAXBException {
+        // Prepare
+        // Prepare logger
+        logger.debug("event=NMLVisitorTest.testVisitDeadaptationServiceType.start guid=" + getLogGUID());
+        // Create a visitor
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor visitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
+        // tv.setTraverseFirst(true);
+
+        // Prepare for by reading the example message
+        InputStream in =
+                getClass().getClassLoader().getResourceAsStream("xml-examples/example-message-deadaptation-service.xml");
+
+        StreamSource ss = new StreamSource(in);
+        JAXBContext context = JAXBContext.newInstance(jaxb_bindings);
+        Unmarshaller um = context.createUnmarshaller();
+        Message msg = (Message) um.unmarshal(ss);
+
+        // Act
+        msg.getBody().accept(tv);
+
+        // Assert
+        String urn = "urn:ogf:network:example.net:2013:deadaptationServiceA";
+        Assert.assertEquals(2, collection.getDeadaptationServices().size());
+        Assert.assertTrue(collection.getDeadaptationServices().containsKey(urn));
+        DeadaptationService slsService = collection.getDeadaptationServices().get(urn);
+
+        Assert.assertEquals(urn, slsService.getId());
+        Assert.assertEquals("DeadaptationServiceA", slsService.getName());
+        Assert.assertEquals(this.version, slsService.getVersion());
+        Assert.assertEquals(VLAN_URI, slsService.getAdaptationFunction());
+
+        Assert.assertEquals(2, slsService.getCanProvidePort().size());
+        Assert.assertEquals(2, slsService.getProvidesPort().size());
+        Assert.assertEquals(2, slsService.getCanProvidePortGroup().size());
+        Assert.assertEquals(2, slsService.getProvidesPortGroup().size());
+        Assert.assertEquals(1, slsService.getIsAlias().size());
+
+        logger.debug("event=NMLVisitorTest.testVisitDeadaptationServiceType.end status=0 guid=" + getLogGUID());
+    }
+
+    @Test
     public void testVisitNSAType() throws JAXBException {
         // Prepare
         // Prepare logger

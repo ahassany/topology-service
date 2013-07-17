@@ -420,6 +420,67 @@ public class SLSTraverserImpl implements Traverser {
     }
 
     @Override
+    public void traverse(DeadaptationService record, Visitor visitor) {
+        getLogger().trace("event=SLSTraverserImpl.traverse.DeadaptationService.start recordURN=" + record.getId() + " guid=" + getLogGUID());
+        try {
+
+            if (record.getCanProvidePort() != null) {
+                for (String urn : record.getCanProvidePort()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    if (sLSRecord != null) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getCanProvidePortGroup() != null) {
+                for (String urn : record.getCanProvidePortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getProvidesPort() != null) {
+                for (String urn : record.getProvidesPort()) {
+                    Port sLSRecord = getCache().getPort(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getProvidesPortGroup() != null) {
+                for (String urn : record.getProvidesPortGroup()) {
+                    PortGroup sLSRecord = getCache().getPortGroup(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+
+            if (record.getIsAlias() != null) {
+                for (String urn : record.getIsAlias()) {
+                    Node sLSRecord = getCache().getNode(urn);
+                    // to stop cyclic dependencies
+                    if (sLSRecord != null && !sLSRecord.getId().equalsIgnoreCase(record.getId())) {
+                        sLSRecord.accept(visitor);
+                    }
+                }
+            }
+        } catch (LSClientException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.DeadaptationService.warning reason=LSClientException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        } catch (ParserException ex) {
+            getLogger().warn("event=SLSTraverserImpl.traverse.DeadaptationService.warning reason=ParserException message=\"" + ex.getMessage() + "\" recordURN=" + record.getId() + " guid=" + getLogGUID());
+        }
+        getLogger().trace("event=SLSTraverserImpl.traverse.DeadaptationService.end status=0 recordURN=" + record.getId() + " guid=" + getLogGUID());
+    }
+
+    @Override
     public void traverse(NSA record, Visitor visitor) {
         getLogger().trace("event=SLSTraverserImpl.traverse.NSA.start recordURN=" + record.getId() + " guid=" + getLogGUID());
         try {

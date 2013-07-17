@@ -285,7 +285,17 @@ public class RecordsCache {
         return getAdaptationService(urn, false);
     }
 
-    // TODO (AH) add support for the different services (adaptation and deadaptation) defined in NML
+    public DeadaptationService getDeadaptationService(String urn, boolean getFreshCopy) throws LSClientException, ParserException {
+        Record record = getRecord(urn, getFreshCopy);
+        if (record instanceof DeadaptationService) {
+            return (DeadaptationService) record;
+        } else {
+            return null;
+        }
+    }
 
+    public DeadaptationService getDeadaptationService(String urn) throws LSClientException, ParserException {
+        return getDeadaptationService(urn, false);
+    }
 
 }

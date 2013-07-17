@@ -794,6 +794,57 @@ public class SLSVisitorTest {
         logger.debug("event=SLSVisitorTest.testVisitAdaptationService.end status=0 guid=" + getLogGUID());
     }
 
+
+    @Test
+    public void testVisitDeadaptationService() throws Exception {
+        // Prepare
+        logger.debug("event=SLSVisitorTest.testVisitDeadaptationService.start guid=" + getLogGUID());
+        // Load data to sLS
+        String filename = "xml-examples/example-deadaptation-service.xml";
+
+        // Read the example and send it to sLS
+        RecordsCollection collection = new RecordsCollection(getLogGUID());
+        NMLVisitor nmlVisitor = new NMLVisitor(collection, getLogGUID());
+        TraversingVisitor nmlTraversingVisitor = new TraversingVisitor(new DepthFirstTraverserImpl(), nmlVisitor);
+
+        // Prepare for by reading the example message
+        InputStream in = getClass().getClassLoader().getResourceAsStream(filename);
+
+        StreamSource ss = new StreamSource(in);
+        Unmarshaller um = JAXBConfig.getUnMarshaller();
+        JAXBElement<DeadaptationServiceType> msg = (JAXBElement<DeadaptationServiceType>) um.unmarshal(ss);
+        msg.getValue().accept(nmlTraversingVisitor);
+
+        /**
+         * register with sLS
+         */
+        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
+        SimpleLS client = sLSConfig.getClient();
+
+        // Prepare the visitor
+        SLSVisitor slsVisitor = new SLSVisitor();
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
+        TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
+        tv.setProgressMonitor(monitorLogging);
+        tv.setTraverseFirst(true);
+
+        String urn = "urn:ogf:network:example.net:2013:deadaptationServiceB";
+
+        // Act
+        DeadaptationService received = recordsCache.getDeadaptationService(urn);
+        Assert.assertNotNull(received);
+        received.accept(tv);
+
+        // Assert
+        Assert.assertTrue(slsVisitor.getDeadaptationServiceTypeMap().containsKey(urn));
+        DeadaptationServiceType nmlObj = slsVisitor.getDeadaptationServiceTypeMap().get(urn);
+        // JAXBConfig.getMarshaller().marshal(new ObjectFactory().createDeadaptationService(nmlObj), System.out);
+        Assert.assertTrue(nmlObj.equals(msg.getValue()));
+        logger.debug("event=SLSVisitorTest.testVisitDeadaptationService.end status=0 guid=" + getLogGUID());
+    }
+
     /**
      * Testing with complete NSA
      *

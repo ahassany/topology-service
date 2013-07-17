@@ -20,6 +20,7 @@ public class ReservedValues {
 
     public static final String RECORD_TYPE_SWITCHING_SERVICE = "nml-switching-service";
     public static final String RECORD_TYPE_ADAPTATION_SERVICE = "nml-adaptation-service";
+    public static final String RECORD_TYPE_DEADAPTATION_SERVICE = "nml-deadaptation-service";
 
     // Records for Network Service Interface (NSI) Topology
     public static final String RECORD_TYPE_NSA = "nsi-nsa";

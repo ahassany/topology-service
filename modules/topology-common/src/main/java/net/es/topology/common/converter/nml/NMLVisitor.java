@@ -840,4 +840,62 @@ public class NMLVisitor extends BaseVisitor {
 
         logger.trace("event=NMLVisitor.visit.AdaptationServiceType.end status=0 guid=" + this.logUUID);
     }
+
+    /**
+     * Visit NML DeadaptationService to generate sLS switching service record
+     *
+     * @param deadaptationServiceType
+     */
+    @Override
+    public void visit(DeadaptationServiceType deadaptationServiceType) {
+        logger.trace("event=NMLVisitor.visit.DeadaptationServiceType.start id=" + deadaptationServiceType.getId() + " guid=" + this.logUUID);
+        DeadaptationService slsService = getRecordsCollection().deadaptationServiceInstance(deadaptationServiceType.getId());
+
+        this.setNetworkObject(deadaptationServiceType, slsService);
+
+        if (deadaptationServiceType.getAdaptationFunction() != null)
+            slsService.setAdaptationFunction(deadaptationServiceType.getAdaptationFunction());
+
+
+        // Parse relations
+        for (DeadaptationServiceRelationType relation : deadaptationServiceType.getRelation()) {
+            if (relation.getType().equalsIgnoreCase(RELATION_CAN_PROVIDE_PORT)) {
+                if (relation.getPort().size() > 0 && slsService.getCanProvidePort() == null) {
+                    slsService.setCanProvidePort(new ArrayList<String>());
+                }
+                for (PortType port : relation.getPort()) {
+                    slsService.getCanProvidePort().add(port.getId());
+                }
+                if (relation.getPortGroup().size() > 0 && slsService.getCanProvidePortGroup() == null) {
+                    slsService.setCanProvidePortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    slsService.getCanProvidePortGroup().add(port.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_PROVIDES_PORT)) {
+                if (relation.getPort().size() > 0 && slsService.getProvidesPort() == null) {
+                    slsService.setProvidesPort(new ArrayList<String>());
+                }
+                for (PortType port : relation.getPort()) {
+                    slsService.getProvidesPort().add(port.getId());
+                }
+
+                if (relation.getPortGroup().size() > 0 && slsService.getProvidesPortGroup() == null) {
+                    slsService.setProvidesPortGroup(new ArrayList<String>());
+                }
+                for (PortGroupType port : relation.getPortGroup()) {
+                    slsService.getProvidesPortGroup().add(port.getId());
+                }
+            } else if (relation.getType().equalsIgnoreCase(RELATION_IS_ALIAS)) {
+                if (slsService.getIsAlias() == null) {
+                    slsService.setIsAlias(new ArrayList<String>());
+                }
+                for (DeadaptationServiceType services : relation.getDeadaptationService()) {
+                    slsService.getIsAlias().add(services.getId());
+                }
+            }
+        }
+
+        logger.trace("event=NMLVisitor.visit.DeadaptationServiceType.end status=0 guid=" + this.logUUID);
+    }
 }

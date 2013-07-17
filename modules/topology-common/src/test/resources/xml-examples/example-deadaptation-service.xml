@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<nml:DeadaptationService xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+                       id="urn:ogf:network:example.net:2013:deadaptationServiceB"
+                       version="2013-05-30T09:30:10Z"
+                       adaptationFunction="http://schemas.ogf.org/nml/2013/05/ethernet#vlan">
+    <nml:name>DeadaptationServiceB</nml:name>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#canProvidePort">
+        <nml:Port id="urn:ogf:network:example.net:2013:port_X:deadaptationServiceB:in"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:port_Y:deadaptationServiceB:in"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#canProvidePort">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_X:deadaptationServiceB:in"/>
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_Y:deadaptationServiceB:in"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesPort">
+        <nml:Port id="urn:ogf:network:example.net:2013:port_X:deadaptationServiceB:out"/>
+        <nml:Port id="urn:ogf:network:example.net:2013:port_Y:deadaptationServiceB:out"/>
+    </nml:Relation>
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#providesPort">
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_X:deadaptationServiceB:out"/>
+        <nml:PortGroup id="urn:ogf:network:example.net:2013:portGroup_Y:deadaptationServiceB:out"/>
+    </nml:Relation>
+
+    <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+        <nml:DeadaptationService id="urn:ogf:network:example.net:2013:deadaptationServiceB:deadaptationServiceB"/>
+    </nml:Relation>
+</nml:DeadaptationService>

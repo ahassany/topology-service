@@ -35,4 +35,6 @@ public interface Traverser {
 
     public void traverse(AdaptationService record, Visitor visitor);
 
+    public void traverse(DeadaptationService record, Visitor visitor);
+
 }
