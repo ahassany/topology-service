@@ -498,7 +498,8 @@ public class RecordsCollectionTest {
 
         // Act
         msg.getBody().accept(tv);
-        visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig),
+                new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // TODO test the registered records
         logger.debug("event=RecordsCollectionTest.testSendTosLS.end status=0 guid=" + getLogGUID());

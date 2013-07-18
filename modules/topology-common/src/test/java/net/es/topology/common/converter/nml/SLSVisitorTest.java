@@ -129,7 +129,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -175,7 +175,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -222,7 +222,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -269,7 +269,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -316,7 +316,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -362,7 +362,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -408,7 +408,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -454,7 +454,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -500,7 +500,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -546,7 +546,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -592,7 +592,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -638,7 +638,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -684,7 +684,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -730,7 +730,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
@@ -781,7 +781,7 @@ public class SLSVisitorTest {
         msg.getValue().accept(nmlTraversingVisitor);
 
         // register with sLS
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();

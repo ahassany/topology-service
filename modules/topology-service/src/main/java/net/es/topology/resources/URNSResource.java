@@ -7,6 +7,7 @@ import net.es.lookup.common.exception.ParserException;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
 import net.es.topology.common.records.ts.utils.RecordsCollection;
+import net.es.topology.common.records.ts.utils.SLSClientDispatcherImpl;
 import net.es.topology.common.records.ts.utils.SLSRegistrationClientDispatcherImpl;
 import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
@@ -91,7 +92,9 @@ public class URNSResource {
         msg.getBody().accept(tv);
 
         try {
-            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(JsonClientProvider.getInstance()), new URNMaskGetAllImpl());
+            JsonClientProvider sLSConfig = JsonClientProvider.getInstance();
+            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig),
+                    new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
         } catch (LSClientException e) {
             throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
         } catch (ParserException e) {

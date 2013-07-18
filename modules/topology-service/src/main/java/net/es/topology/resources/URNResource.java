@@ -1,7 +1,5 @@
 package net.es.topology.resources;
 
-import net.es.lookup.client.RegistrationClient;
-import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
 import net.es.topology.client.sls.SLSTSClient;
@@ -138,7 +136,9 @@ public class URNResource {
 
         msg.getBody().accept(tv);
         try {
-            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(JsonClientProvider.getInstance()), new URNMaskGetAllImpl());
+            JsonClientProvider sLSConfig = JsonClientProvider.getInstance();
+            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig),
+                    new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
         } catch (LSClientException e) {
             throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
         } catch (ParserException e) {

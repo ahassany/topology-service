@@ -73,7 +73,7 @@ public class SLSTSClientTest {
         /**
          * register with sLS
          */
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
         RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
 
         SLSTSClient slsTSClient = new SLSTSClient(recordsCache, getLogGUID());
