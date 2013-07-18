@@ -89,12 +89,9 @@ public class URNSResource {
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
 
         msg.getBody().accept(tv);
-        SimpleLS client;
+
         try {
-            client = JsonClientProvider.getInstance().getClient();
-            client.connect();
-            RegistrationClient rclient = new RegistrationClient(client);
-            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(rclient), new URNMaskGetAllImpl());
+            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(JsonClientProvider.getInstance()), new URNMaskGetAllImpl());
         } catch (LSClientException e) {
             throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
         } catch (ParserException e) {

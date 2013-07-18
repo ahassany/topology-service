@@ -53,10 +53,10 @@ public class RecordsCacheTest {
         SimpleLS client = sLSConfig.getClient();
 
         // Act
-        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
 
         // Assert
-        Assert.assertSame(client, cache.getClientDispatcher().getClient(""));
+        Assert.assertTrue(cache.getClientDispatcher().getClient("") instanceof SimpleLS);
         logger.debug("event=RecordsCacheTest.testGetClient.end status=0 guid=" + getLogGUID());
     }
 
@@ -71,7 +71,7 @@ public class RecordsCacheTest {
         logger.debug("event=RecordsCacheTest.testGetClient.start guid=" + getLogGUID());
         // Arrange
         SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
 
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
 

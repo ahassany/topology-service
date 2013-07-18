@@ -14,5 +14,5 @@ public interface SLSClientDispatcher {
      * @param urn
      * @return
      */
-    public SimpleLS getClient(String urn);
+    public SimpleLS getClient(String urn) throws Exception;
 }

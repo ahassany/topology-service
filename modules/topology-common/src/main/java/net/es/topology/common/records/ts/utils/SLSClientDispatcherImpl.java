@@ -1,6 +1,8 @@
 package net.es.topology.common.records.ts.utils;
 
 import net.es.lookup.client.SimpleLS;
+import net.es.topology.common.config.sls.ClientProvider;
+import net.es.topology.common.config.sls.JsonClientProvider;
 
 /**
  * This is a simple implementation for using one sLS backend
@@ -9,14 +11,14 @@ import net.es.lookup.client.SimpleLS;
  */
 public class SLSClientDispatcherImpl implements SLSClientDispatcher {
 
-    private SimpleLS client;
+    private ClientProvider clientProvider;
 
-    public SLSClientDispatcherImpl(SimpleLS client) {
-        this.client = client;
+    public SLSClientDispatcherImpl(ClientProvider clientProvider) {
+        this.clientProvider = clientProvider;
     }
 
     @Override
-    public SimpleLS getClient(String urn) {
-        return client;
+    public SimpleLS getClient(String urn) throws Exception{
+        return clientProvider.getClient();
     }
 }

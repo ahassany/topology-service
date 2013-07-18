@@ -78,7 +78,12 @@ public class RecordsCache {
             return null;
         }
         if (getFreshCopy == true || isCached == false) {
-            SimpleLS client = getClientDispatcher().getClient(urn);
+            SimpleLS client;
+            try {
+                client= getClientDispatcher().getClient(urn);
+            } catch (Exception e) {
+               throw new LSClientException("Couldn't load client config");
+            }
             String encodedURN = urn;
             try {
                 encodedURN = URLEncoder.encode(urn, "utf8");
@@ -94,6 +99,7 @@ public class RecordsCache {
                 recordMap.put(urn, records.get(records.size() - 1));
                 record = records.get(records.size() - 1);
             }
+
         } else if (isCached == true) {
             record = recordMap.get(urn);
         }

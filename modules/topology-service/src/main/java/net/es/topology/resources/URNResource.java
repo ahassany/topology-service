@@ -60,13 +60,13 @@ public class URNResource {
             resumeOnBroadcast = true;
         }
 
-        SimpleLS slsClient;
+        RecordsCache cache;
         try {
-            slsClient = JsonClientProvider.getInstance().getClient();
+            cache = new RecordsCache(new SLSClientDispatcherImpl(JsonClientProvider.getInstance()), new URNMaskGetAllImpl(), "");
         } catch (Exception e) {
             throw new WebApplicationException(Response.serverError().entity("Unable to init sLS client: '" + e.getMessage() + "'.\n").build());
         }
-        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(slsClient), new URNMaskGetAllImpl(), "");
+
         SLSTSClient tsClient = new SLSTSClient(cache, "");
         NetworkObject networkObject;
         try {
@@ -137,12 +137,8 @@ public class URNResource {
         TraversingVisitor tv = new TraversingVisitor(new DepthFirstTraverserImpl(), visitor);
 
         msg.getBody().accept(tv);
-        SimpleLS client;
         try {
-            client = JsonClientProvider.getInstance().getClient();
-            client.connect();
-            RegistrationClient rclient = new RegistrationClient(client);
-            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(rclient), new URNMaskGetAllImpl());
+            visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(JsonClientProvider.getInstance()), new URNMaskGetAllImpl());
         } catch (LSClientException e) {
             throw new WebApplicationException(Response.serverError().entity("LSClientException : '" + e.getMessage() + "'.\n").build());
         } catch (ParserException e) {

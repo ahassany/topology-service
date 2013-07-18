@@ -599,7 +599,13 @@ public class RecordsCollection {
                 continue;
             }
             logger.info("event=RecordsCollection.sendTosLS.register.start id=" + record.getId() + " guid=" + this.logUUID);
-            RegistrationClient client = clientDispatcher.getRegistrationClient(record.getId());
+            RegistrationClient client;
+            try {
+                client = clientDispatcher.getRegistrationClient(record.getId());
+            } catch (Exception e) {
+                throw new LSClientException("Couldn't load sls client config: " + e.getMessage());
+            }
+
             client.setRecord(record);
             client.register();
             registeredRecords.put(client.getRelativeUrl(), record);

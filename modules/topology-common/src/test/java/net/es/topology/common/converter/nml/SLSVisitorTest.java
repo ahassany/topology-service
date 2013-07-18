@@ -64,10 +64,10 @@ public class SLSVisitorTest {
         // Arrange
         String urn = "urn:ogf:network:example.org:2013:nsa1";
         String topoURN = "urn:ogf:network:example.org:2013:topo";
-        SimpleLS client = sLSConfig.getClient();
-        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
 
+        RecordsCache cache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
+        
 
         // Register the first NSA
         NSA nsa1 = new NSA();
@@ -90,7 +90,7 @@ public class SLSVisitorTest {
 
         // Prepare the visitor
         SLSVisitor visitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), visitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -128,16 +128,12 @@ public class SLSVisitorTest {
         JAXBElement<PortType> msg = (JAXBElement<PortType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -178,16 +174,12 @@ public class SLSVisitorTest {
         JAXBElement<PortGroupType> msg = (JAXBElement<PortGroupType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -229,16 +221,12 @@ public class SLSVisitorTest {
         JAXBElement<TopologyType> msg = (JAXBElement<TopologyType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -280,16 +268,12 @@ public class SLSVisitorTest {
         JAXBElement<NSAType> msg = (JAXBElement<NSAType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -331,16 +315,12 @@ public class SLSVisitorTest {
         JAXBElement<NsiServiceType> msg = (JAXBElement<NsiServiceType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -381,16 +361,12 @@ public class SLSVisitorTest {
         JAXBElement<NodeType> msg = (JAXBElement<NodeType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -431,16 +407,12 @@ public class SLSVisitorTest {
         JAXBElement<LinkType> msg = (JAXBElement<LinkType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -481,16 +453,12 @@ public class SLSVisitorTest {
         JAXBElement<BidirectionalLinkType> msg = (JAXBElement<BidirectionalLinkType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -531,16 +499,12 @@ public class SLSVisitorTest {
         JAXBElement<BidirectionalLinkType> msg = (JAXBElement<BidirectionalLinkType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -581,16 +545,12 @@ public class SLSVisitorTest {
         JAXBElement<BidirectionalPortType> msg = (JAXBElement<BidirectionalPortType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -631,16 +591,12 @@ public class SLSVisitorTest {
         JAXBElement<LinkGroupType> msg = (JAXBElement<LinkGroupType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -681,16 +637,12 @@ public class SLSVisitorTest {
         JAXBElement<SwitchingServiceType> msg = (JAXBElement<SwitchingServiceType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -731,16 +683,12 @@ public class SLSVisitorTest {
         JAXBElement<AdaptationServiceType> msg = (JAXBElement<AdaptationServiceType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -781,16 +729,12 @@ public class SLSVisitorTest {
         JAXBElement<DeadaptationServiceType> msg = (JAXBElement<DeadaptationServiceType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);
@@ -836,16 +780,12 @@ public class SLSVisitorTest {
         JAXBElement<NSAType> msg = (JAXBElement<NSAType>) um.unmarshal(ss);
         msg.getValue().accept(nmlTraversingVisitor);
 
-        /**
-         * register with sLS
-         */
-        RegistrationClient registrationClient = new RegistrationClient(sLSConfig.getClient());
-        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(registrationClient), new URNMaskGetAllImpl());
-        SimpleLS client = sLSConfig.getClient();
+        // register with sLS
+        collection.sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // Prepare the visitor
         SLSVisitor slsVisitor = new SLSVisitor();
-        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(client), new URNMaskGetAllImpl(), getLogGUID());
+        RecordsCache recordsCache = new RecordsCache(new SLSClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl(), getLogGUID());
         SLSTraversingVisitor tv = new SLSTraversingVisitor(new SLSTraverserImpl(recordsCache, getLogGUID()), slsVisitor, getLogGUID());
         TraversingVisitorProgressMonitorLoggingImpl monitorLogging = new TraversingVisitorProgressMonitorLoggingImpl(getLogGUID());
         tv.setProgressMonitor(monitorLogging);

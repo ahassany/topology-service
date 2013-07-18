@@ -5,6 +5,7 @@ import net.es.lookup.client.SimpleLS;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
 import net.es.topology.common.records.ts.utils.RecordsCollection;
+import net.es.topology.common.records.ts.utils.SLSClientDispatcherImpl;
 import net.es.topology.common.records.ts.utils.SLSRegistrationClientDispatcherImpl;
 import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
@@ -471,7 +472,6 @@ public class RecordsCollectionTest {
     }
 
     @Test
-    @Ignore
     public void testSendTosLS() throws Exception {
         // Arrange
         logger.debug("event=RecordsCollectionTest.testSendTosLS.start guid=" + getLogGUID());
@@ -495,11 +495,10 @@ public class RecordsCollectionTest {
 
         // Prepare client
         client.connect();
-        RegistrationClient rclient = new RegistrationClient(client);
 
         // Act
         msg.getBody().accept(tv);
-        visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(rclient), new URNMaskGetAllImpl());
+        visitor.getRecordsCollection().sendTosLS(new SLSRegistrationClientDispatcherImpl(sLSConfig), new URNMaskGetAllImpl());
 
         // TODO test the registered records
         logger.debug("event=RecordsCollectionTest.testSendTosLS.end status=0 guid=" + getLogGUID());

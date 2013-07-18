@@ -15,5 +15,5 @@ public interface SLSRegistrationClientDispatcher {
      * @param urn
      * @return
      */
-    public RegistrationClient getRegistrationClient(String urn);
+    public RegistrationClient getRegistrationClient(String urn) throws Exception;
 }

@@ -1,6 +1,8 @@
 package net.es.topology.common.records.ts.utils;
 
 import net.es.lookup.client.RegistrationClient;
+import net.es.lookup.client.SimpleLS;
+import net.es.topology.common.config.sls.ClientProvider;
 
 /**
  * Simple implementation that returns only one instance
@@ -9,10 +11,10 @@ import net.es.lookup.client.RegistrationClient;
  */
 public class SLSRegistrationClientDispatcherImpl implements SLSRegistrationClientDispatcher {
 
-    private RegistrationClient registrationClient;
+    private ClientProvider clientProvider;
 
-    public SLSRegistrationClientDispatcherImpl(RegistrationClient registrationClient) {
-        this.registrationClient = registrationClient;
+    public SLSRegistrationClientDispatcherImpl(ClientProvider clientProvider) {
+        this.clientProvider = clientProvider;
     }
 
     /**
@@ -22,7 +24,9 @@ public class SLSRegistrationClientDispatcherImpl implements SLSRegistrationClien
      * @return
      */
     @Override
-    public RegistrationClient getRegistrationClient(String urn) {
-        return this.registrationClient;
+    public RegistrationClient getRegistrationClient(String urn)  throws  Exception{
+        SimpleLS client = clientProvider.getClient();
+        RegistrationClient registrationClient = new RegistrationClient(client);
+        return registrationClient;
     }
 }
