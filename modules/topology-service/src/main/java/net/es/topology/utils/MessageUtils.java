@@ -6,6 +6,9 @@ import org.ogf.schemas.nsi._2013._09.messaging.ObjectFactory;
 import org.ogf.schemas.nsi._2013._09.topology.NSAType;
 import org.ogf.schemas.nsi._2013._09.topology.NsiServiceType;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Helper class to make messages
  *
@@ -17,14 +20,19 @@ public class MessageUtils {
      * Encapsulate a NetworkObject in NSI Message
      *
      * @param networkObject
+     * @param msg           the message carrying the contect
      * @return
      * @throws Exception
      */
-    public static Message makeMessage(NetworkObject networkObject) throws Exception {
-        ObjectFactory msgFactory = new ObjectFactory();
-        Message msg = msgFactory.createMessage();
-        Message.Body body = msgFactory.createMessageBody();
-        msg.setBody(body);
+    public static Message makeMessage(NetworkObject networkObject, Message msg) throws Exception {
+
+        Message.Body body;
+        // Make sure body is initialized
+        if (msg.getBody() == null) {
+            ObjectFactory msgFactory = new ObjectFactory();
+            msg.setBody(msgFactory.createMessageBody());
+        }
+        body = msg.getBody();
 
         if (networkObject instanceof NSAType) {
             body.getNSA().add((NSAType) networkObject);
@@ -59,6 +67,33 @@ public class MessageUtils {
         } else
             throw new Exception("Unable to handle networkobject in a message");
 
+        return msg;
+    }
+
+    /**
+     * Encapsulate a NetworkObject in NSI Message
+     *
+     * @param networkObject
+     * @return
+     * @throws Exception
+     */
+    public static Message makeMessage(NetworkObject networkObject) throws Exception {
+        ObjectFactory msgFactory = new ObjectFactory();
+        Message msg = msgFactory.createMessage();
+        Message.Body body = msgFactory.createMessageBody();
+        msg.setBody(body);
+        return makeMessage(networkObject, msg);
+    }
+
+    /**
+     * @param networkObjects
+     * @return
+     * @throws Exception
+     */
+    public static Message makeMessageWithListOfSameType(Collection<NetworkObject> networkObjects, Message msg) throws Exception {
+        for (NetworkObject networkObject : networkObjects) {
+            makeMessage(networkObject, msg);
+        }
         return msg;
     }
 }

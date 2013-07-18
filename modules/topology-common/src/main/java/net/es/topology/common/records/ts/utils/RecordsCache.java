@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Retrieves records from sLS and caches them.
@@ -80,9 +77,9 @@ public class RecordsCache {
         if (getFreshCopy == true || isCached == false) {
             SimpleLS client;
             try {
-                client= getClientDispatcher().getClient(urn);
+                client = getClientDispatcher().getClient(urn);
             } catch (Exception e) {
-               throw new LSClientException("Couldn't load client config");
+                throw new LSClientException("Couldn't load client config");
             }
             String encodedURN = urn;
             try {
@@ -108,6 +105,62 @@ public class RecordsCache {
             status = "1";
         getLogger().info("event=RecordsCache.getRecord.end status=" + status + " getFreshCopy=" + getFreshCopy + " urn=" + urn + " guid=" + getLogGUID());
         return record;
+    }
+
+    /**
+     * Returns all records by their record type and caches them
+     *
+     * @param recordType the recordType of the record
+     * @return
+     * @throws LSClientException
+     * @throws ParserException
+     */
+    public List<NetworkObject> getRecordsByType(String recordType) throws LSClientException, ParserException {
+        getLogger().info("event=getRecordsByType.getRecord.start recordType=" + recordType + " guid=" + getLogGUID());
+        List<Record> records = new ArrayList<Record>();
+        List<NetworkObject> recordsToBeReturned = new ArrayList<NetworkObject>();
+
+        SimpleLS client;
+        try {
+            client = getClientDispatcher().getClient(recordType);
+        } catch (Exception e) {
+            throw new LSClientException("Couldn't load client config");
+        }
+        String encodedType = recordType;
+        try {
+            encodedType = URLEncoder.encode(recordType, "utf8");
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        client.setRelativeUrl("lookup/records?type=" + encodedType);
+        client.connect();
+        client.send();
+        String resp = client.getResponse();
+        List<Record> retrievedRecords = TSRecordFactory.toRecords(resp, getLogGUID());
+
+        for (Record record : retrievedRecords) {
+            // don't care about none topology records
+            if (!(record instanceof NetworkObject)) {
+                continue;
+            }
+            NetworkObject networkObject = (NetworkObject) record;
+            // don't care about masked URNs
+            if (getUrnMask().getFromSLS(networkObject.getId()) == false) {
+                getLogger().info("event=getRecordsByType.getRecord.end status=1 message=\"URN is not allowed\" recordType=" + recordType + "guid=" + getLogGUID());
+                continue;
+            }
+
+            // Cache the record
+            recordMap.put(networkObject.getId(), record);
+            // prepare it to be returned
+            recordsToBeReturned.add(networkObject);
+        }
+
+        String status = "0";
+        if (records.size() == 0)
+            status = "1";
+        getLogger().info("event=RecordsCache.getRecordsByType.end status=" + status + " recordType=" + recordType + " guid=" + getLogGUID());
+        return recordsToBeReturned;
     }
 
     /**

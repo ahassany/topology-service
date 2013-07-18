@@ -4,20 +4,23 @@ import net.es.lookup.client.RegistrationClient;
 import net.es.lookup.client.SimpleLS;
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
+import net.es.topology.client.sls.SLSTSClient;
 import net.es.topology.common.config.sls.JsonClientProvider;
 import net.es.topology.common.converter.nml.NMLVisitor;
-import net.es.topology.common.records.ts.utils.RecordsCollection;
-import net.es.topology.common.records.ts.utils.SLSClientDispatcherImpl;
-import net.es.topology.common.records.ts.utils.SLSRegistrationClientDispatcherImpl;
-import net.es.topology.common.records.ts.utils.URNMaskGetAllImpl;
+import net.es.topology.common.records.ts.keys.ReservedValues;
+import net.es.topology.common.records.ts.utils.*;
 import net.es.topology.common.visitors.nml.DepthFirstTraverserImpl;
 import net.es.topology.common.visitors.nml.TraversingVisitor;
+import net.es.topology.utils.MessageUtils;
+import net.es.topology.utils.SLSCallbackListener;
 import org.apache.commons.io.IOUtils;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.jersey.Broadcastable;
 import org.atmosphere.jersey.SuspendResponse;
+import org.ogf.schemas.nml._2013._05.base.NetworkObject;
 import org.ogf.schemas.nsi._2013._09.messaging.Message;
+import org.ogf.schemas.nsi._2013._09.messaging.ObjectFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -28,6 +31,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 
 public class URNSResource {
@@ -50,9 +54,43 @@ public class URNSResource {
             resumeOnBroadcast = true;
         }
 
+        RecordsCache cache;
+        try {
+            cache = new RecordsCache(new SLSClientDispatcherImpl(JsonClientProvider.getInstance()), new URNMaskGetAllImpl(), "");
+        } catch (Exception e) {
+            throw new WebApplicationException(Response.serverError().entity("Unable to init sLS client: '" + e.getMessage() + "'.\n").build());
+        }
+
+        SLSTSClient tsClient = new SLSTSClient(cache, "");
+        Map<String, NetworkObject> networkObjects;
+        try {
+            // FIXME (AH): this only support retrieving NSA, need to be modified to be more general
+            networkObjects = tsClient.getNetworkObjectsByRecordType(ReservedValues.RECORD_TYPE_NSA);
+        } catch (LSClientException e) {
+            throw new WebApplicationException(Response.serverError().entity("LSClient exception: '" + e.getMessage() + "'.\n").build());
+        } catch (ParserException e) {
+            throw new WebApplicationException(Response.serverError().entity("Unable to parse sLS output: '" + e.getMessage() + "'.\n").build());
+        }
+        Message msg;
+
+        if (networkObjects == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("NOT FOUND.\n").build());
+            //atmosphereResourceEvent.broadcaster().broadcast("");
+        } else {
+            ObjectFactory objectFactory = new ObjectFactory();
+            msg = objectFactory.createMessage();
+            msg.setBody(objectFactory.createMessageBody());
+            try {
+                msg = MessageUtils.makeMessageWithListOfSameType(networkObjects.values(), msg);
+            } catch (Exception e) {
+                throw new WebApplicationException(Response.serverError().entity("Unable pack response message: '" + e.getMessage() + "'.\n").build());
+            }
+        }
+
         return new SuspendResponse.SuspendResponseBuilder<Message>()
-                .broadcaster(topic).resumeOnBroadcast(resumeOnBroadcast)
+                .resumeOnBroadcast(resumeOnBroadcast)
                 .outputComments(true)
+                .addListener(new SLSCallbackListener(msg))
                 .build();
 
     }

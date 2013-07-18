@@ -2,7 +2,9 @@ package net.es.topology.client.sls;
 
 import net.es.lookup.common.exception.LSClientException;
 import net.es.lookup.common.exception.ParserException;
+import net.es.lookup.records.Record;
 import net.es.topology.common.converter.nml.SLSVisitor;
+import net.es.topology.common.records.ts.keys.ReservedValues;
 import net.es.topology.common.records.ts.utils.RecordsCache;
 import net.es.topology.common.visitors.sls.SLSTraverserImpl;
 import net.es.topology.common.visitors.sls.SLSTraversingVisitor;
@@ -97,6 +99,16 @@ public class SLSTSClient {
         Map<String, NetworkObject> objectMap = new HashMap<String, NetworkObject>();
         for (String urn : urns) {
             objectMap.put(urn, getNetworkObject(urn));
+        }
+        return objectMap;
+    }
+
+    public Map<String, NetworkObject> getNetworkObjectsByRecordType(String recordType) throws LSClientException, ParserException {
+        List<net.es.topology.common.records.ts.NetworkObject> records = recordsCache.getRecordsByType(recordType);
+
+        Map<String, NetworkObject> objectMap = new HashMap<String, NetworkObject>();
+        for (net.es.topology.common.records.ts.NetworkObject networkObject: records) {
+            objectMap.put(networkObject.getId(), getNetworkObject(networkObject.getId()));
         }
         return objectMap;
     }
