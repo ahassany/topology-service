@@ -1,9 +1,7 @@
 # NML/NSI Topology Service (NTS)
 
-***This is still work under heavey developement, it's not yet ready to be used yet!***
 
-The following instructions are really about setting up a dev environment.
-
+The following instructions are really about setting up a dev environment. See [Installing and using NML/NSI Topology service](https://github.com/ahassany/topology-service/wiki/Using-NML-NSI-Topology-Service)
 
 ## Installation
 
