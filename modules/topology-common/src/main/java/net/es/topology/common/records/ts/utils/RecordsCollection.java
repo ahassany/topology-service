@@ -621,6 +621,7 @@ public class RecordsCollection {
                 continue;
             }
             logger.info("event=RecordsCollection.sendTosLS.register.start id=" + record.getId() + " guid=" + this.logGUID);
+            boolean isReferenceRecord = false;
 
             if (clientDispatcher != null) {
                 logger.trace("event=RecordsCollection.sendTosLS.register.checkExists.start id=" + record.getId() + " guid=" + this.logGUID);
@@ -636,8 +637,14 @@ public class RecordsCollection {
                 String resp = client.getResponse();
                 List<Record> returnedRecords = TSRecordFactory.toRecords(resp, getLogGUID());
 
+
                 for (Record record1 : returnedRecords) {
                     logger.trace("event=RecordsCollection.sendTosLS.register.checkExists.delete.start relativeURL=" + record1.getURI() + " id=" + record.getId() + " guid=" + this.logGUID);
+                    if (record1.getMap().keySet().size() > record.getMap().keySet().size()) {
+                        getLogger().info("don't delete old record");
+                        isReferenceRecord = true;
+                        break;
+                    }
                     SimpleLS deleteClient = clientDispatcher.getClient(record.getId());
                     deleteClient.setConnectionType("DELETE");
                     deleteClient.setRelativeUrl(record1.getURI());
@@ -648,7 +655,9 @@ public class RecordsCollection {
                 logger.trace("event=RecordsCollection.sendTosLS.register.checkExists.end status=0 id=" + record.getId() + " guid=" + this.logGUID);
             }
 
-
+            if (isReferenceRecord == true) {
+                continue;
+            }
             RegistrationClient registrationClient;
             try {
                 registrationClient = registrationClientDispatcher.getRegistrationClient(record.getId());

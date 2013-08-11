@@ -655,10 +655,10 @@ public class NMLVisitorTest {
         Assert.assertTrue(nsa.getTopologies().contains("urn:ogf:network:example.org:2013:topology"));
 
         Assert.assertEquals(1, nsa.getPeersWith().size());
-        Assert.assertTrue(nsa.getPeersWith().contains("urn:ogf:network:example.org:2013:nsa"));
+        Assert.assertTrue(nsa.getPeersWith().contains("REF:urn:ogf:network:example.org:2013:nsa"));
 
         Assert.assertEquals(1, nsa.getManagedBy().size());
-        Assert.assertTrue(nsa.getManagedBy().contains("urn:ogf:network:example.net:2013:nsa"));
+        Assert.assertTrue(nsa.getManagedBy().contains("REF:urn:ogf:network:example.net:2013:nsa"));
 
         Location loc = nsa.getLocation();
         Assert.assertSame(nsa, loc.getNetworkObject());

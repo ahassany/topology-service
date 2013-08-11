@@ -953,7 +953,11 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getPeersWith()) {
                 relation.setType(NMLVisitor.RELATION_PEERS_WITH);
                 NSAType objR = null;
-                if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                if (urn.startsWith("REF:")) {
+                    objR = nsiFactory.createNSAType();
+                    objR.setId(urn.substring("REF:".length()));
+                }
+                else if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
                     objR = nsiFactory.createNSAType();
                     objR.setId(urn);
                 } else {
@@ -970,7 +974,11 @@ public class SLSVisitor implements Visitor {
             for (String urn : record.getManagedBy()) {
                 relation.setType(NMLVisitor.RELATION_MANAGED_BY);
                 NSAType objR = null;
-                if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
+                if (urn.startsWith("REF:")) {
+                    objR = nsiFactory.createNSAType();
+                    objR.setId(urn.substring("REF:".length()));
+                }
+                else if (getNsaTypeMap().containsKey(urn) == false || serializedURNS.contains(urn) == true || urn.equalsIgnoreCase(record.getId())) {
                     objR = nsiFactory.createNSAType();
                     objR.setId(urn);
                 } else {

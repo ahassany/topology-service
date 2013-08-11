@@ -161,6 +161,34 @@ public class NMLVisitor extends BaseVisitor {
     }
 
     /**
+     * Checks the contents of the element and return true if there is any value set other than the ID
+     * @param obj
+     * @return
+     */
+    protected boolean isReferenceElement(NetworkObject obj) {
+        if (obj.getName() != null)
+            return false;
+        else if (obj.getVersion() != null)
+            return false;
+        else if (obj.getLocation() != null)
+            return false;
+        else if (obj.getLifetime() != null)
+            return false;
+        return true;
+    }
+
+    protected boolean isReferenceElement(NSAType obj) {
+        if (isReferenceElement((NetworkObject)obj) == true)
+            return true;
+        else if (obj.getService() != null || obj.getService().size() != 0)
+            return false;
+        else if (obj.getTopology() != null || obj.getTopology().size() != 0)
+            return false;
+        else if (obj.getRelation() != null || obj.getRelation().size() != 0)
+            return false;
+        return true;
+    }
+    /**
      * Visit nml node to generate sLS Node record
      *
      * @param nodeType
@@ -545,14 +573,20 @@ public class NMLVisitor extends BaseVisitor {
                     sLSNSA.setPeersWith(new ArrayList<String>());
                 }
                 for (NSAType nsa : relation.getNSA()) {
-                    sLSNSA.getPeersWith().add(nsa.getId());
+                    String related_id = nsa.getId();
+                    if (isReferenceElement(nsa))
+                        related_id = "REF:" + nsa.getId();
+                    sLSNSA.getPeersWith().add(related_id);
                 }
             } else if (relation.getType().equalsIgnoreCase(RELATION_MANAGED_BY)) {
                 if (sLSNSA.getManagedBy() == null) {
                     sLSNSA.setManagedBy(new ArrayList<String>());
                 }
                 for (NSAType nsa : relation.getNSA()) {
-                    sLSNSA.getManagedBy().add(nsa.getId());
+                    String related_id = nsa.getId();
+                    if (isReferenceElement(nsa))
+                        related_id = "REF:" + nsa.getId();
+                    sLSNSA.getManagedBy().add(related_id);
                 }
             }
         }

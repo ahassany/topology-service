@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nsiMsg:message xmlns:nsi="http://schemas.ogf.org/nsi/2013/09/topology#"
+                xmlns:nsiMsg="http://schemas.ogf.org/nsi/2013/09/messaging#"
+                xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#">
+    <nsiMsg:body>
+        <nsi:NSA xmlns:nml="http://schemas.ogf.org/nml/2013/05/base#"
+                 xmlns:nsi="http://schemas.ogf.org/nsi/2013/09/topology#"
+                 xmlns:vc="urn:ietf:params:xml:ns:vcard-4.0"
+                 id="urn:ogf:network:bonaire.example:2013:nsa" version="2013-07-26T10:42:44Z">
+            <nml:Topology id="urn:ogf:network:bonaire.example:2013:topology">
+                <nml:name>bonaire.example</nml:name>
+                <!-- bonaire - aruba -->
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasOutboundPort">
+                    <nml:PortGroup id="urn:ogf:network:bonaire.example:2013:bonaire-aruba">
+                        <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2012/10/ethernet#vlan">1780-1783
+                        </nml:LabelGroup>
+                        <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                            <nml:PortGroup id="urn:ogf:network:aruba.example:2013:bonaire-aruba"/>
+                        </nml:Relation>
+                    </nml:PortGroup>
+                </nml:Relation>
+                <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#hasInboundPort">
+                    <nml:PortGroup id="urn:ogf:network:bonaire.example:2013:aruba-bonaire">
+                        <nml:LabelGroup labeltype="http://schemas.ogf.org/nml/2012/10/ethernet#vlan">1780-1783
+                        </nml:LabelGroup>
+                        <nml:Relation type="http://schemas.ogf.org/nml/2013/05/base#isAlias">
+                            <nml:PortGroup id="urn:ogf:network:aruba.example:2013:aruba-bonaire"/>
+                        </nml:Relation>
+                    </nml:PortGroup>
+                </nml:Relation>
+                <nml:BidirectionalPort id="urn:ogf:network:bonaire.example:2013:bi-bonaire-aruba">
+                    <nml:PortGroup id="urn:ogf:network:bonaire.example:2013:bonaire-aruba"/>
+                    <nml:PortGroup id="urn:ogf:network:bonaire.example:2013:aruba-bonaire"/>
+                </nml:BidirectionalPort>
+            </nml:Topology>
+            <nsi:Relation type="http://schemas.ogf.org/nsi/2013/09/topology#peersWith">
+                <nsi:NSA id="urn:ogf:network:aruba.example:2013:nsa"/>
+            </nsi:Relation>
+        </nsi:NSA>
+    </nsiMsg:body>
+</nsiMsg:message>
